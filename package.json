@@ -1,0 +1,38 @@
+{
+  "name": "pdca",
+  "version": "1.0.0",
+  "description": "build PDCA habit",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zoran-yang/PDCA.git"
+  },
+  "keywords": [
+    "PDCA"
+  ],
+  "author": "Zoran yang",
+  "license": "UNLICENSED",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/Zoran-yang/PDCA/issues"
+  },
+  "homepage": "https://github.com/Zoran-yang/PDCA#readme",
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.5",
+    "@electron-forge/maker-deb": "^6.1.0",
+    "@electron-forge/maker-rpm": "^6.1.0",
+    "@electron-forge/maker-squirrel": "^6.0.5",
+    "@electron-forge/maker-zip": "^6.0.5",
+    "electron": "^23.2.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "node-notifier": "^10.0.1"
+  }
+}
