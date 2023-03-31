@@ -1,31 +1,17 @@
 
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { useState } from 'react';
 
 
 const filter = createFilterOptions();
 
-export function FreeSoloCreateOption({labelName,taskInfo}) {
-  const [value, setValue] = useState(null);
+//For revising data source, I takes useStates as parameters from parent component.
+export function FreeSoloCreateOption({labelName, taskInfo, selectedstatus, handleSelectedstatus}) {
 
   return (
     <Autocomplete
-        value={value}
-        onChange={(event, newValue) => {
-            if (typeof newValue === 'string') {
-            setValue({
-                title: newValue,
-            });
-            } else if (newValue && newValue.inputValue) {
-            // Create a new value from the user input
-            setValue({
-                title: newValue.inputValue,
-            });
-            } else {
-            setValue(newValue);
-            }
-        }}
+        value={selectedstatus}
+        onChange={handleSelectedstatus}
         filterOptions={(options, params) => {
             const filtered = filter(options, params);
 
@@ -33,10 +19,10 @@ export function FreeSoloCreateOption({labelName,taskInfo}) {
             // Suggest the creation of a new value
             const isExisting = options.some((option) => inputValue === option.title);
             if (inputValue !== '' && !isExisting) {
-            filtered.push({
-                inputValue,
-                title: `Add "${inputValue}"`,
-            });
+                filtered.push({
+                    inputValue,
+                    title: `Add "${inputValue}"`,
+                });
             }
 
             return filtered;
@@ -48,17 +34,17 @@ export function FreeSoloCreateOption({labelName,taskInfo}) {
         getOptionLabel={(option) => {
             // Value selected with enter, right from the input
             if (typeof option === 'string') {
-            return option;
+                return option;
             }
             // Add "xxx" option created dynamically
             if (option.inputValue) {
-            return option.inputValue;
+                return option.inputValue;
             }
             // Regular option
             return option.title;
         }}
         renderOption={(props, option) => <li {...props}>{option.title}</li>}
-        sx={{ width: 200, margin: 3}}
+        sx={{ margin: 1, width: "100%"}}
         freeSolo
         renderInput={(params) => (
             <TextField {...params} label={labelName} />
@@ -66,5 +52,3 @@ export function FreeSoloCreateOption({labelName,taskInfo}) {
     />
   );
 }
-
-
