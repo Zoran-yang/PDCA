@@ -23,12 +23,24 @@ function showNotification() {
     }, (err, response, metadata) => {
       if (response === 'activate') {
         if (err) throw err;
-        if (metadata.activationType === 'clicked') {
-            app.whenReady().then(() => {
-                createWindow()
-            })
-            return; // No need to continue
-        }
+        // if (metadata.activationType === 'clicked') {
+        //     app.whenReady().then(() => {
+        //         createWindow()
+        //     })
+        //     return; // No need to continue
+        // }
+        const newWindow = new BrowserWindow({
+          width: 800,
+          height: 600,
+          webPreferences: {
+            nodeIntegration: true
+          }
+        })
+        newWindow.loadFile(path.join(__dirname, 'index.html'))
+        newWindow.on('ready-to-show', () => {
+          newWindow.show()
+        })
+
       } else if (response === 'dismissed') {
         console.log('Notification closed')
       }
