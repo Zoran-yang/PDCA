@@ -1,5 +1,6 @@
 import {FreeSoloCreateOption} from '../Component/Autocomplete.jsx';
 import {TaskContentField} from '../Component/TaskContentField.jsx';
+import CreateReminder from './CreateReminder.jsx';
 import Tags from '../Component/TaskTags.jsx';
 import {useState} from 'react';
 import Button from '@mui/material/Button';
@@ -16,7 +17,7 @@ const taskTypes = [
 const taskNames = {
   Work: [
     { title: 'Writing the code' },
-    { title: 'SS' },
+    { title: 'Apply jobs' },
   ] ,
   Sleep:[
     { title: 'Sleep-A' },
@@ -45,6 +46,23 @@ const taskContents = {
       taskTags : [{ title: "Doing" }],
       taskContent : ['Writing the resume', 'Writing the cover letter']
     },
+  ]
+}
+
+const prompts = {
+  Work : [
+      {
+        taskNames : 'Writing the code',
+        taskTags : [{ title: "Doing" },{ title: "React" }],
+        reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
+                      'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
+                      ]
+      },
+      {
+        taskNames : 'Apply jobs',
+        taskTags : [{ title: "Doing" }],
+        reminder : ['https://www.evernote.com/shard/s608/sh/5af1507d-3af3-0988-f68f-433428038f86/oXJlO12snMJL7_Gn-SBi6k1ZTfVO-WNnmEm01yFx4lf97g_hf_cc8Rf3yA']
+      },
   ]
 }
 
@@ -123,7 +141,7 @@ export default function App(){
     console.log(taskNames)
   
     selectedTaskTags?.forEach(selectedTaskTag => { // if the task tag is not in the taskTag list, add it
-      const existingTaskTags =taskTags.some(taskTag => {
+      const existingTaskTags = taskTags.some(taskTag => {
         return taskTag.title === selectedTaskTag.inputValue || taskTag.title === selectedTaskTag
       })
 
@@ -155,7 +173,6 @@ export default function App(){
 
     if (IsSaved === false){  
       if(!taskContents[selectedTaskTypes.title]){ // if the task type is not in the taskContents, add it
-        console.log("here")
         taskContents = {...taskContents, [selectedTaskTypes.title]: [
           {
             taskNames : selectedTaskNames.title,
@@ -201,7 +218,17 @@ export default function App(){
         flexWrap: "wrap",
         marginRight: 5
       }}>
-        <Button id='submit-btn' variant="outlined" sx={{ marginRight: 1}} onClick={()=>saveTasksData(taskTypes, selectedTaskTypes, taskNames, selectedTaskNames, taskTags, selectedTaskTags, taskContents, addedTaskContent)}>Save</Button>
+        <Button 
+          id='submit-btn' 
+          variant="outlined" 
+          sx={{ marginRight: 1}} 
+          onClick={()=>{
+              saveTasksData(taskTypes, selectedTaskTypes, taskNames, selectedTaskNames, taskTags, selectedTaskTags, taskContents, addedTaskContent)
+              CreateReminder(prompts, selectedTaskTypes, selectedTaskNames, selectedTaskTags)
+          }}
+        >
+          Save
+        </Button>
         <Button id='cancel-btn' variant="outlined" onClick={()=>window.close()}>cancal</Button>
       </div>
     </div>
