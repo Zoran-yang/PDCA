@@ -1,7 +1,7 @@
 {
-  "name": "pdca",
+  "name": "mindresetter",
   "version": "1.0.0",
-  "description": "build PDCA habit",
+  "description": "Rebuild your mindset",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,6 +12,15 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Zoran-yang/PDCA.git"
+  },
+  "build": {
+    "productName": "MindResetter",
+    "appId": "MindResetter",
+    "win": {
+      "icon": "icon.png",
+      "target": "nsis",
+      "startOnLogin": true
+    }
   },
   "keywords": [
     "PDCA"
@@ -32,6 +41,7 @@
     "electron": "^23.2.0"
   },
   "dependencies": {
+    "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
     "node-notifier": "^10.0.1"
   }

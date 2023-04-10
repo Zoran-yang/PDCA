@@ -3,6 +3,7 @@
 export default function CreateReminder(prompts, selectedTaskTypes, selectedTaskNames, selectedTaskTags) {
     for (const element of prompts[selectedTaskTypes.title] || []){ 
         const existingTaskName = element.taskNames === selectedTaskNames.title
+        // Union of taskTags and selectedTaskTags
         const existingTaskTags = element.taskTags.every(taskTag => {
           return selectedTaskTags?.some(selectedTaskTag => {
             return selectedTaskTag === taskTag.title

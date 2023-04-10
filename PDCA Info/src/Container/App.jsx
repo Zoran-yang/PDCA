@@ -1,10 +1,16 @@
-import {FreeSoloCreateOption} from '../Component/Autocomplete.jsx';
+import {FreeSoloCreateOption} from '../Component/FreeSoloCreateOption.jsx';
+import ComboBox from "../Component/Autocomplete.jsx";
 import {TaskContentField} from '../Component/TaskContentField.jsx';
 import CreateReminder from './CreateReminder.jsx';
 import Tags from '../Component/TaskTags.jsx';
 import {useState} from 'react';
 import Button from '@mui/material/Button';
 import "./App.css"
+
+// const taskPhase = [
+//   "Plan", "Do", "Check", "Act"
+// ];
+
 
 const taskTypes = [
   { title: 'Work'},
@@ -30,8 +36,8 @@ const taskTags = [
   { title: "Doing" },
   { title: "Checking" },
   { title: "Acting" },
+  { title: "React" },
   { title: "None" },
-  { title: "React" }
 ];
 
 const taskContents = {
@@ -51,18 +57,44 @@ const taskContents = {
 
 const prompts = {
   Work : [
-      {
-        taskNames : 'Writing the code',
-        taskTags : [{ title: "Doing" },{ title: "React" }],
-        reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
-                      'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
-                      ]
-      },
-      {
-        taskNames : 'Apply jobs',
-        taskTags : [{ title: "Doing" }],
-        reminder : ['https://www.evernote.com/shard/s608/sh/5af1507d-3af3-0988-f68f-433428038f86/oXJlO12snMJL7_Gn-SBi6k1ZTfVO-WNnmEm01yFx4lf97g_hf_cc8Rf3yA']
-      },
+    {
+      taskNames : 'Practice the interview code questions',
+      taskTags : [{ title: "Planning" }],
+      reminder : ["https://www.evernote.com/shard/s608/sh/84270d5e-1e5c-e551-c271-c40e222ba7b6/YVMYzkAcZqMkBcE5SRQAsQDHodA_CNhz54cDZ2i5JVn9-vwKG7hMiNW5Lg",
+                  ]
+    },
+    {
+      taskNames : 'Writing the code',
+      taskTags : [{ title: "Planning" }],
+      reminder : ["https://www.evernote.com/shard/s608/sh/84270d5e-1e5c-e551-c271-c40e222ba7b6/YVMYzkAcZqMkBcE5SRQAsQDHodA_CNhz54cDZ2i5JVn9-vwKG7hMiNW5Lg",
+                  ]
+    },
+    {
+      taskNames : 'Writing the code',
+      taskTags : [{ title: "Doing" },{ title: "React" }],
+      reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
+                  'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
+                  ]
+    },
+    {
+      taskNames : 'Writing the code',
+      taskTags : [{ title: "Checking" },{ title: "React" }],
+      reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
+                  'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
+                  ]
+    },
+    {
+      taskNames : 'Writing the code',
+      taskTags : [{ title: "Doing" },{ title: "React" }],
+      reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
+                  'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
+                  ]
+    },
+    {
+      taskNames : 'Apply jobs',
+      taskTags : [{ title: "Doing" }],
+      reminder : ['https://www.evernote.com/shard/s608/sh/5af1507d-3af3-0988-f68f-433428038f86/oXJlO12snMJL7_Gn-SBi6k1ZTfVO-WNnmEm01yFx4lf97g_hf_cc8Rf3yA']
+    },
   ]
 }
 
@@ -70,6 +102,7 @@ const prompts = {
 export default function App(){
   const [selectedTaskTypes, setSelectedTaskTypes] = useState({ title: 'Work'});
   const [selectedTaskNames, setSelectedTaskNames] = useState(null);
+  // const [selectedTaskPhase, setSelectedTaskPhase] = useState(null);
   const [selectedTaskTags, setSelectedTaskTags] = useState(null);
   const [addedTaskContent, setAddedTaskContent] = useState(null);
   
@@ -152,8 +185,9 @@ export default function App(){
     console.log(taskTags)
 
     for (const element of taskContents[selectedTaskTypes.title] || []){ 
+      if (element.taskTags.length !== selectedTaskTags?.length) continue     //finding the intersection of taskTags and selectedTaskTags -1
       const existingTaskName = element.taskNames === selectedTaskNames.title
-      const existingTaskTags = element.taskTags.every(taskTag => {
+      const existingTaskTags = element.taskTags.every(taskTag => {           //finding the intersection of taskTags and selectedTaskTags -2
         return selectedTaskTags?.some(selectedTaskTag => {
           return selectedTaskTag === taskTag.title
         })
@@ -209,6 +243,7 @@ export default function App(){
           taskInfo={taskNames[selectedTaskTypes?.title] || [{ title: "No relevent activity."}]} 
           selectedstatus={selectedTaskNames} 
           handleSelectedstatus={handleSelectedTaskName}/>
+        {/* <ComboBox taskInfo={taskPhase}/> */}
         <Tags taskInfo={taskTags} handleTaskTags={handleTaskTags}/>
         <TaskContentField handleAddedTaskContent={handleAddedTaskContent}/>
       </div>
