@@ -2,75 +2,72 @@
 import React from 'react';
 import {Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw} from 'draft-js'
 import Immutable from 'immutable';
+import {useState, useRef} from 'react';
 // import ReactDOM from 'react-dom';
 import "./CreateSOP.css"
 
-export default class RichEditorExample extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {editorState: EditorState.createEmpty()};
-		this.focus = () => this.refs.editor.focus();
-	}
-	onChange = (editorState) => {
-		this.setState({editorState});
-	}
+const RichEditorExample = ({handleTaskSOP, editorState}) => {
+    // const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
+    const editorRef = useRef(null);
 
-	toggleBlockType = (blockType) => {
-		this.onChange(
-			RichUtils.toggleBlockType(
-				this.state.editorState,
-				blockType
-		));
-	}
+    const onChange = (newEditorState) => {
+        handleTaskSOP(newEditorState);
+    }
 
-	toggleInlineStyle = (inlineStyle) => {
-		this.onChange(
-			RichUtils.toggleInlineStyle(
-				this.state.editorState,
-				inlineStyle
-			)
-		);
-	}
+    const toggleBlockType = (blockType) => {
+        onChange(
+            RichUtils.toggleBlockType(
+                editorState,
+                blockType
+            )
+        );
+    }
 
-	render() {
-		const {editorState} = this.state;
+    const toggleInlineStyle = (inlineStyle) => {
+        onChange(
+            RichUtils.toggleInlineStyle(
+                editorState,
+                inlineStyle
+            )
+        );
+    }
 
-		// If the user changes block type before entering any text, we can
-		// either style the placeholder or hide it. Let's just hide it now.
-		let className = 'RichEditor-editor';
-		const contentState = editorState.getCurrentContent();
-		if (!contentState.hasText()) {
-			if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-				className += ' RichEditor-hidePlaceholder';
-			}
-		}
+    let className = 'RichEditor-editor';
+    const contentState = editorState.getCurrentContent();
+    if (!contentState.hasText()) {
+        if (contentState.getBlockMap().first().getType() !== 'unstyled') {
+            className += ' RichEditor-hidePlaceholder';
+        }
+    }
 
-		return (
-			<div className="RichEditor-root">
-				<BlockStyleControls
-					editorState={editorState}
-					onToggle={this.toggleBlockType}
-				/>
-				<InlineStyleControls
-					editorState={editorState}
-					onToggle={this.toggleInlineStyle}
-				/>
-				<div className={className} onClick={this.focus}>
-					<Editor
-						blockStyleFn={getBlockStyle}
-						customStyleMap={styleMap}
-						editorState={editorState}
-						onChange={this.onChange}
-						// placeholder="Tell a story..."
-						ref="editor"
-						blockRenderMap={extendedBlockRenderMap}
-					/>
-				</div>
-                
-			</div>
-		);
-	}
+    return (
+        <>
+            <div className="RichEditor-root" style={{ margin: 5, width: "100%" }}>
+                <BlockStyleControls
+                    editorState={editorState}
+                    onToggle={toggleBlockType}
+                />
+                <InlineStyleControls
+                    editorState={editorState}
+                    onToggle={toggleInlineStyle}
+                />
+                <div className={className} onClick={() => editorRef.current.focus()}>
+                    <Editor
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
+                        editorState={editorState}
+                        onChange={onChange}
+                        // placeholder="Tell a story..."
+                        ref={editorRef}
+                        blockRenderMap={extendedBlockRenderMap}
+                    />
+                </div>
+            </div>
+        </>
+    );
 }
+
+export default RichEditorExample;
 
 
 const styleMap = {
