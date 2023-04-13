@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 
 const filter = createFilterOptions();
 
-export default function Tags({handleTaskTags, taskInfo}) {
+export default function Tags({handleSelectedTaskTags, taskInfo}) {
   return (
       <Autocomplete
         multiple
@@ -55,7 +55,7 @@ export default function Tags({handleTaskTags, taskInfo}) {
             return <li {...props}>{option.title}</li>
         }}
         sx={{margin: 1, width: "100%"}}
-        onChange={handleTaskTags}
+        onChange={handleSelectedTaskTags}
         renderInput={(params) => (
           <TextField
             {...params}
