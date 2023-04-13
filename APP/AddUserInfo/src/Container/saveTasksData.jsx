@@ -1,52 +1,22 @@
 
 
 export default function saveTasksData(
-    taskTypes = null, 
     selectedTaskTypes, 
-    taskNames = null, 
     selectedTaskNames= null, 
-    taskTags= null, 
     selectedTaskTags= null, 
-    addedTaskContent= null
+    addedTaskContent= null,
+    setIsMistake
 ){
-   
-    let IsSaved = false;
-    updateTaskTypes(selectedTaskTypes)
-    // updateTaskNames(selectedTaskTypes, selectedTaskNames)
-    updateTaskTags(selectedTaskTags)
+  // if any of the input is null, return
+  // if (!selectedTaskTypes || !selectedTaskNames || !selectedTaskTags || !addedTaskContent) {
+  //   setIsMistake(true)
+  //   return
+  // }
 
-    function updateTaskTags(selectedTaskTags){
-      let promises = [];
-      //multiple tags are selected and saved as an array
-      for (let element of selectedTaskTags || []){  
-        //three kinds of tags are selected, one is a string, the others are an object. 
-        //e.g. "tag1", {"title":tag2} and { inputValue: 'tag3', title: 'Add "tag3"' }
-        if (element.inputValue) {
-          element = {"title":element.inputValue}
-        }else if (typeof(element) === "string"){
-          element = {"title":element}
-        }
-        promises.push(
-        fetch("http://localhost:3000/updateTaskInfos", 
-        {
-          method: 'PATCH', 
-          headers : {'Content-Type':'application/json'},
-          body : JSON.stringify(
-            {
-              "id" : "zoran",
-              "updatedInfo" : {
-                "requestType" : "taskTags",
-                "TaskTag" : element,
-              }
-            }
-          )
-        }))
-      }
-      Promise.all(promises).catch((error)=>console.log("Error" + error))
-  }
-
-
-
+  let IsSaved = false;
+  updateTaskTypes(selectedTaskTypes)
+  updateTaskNames(selectedTaskTypes, selectedTaskNames)
+  // updateTaskTags(selectedTaskTags)
 
     // if (!existingTaskNames){ // if the task name is not in the TaskNames list, add it
     //     if (!taskNames[selectedTaskTypes.title]){
@@ -56,17 +26,6 @@ export default function saveTasksData(
     //     }
     // }
     // console.log(taskNames)
-
-    // selectedTaskTags?.forEach(selectedTaskTag => { // if the task tag is not in the taskTag list, add it
-    //     const existingTaskTags = taskTags.some(taskTag => {
-    //     return taskTag.title === selectedTaskTag.inputValue || taskTag.title === selectedTaskTag
-    //     })
-
-    //     if (!existingTaskTags){
-    //     taskTags.push({ title: selectedTaskTag.inputValue||selectedTaskTag});
-    //     }
-    // })
-    // console.log(taskTags)
 
     // for (const element of taskContents[selectedTaskTypes.title] || []){ 
     //     if (element.taskTags.length !== selectedTaskTags?.length) continue     //finding the intersection of taskTags and selectedTaskTags -1
@@ -115,13 +74,7 @@ export default function saveTasksData(
 
 
 function updateTaskTypes(selectedTaskTypes){ 
-  //three kinds of tags are selected, one is a string, the others are an object. 
-  //e.g. "tag1", {"title":tag2} and { inputValue: 'tag3', title: 'Add "tag3"' }
-  if (selectedTaskTypes.inputValue) {
-    selectedTaskTypes = {"title":selectedTaskTypes.inputValue}
-  }else if (typeof(selectedTaskTypes) === "string"){
-    selectedTaskTypes = {"title":selectedTaskTypes}
-  }
+  selectedTaskTypes = transferTaskInfoForm(selectedTaskTypes)
 
   // update info to db of "tasktypes"  
   fetch("http://localhost:3000/updateTaskInfos", 
@@ -150,7 +103,39 @@ function updateTaskTypes(selectedTaskTypes){
   })             
 }
 
-function updateTaskNames(selectedTaskTypes, selectedTaskNames){
+function updateTaskNames(selectedTaskTypes = "工作", selectedTaskNames){
+  console.log("selectedTaskTypes",selectedTaskTypes)
+  console.log("selectedTaskNames",selectedTaskNames)
+
+  selectedTaskTypes = transferTaskInfoForm(selectedTaskTypes)
+  selectedTaskNames = transferTaskInfoForm(selectedTaskNames)
+  
+  fetch("http://localhost:3000/updateTaskInfos", 
+  {
+    method: 'PATCH', 
+    headers : {'Content-Type':'application/json'},
+    body : JSON.stringify(
+      {
+        "id" : "zoran",
+        "updatedInfo" : {
+          "requestType" : "taskNames",
+          "taskType" : selectedTaskTypes,
+          "taskName" : selectedTaskNames,
+        }
+      }
+    )
+  })
+  .then((res) => res.json())
+  .catch(console.log)
+}
+
+function updateTaskTags(selectedTaskTags){
+  let promises = [];
+  //multiple tags are selected and saved as an array
+  for (let element of selectedTaskTags || []){  
+    element = transferTaskInfoForm(element)
+
+    promises.push(
     fetch("http://localhost:3000/updateTaskInfos", 
     {
       method: 'PATCH', 
@@ -159,13 +144,24 @@ function updateTaskNames(selectedTaskTypes, selectedTaskNames){
         {
           "id" : "zoran",
           "updatedInfo" : {
-            "requestType" : "TaskNames",
-            "taskType" : selectedTaskTypes,
-            "taskName" : selectedTaskNames,
+            "requestType" : "taskTags",
+            "TaskTag" : element,
           }
         }
       )
-    })
-    .then((res) => res.json())
-    .catch(console.log)
+    }))
+  }
+  Promise.all(promises).catch((error)=>console.log("Error" + error))
+}
+
+
+function transferTaskInfoForm(taskInfo){
+  //three kinds of tags are selected, one is a string, the others are an object. 
+  //e.g. "tag1", {"title":tag2} and { inputValue: 'tag3', title: 'Add "tag3"' }
+  if (taskInfo.inputValue) {
+    taskInfo = {"title":taskInfo.inputValue}
+  }else if (typeof(taskInfo) === "string"){
+    taskInfo = {"title":taskInfo}
+  }
+  return taskInfo
 }

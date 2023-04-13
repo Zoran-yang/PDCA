@@ -94,6 +94,8 @@ const taskContents = {
   TaskTag: [ { inputValue: 'A', title: 'Add "A"' }, 'B' ,{"title":"tag2"} ]
   
 
+  
+
 // CEATE TABLE tasktypes (id BIGSERIAL UNIQUE , taskType text, PRIMARY KEY(id));
 // CREATE TABLE tasknames (id BIGSERIAL UNIQUE, taskType text, taskName text, PRIMARY KEY(id));
 // CREATE TABLE tasksops (id BIGSERIAL UNIQUE, taskType text NOT NULL, taskName text NOT NULL, taskTag text, sop text NOT NULL,PRIMARY KEY(id));

@@ -1,23 +1,27 @@
 import {FreeSoloCreateOption} from '../Component/FreeSoloCreateOption.jsx';
 import ComboBox from "../Component/Autocomplete.jsx";
-import {TaskContentField} from '../Component/TaskContentField.jsx';
+// import {TaskContentField} from '../Component/TaskContentField.jsx';
 import CreateReminder from './CreateReminder.jsx';
+import {EditorState, convertToRaw} from 'draft-js'
 import Tags from '../Component/TaskTags.jsx';
 import {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import saveTasksData from './saveTasksData.jsx';
+import getTaskNames from './getTaskNames.jsx';
+import TaskContentField from "../../../BuildSOP/src/CreateSOP.jsx";
 import "./App.css"
 
 
 export default function App(){
-  let taskNames
   const [selectedTaskTypes, setSelectedTaskTypes] = useState(null);
   const [selectedTaskNames, setSelectedTaskNames] = useState(null);
   // const [selectedTaskPhase, setSelectedTaskPhase] = useState(null);  considering to add concept of phase(timeline)
   const [selectedTaskTags, setSelectedTaskTags] = useState(null);
-  const [addedTaskContent, setAddedTaskContent] = useState(null);
+  const [addedTaskContent, setAddedTaskContent] = useState(() => EditorState.createEmpty());
   const [taskTypes, setTaskTypes] = useState(null);
   const [taskTags, setTaskTags] = useState(null);
+  const [taskNames, setTaskNames] = useState(null);
+  const [isMistake, setIsMistake] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:3000/getTaskInfos", // get task types from server
@@ -64,33 +68,7 @@ export default function App(){
     .catch(console.log)     
   },[])
   
-  function getTaskNames(newValue){  // get task names from server
-    fetch("http://localhost:3000/getTaskInfos",  
-    {
-      method: 'POST', 
-      headers : {'Content-Type':'application/json'},
-      body : JSON.stringify(
-        {
-          "id" : "zoran",
-          "requestInfo" : {
-            "requestType" : "taskNames",
-            "taskType" : newValue,
-          }
-        }
-      )
-    })
-    .then(async(res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        console.log(await res.json())
-        throw new Error('Request failed.');
-    }})
-    .catch(console.log)  
-  }
-  
   function handleSelectedTaskTypes(event, newValue) {
-    console.log(newValue)
     if (typeof newValue === 'string') {
       setSelectedTaskTypes({
         title: newValue,
@@ -104,7 +82,7 @@ export default function App(){
       setSelectedTaskTypes(newValue);
     }
     if (!newValue?.title) return
-    taskNames = getTaskNames(newValue) //When TaskTypes change, taskNames change
+    getTaskNames(newValue, handleTaskNames) //When TaskTypes change, taskNames change
   }
 
   function handleSelectedTaskName(event, newValue) {
@@ -120,16 +98,14 @@ export default function App(){
     } else {
       setSelectedTaskNames(newValue);
     }
-    console.log(newValue)
-    console.log(selectedTaskNames)
   }
 
-  function handleAddedTaskContent(event, newValue) {
-    setAddedTaskContent(event.target.value);
+  function handleAddedTaskContent(event, newEditorState) {
+    console.log(JSON.stringify(convertToRaw(taskSOP.getCurrentContent())))
+    setAddedTaskContent(newEditorState);
   }
 
   function handleSelectedTaskTags(event, newValue) {
-    console.log(newValue)
     setSelectedTaskTags(newValue);
   }
 
@@ -149,6 +125,15 @@ export default function App(){
     setTaskTags(newValue);
   }
 
+  function handleTaskNames(newValue) {
+    
+    if(newValue === null) return
+    newValue = newValue.map((item) => {
+      return JSON.parse(item.taskname)
+    })
+    setTaskNames(newValue);
+  }
+
   return (
     <div>
       <h1 style={{textAlign: "center"}}>My Task</h1>
@@ -158,14 +143,18 @@ export default function App(){
           taskInfo={taskTypes||JSON.parse(JSON.stringify([{"title": ""}]))}
           selectedstatus={selectedTaskTypes} 
           handleSelectedstatus={handleSelectedTaskTypes}/>
-        {/* <FreeSoloCreateOption 
+        <FreeSoloCreateOption 
           labelName="Task Name" 
           taskInfo={taskNames || [{ title: ""}]} 
           selectedstatus={selectedTaskNames} 
-          handleSelectedstatus={handleSelectedTaskName}/> */}
+          handleSelectedstatus={handleSelectedTaskName}/>
         {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}  
-        <Tags taskInfo={taskTags||JSON.parse(JSON.stringify([{"title": ""}]))} handleSelectedTaskTags={handleSelectedTaskTags}/>
-        {/* <TaskContentField handleAddedTaskContent={handleAddedTaskContent}/> */}
+        <Tags 
+          taskInfo={taskTags||JSON.parse(JSON.stringify([{"title": ""}]))} 
+          handleSelectedTaskTags={handleSelectedTaskTags} 
+          selectedTaskTags={selectedTaskTags}
+        />
+        <TaskContentField handleTaskSOP={handleAddedTaskContent} editorState={addedTaskContent}/>
       </div>
       <div style={{
         display:"flex",
@@ -178,7 +167,7 @@ export default function App(){
           variant="outlined" 
           sx={{ marginRight: 1}} 
           onClick={()=>{
-              saveTasksData(taskTypes, selectedTaskTypes, taskNames, selectedTaskNames, taskTags, selectedTaskTags, addedTaskContent)
+              saveTasksData(selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
               // CreateReminder(prompts, selectedTaskTypes, selectedTaskNames, selectedTaskTags)
           }}
         >
