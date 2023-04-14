@@ -25,7 +25,6 @@ export function FreeSoloCreateOption({labelName, taskInfo, selectedstatus, handl
                             title: `Add "${inputValue}"`,
                         });
                     }
-
                     return filtered;
                 }}
                 selectOnFocus

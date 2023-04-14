@@ -1,17 +1,17 @@
 
 import React from 'react';
-import {Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, convertToRaw} from 'draft-js'
+import {Editor, RichUtils, DefaultDraftBlockRenderMap,} from 'draft-js'
 import Immutable from 'immutable';
 import {useState, useRef} from 'react';
 // import ReactDOM from 'react-dom';
-import "./CreateSOP.css"
+import "./TaskContentField.css"
 
-const RichEditorExample = ({handleTaskSOP, editorState}) => {
+const RichEditorExample = ({handleStatus, editorState, title}) => {
     // const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const editorRef = useRef(null);
 
     const onChange = (newEditorState) => {
-        handleTaskSOP(newEditorState);
+        handleStatus(newEditorState);
     }
 
     const toggleBlockType = (blockType) => {
@@ -42,7 +42,13 @@ const RichEditorExample = ({handleTaskSOP, editorState}) => {
 
     return (
         <>
-            <div className="RichEditor-root" style={{ margin: 5, width: "100%" }}>
+          
+            <div className="RichEditor-root" style={{ margin: 5, marginTop: 15, width: "100%" }}>
+                <div style={{width:"100%", display:"flex", flexWrap:"wrap", borderBottom: "1px solid #ddd", paddingBottom:10}}>
+                    <div >
+                        <span className='RichEditor-title'>Add {title}</span>    
+                    </div>
+                </div>   
                 <BlockStyleControls
                     editorState={editorState}
                     onToggle={toggleBlockType}
@@ -68,6 +74,10 @@ const RichEditorExample = ({handleTaskSOP, editorState}) => {
 }
 
 export default RichEditorExample;
+
+
+
+
 
 
 const styleMap = {
