@@ -30,7 +30,7 @@ export default function saveTasksData(
       updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, richEditorInput)
       break;
   }
-
+  console.log("saved")
   // window.close()
 }
 

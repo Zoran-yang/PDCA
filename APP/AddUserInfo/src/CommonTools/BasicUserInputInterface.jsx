@@ -168,8 +168,8 @@ export default function BasicUserInputInterface({title, dataSource}){
                     variant="outlined" 
                     sx={{ marginRight: 1}} 
                     onClick={()=>{
-                        saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
-                        // CreateReminder(selectedTaskTypes, selectedTaskNames, selectedTaskTags)
+                        // saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
+                        CreateReminder(selectedTaskTypes, selectedTaskNames, selectedTaskTags)
                     }}
                 >
                     Save

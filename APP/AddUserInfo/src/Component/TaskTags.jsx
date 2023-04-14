@@ -66,7 +66,6 @@ export default function Tags({handleSelectedTaskTags, taskInfo, selectedTaskTags
                 />
                 )}
             />
-            <BlankWarning input={selectedTaskTags} notIntialRender={notIntialRender}/>
         </>
     );
 }

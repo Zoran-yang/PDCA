@@ -3,7 +3,6 @@ import React from 'react';
 import {Editor, RichUtils, DefaultDraftBlockRenderMap,} from 'draft-js'
 import Immutable from 'immutable';
 import {useState, useRef} from 'react';
-// import ReactDOM from 'react-dom';
 import "./TaskContentField.css"
 
 const RichEditorExample = ({handleStatus, editorState, title}) => {
@@ -42,7 +41,6 @@ const RichEditorExample = ({handleStatus, editorState, title}) => {
 
     return (
         <>
-          
             <div className="RichEditor-root" style={{ margin: 5, marginTop: 15, width: "100%" }}>
                 <div style={{width:"100%", display:"flex", flexWrap:"wrap", borderBottom: "1px solid #ddd", paddingBottom:10}}>
                     <div >
