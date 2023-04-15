@@ -1,4 +1,4 @@
-import {taskInfoFormat} from '../CommonTools/taskInfoFormat.jsx'
+import {taskInfoFormat} from '../../CommonTools/taskInfoFormat.jsx'
 
 
 export default function CreateReminder(selectedTaskTypes, selectedTaskNames, selectedTaskTags) {
@@ -6,8 +6,8 @@ export default function CreateReminder(selectedTaskTypes, selectedTaskNames, sel
   selectedTaskNames = taskInfoFormat(selectedTaskNames)
   selectedTaskTags = taskInfoFormat(selectedTaskTags)
 
-
-  fetch("http://localhost:3000/getTaskInfos", // get task types from server
+  // fetch task sops from server
+  fetch("http://localhost:3000/getTaskInfos", 
   {
     method: 'POST', 
     headers : {'Content-Type':'application/json'},
@@ -31,4 +31,7 @@ export default function CreateReminder(selectedTaskTypes, selectedTaskNames, sel
       throw new Error('Request failed.');
     }})
   .catch(console.log) 
+
+  // create floating window with reminder
+
 }

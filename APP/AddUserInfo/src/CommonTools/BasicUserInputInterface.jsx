@@ -1,13 +1,13 @@
 import {FreeSoloCreateOption} from '../Component/FreeSoloCreateOption.jsx';
 // import ComboBox from "../Component/Autocomplete.jsx";
-import CreateReminder from "../Container/CreateReminder.jsx";
+import CreateReminder from "../Component/CreateReminder/CreateReminder.jsx";
 import Tags from '../Component/TaskTags.jsx';
 import Button from '@mui/material/Button';
 import saveTasksData from './saveTasksData.jsx';
 import TaskContentField from '../Component/TaskContentField.jsx';
 import {EditorState, convertToRaw} from 'draft-js'
 import {useEffect, useState} from 'react';
-import getTaskNames from '../Container/getTaskNames.jsx';
+import getTaskNames from './getTaskNames.jsx';
 
 
 
