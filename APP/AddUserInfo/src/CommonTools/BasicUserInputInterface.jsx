@@ -1,17 +1,15 @@
 import {FreeSoloCreateOption} from '../Component/FreeSoloCreateOption.jsx';
 // import ComboBox from "../Component/Autocomplete.jsx";
-import CreateReminder from "../Component/CreateReminder/CreateReminder.jsx";
 import Tags from '../Component/TaskTags.jsx';
 import Button from '@mui/material/Button';
-import saveTasksData from './saveTasksData.jsx';
 import TaskContentField from '../Component/TaskContentField.jsx';
-import {EditorState, convertToRaw} from 'draft-js'
+import {EditorState} from 'draft-js'
 import {useEffect, useState} from 'react';
 import getTaskNames from './getTaskNames.jsx';
 
 
 
-export default function BasicUserInputInterface({title, dataSource}){
+export default function BasicUserInputInterface({title, dataSource, AfterSubmit}){
 
     const [taskTypes, setTaskTypes] = useState(null);
     const [taskTags, setTaskTags] = useState(null);
@@ -22,6 +20,7 @@ export default function BasicUserInputInterface({title, dataSource}){
     const [selectedTaskTags, setSelectedTaskTags] = useState(null);
     const [addedTaskContent, setAddedTaskContent] = useState(() => EditorState.createEmpty());
     const [isMistake, setIsMistake] = useState(false);
+    const [IsSubmitted, setIsSubmitted] = useState(false)
 
 
     function handleTaskTypes(newValue) {
@@ -89,6 +88,10 @@ export default function BasicUserInputInterface({title, dataSource}){
         setSelectedTaskTags(newValue);
     }
 
+    function handleIsSubmitted(){
+        setIsSubmitted(true)
+    }
+
     useEffect(() => {
         fetch("http://localhost:3000/getTaskInfos", // get task types from server
         {
@@ -134,48 +137,57 @@ export default function BasicUserInputInterface({title, dataSource}){
         .catch(console.log)     
     },[])
     
-    
-    return (
-        <div>
-            <h1 style={{textAlign: "center"}}>Add My {title}</h1>
-            <div style={{display:"flex", flexWrap:"wrap"}}>     
-                <FreeSoloCreateOption 
-                    labelName="Task Type" 
-                    taskInfo={taskTypes||JSON.parse(JSON.stringify([{"title": ""}]))}
-                    selectedstatus={selectedTaskTypes} 
-                    handleSelectedstatus={handleSelectedTaskTypes}/>
-                <FreeSoloCreateOption 
-                    labelName="Task Name" 
-                    taskInfo={taskNames || [{ title: ""}]} 
-                    selectedstatus={selectedTaskNames} 
-                    handleSelectedstatus={handleSelectedTaskName}/>
-                {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}  
-                <Tags 
-                    taskInfo={taskTags||JSON.parse(JSON.stringify([{"title": ""}]))} 
-                    handleSelectedTaskTags={handleSelectedTaskTags} 
-                    selectedTaskTags={selectedTaskTags}
-                />               
-                <TaskContentField handleStatus={handleAddedTaskContent} editorState={addedTaskContent} title={title}/>
-            </div>
-            <div style={{
+    if (!IsSubmitted) {
+        return (
+            <div>
+                <h1 style={{textAlign: "center"}}>Add My {title}</h1>
+                <div style={{display:"flex", flexWrap:"wrap"}}>     
+                    <FreeSoloCreateOption 
+                        labelName="Task Type" 
+                        taskInfo={taskTypes||JSON.parse(JSON.stringify([{"title": ""}]))}
+                        selectedstatus={selectedTaskTypes} 
+                        handleSelectedstatus={handleSelectedTaskTypes}/>
+                    <FreeSoloCreateOption 
+                        labelName="Task Name" 
+                        taskInfo={taskNames || [{ title: ""}]} 
+                        selectedstatus={selectedTaskNames} 
+                        handleSelectedstatus={handleSelectedTaskName}/>
+                    {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}  
+                    <Tags 
+                        taskInfo={taskTags||JSON.parse(JSON.stringify([{"title": ""}]))} 
+                        handleSelectedTaskTags={handleSelectedTaskTags} 
+                        selectedTaskTags={selectedTaskTags}
+                    />               
+                    <TaskContentField handleStatus={handleAddedTaskContent} editorState={addedTaskContent} title={title}/>
+                </div>
+                <div style={{
                 display:"flex",
                 justifyContent:"flex-end",
                 flexWrap: "wrap",
                 marginRight: 5
-            }}>
-                <Button 
+                }}>
+                    <Button 
                     id='submit-btn' 
                     variant="outlined" 
                     sx={{ marginRight: 1}} 
                     onClick={()=>{
-                        // saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
-                        CreateReminder(selectedTaskTypes, selectedTaskNames, selectedTaskTags)
+                        saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
+                        handleIsSubmitted()
                     }}
-                >
-                    Save
-                </Button>
-                <Button id='cancel-btn' variant="outlined" onClick={()=>window.close()}>cancal</Button>
-            </div>
-        </div>
-    )
+                    >
+                        Save
+                    </Button>
+                    <Button id='cancel-btn' variant="outlined" onClick={()=>window.close()}>cancal</Button>
+                </div>
+            </div> 
+        )
+    } else {
+        return(
+            <AfterSubmit
+            selectedTaskTypes = {selectedTaskTypes} 
+            selectedTaskNames = {selectedTaskNames}
+            selectedTaskTags = {selectedTaskTags}
+            />
+        )
+    }
 }

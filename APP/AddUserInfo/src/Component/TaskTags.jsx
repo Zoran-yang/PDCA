@@ -2,12 +2,11 @@ import * as React from 'react';
 import Chip from '@mui/material/Chip';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import BlankWarning from './blankWarning.jsx';
+
 
 const filter = createFilterOptions();
 
-export default function Tags({handleSelectedTaskTags, taskInfo, selectedTaskTags}) {
-    let notIntialRender = false;
+export default function Tags({handleSelectedTaskTags, taskInfo}) {
     return (
         <>
             <Autocomplete

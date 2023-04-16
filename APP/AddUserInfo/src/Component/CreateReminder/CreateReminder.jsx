@@ -1,37 +1,60 @@
 import {taskInfoFormat} from '../../CommonTools/taskInfoFormat.jsx'
+import {useEffect, useState} from 'react';
+import Reminder from './Reminder.jsx';
 
 
-export default function CreateReminder(selectedTaskTypes, selectedTaskNames, selectedTaskTags) {
+export default function CreateReminder({selectedTaskTypes, selectedTaskNames, selectedTaskTags}) {
+
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes)
   selectedTaskNames = taskInfoFormat(selectedTaskNames)
   selectedTaskTags = taskInfoFormat(selectedTaskTags)
+  
+  const [sopData, setSopData] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
+  
+  function handleSopData(data) {
+    setSopData(data)
+  }
 
-  // fetch task sops from server
-  fetch("http://localhost:3000/getTaskInfos", 
-  {
-    method: 'POST', 
-    headers : {'Content-Type':'application/json'},
-    body : JSON.stringify(
-      {
-        "id" : "zoran",
-        "requestInfo" : {
-          "requestType" : "taskSOP",
-          "taskType" : selectedTaskTypes,
-          "taskName" : selectedTaskNames,
-          "taskTags" : selectedTaskTags,
+  useEffect(() => {
+    // fetch task sops from server
+    fetch("http://localhost:3000/getTaskInfos", 
+    {
+      method: 'POST', 
+      headers : {'Content-Type':'application/json'},
+      body : JSON.stringify(
+        {
+          "id" : "zoran",
+          "requestInfo" : {
+            "requestType" : "taskSOP",
+            "taskType" : selectedTaskTypes,
+            "taskName" : selectedTaskNames,
+            "taskTags" : selectedTaskTags,
+          }
         }
-      }
-    )
-  })
-  .then(async(res) => {
-    if (res.ok) {
-      console.log(await res.json())
-      // return handleTaskTypes(await res.json())
-    } else {
-      throw new Error('Request failed.');
-    }})
-  .catch(console.log) 
+      )
+    })
+    .then(async(res) => {
+      if (res.ok) {
+        handleSopData(await res.json())
+        setIsLoading(false);
+      } else {
+        throw new Error('Request failed.');
+      }})
+    .catch(console.log) 
+  },[])
 
-  // create floating window with reminder
+  // render task sops
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!sopData || !sopData.length || !sopData[0].tasktype) {
+    return <div>Error: No data available</div>;
+  }
+
+  return (
+    <Reminder sopData = {sopData}/>
+  )
 
 }
