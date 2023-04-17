@@ -4,10 +4,10 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import TaskDisplayField from "../../../AddUserInfo/src/CommonTools/TaskDisplayField"
+import TaskDisplayField from "../../AddUserInfo/src/CommonTools/TaskDisplayField"
 import { useEffect, useState } from 'react';
-import FloatingWindows from "../../../AddUserInfo/src/CommonTools/floatingWindows"
-import BasicUserInputInterface from "../../../AddUserInfo/src/CommonTools/BasicUserInputInterface.jsx"
+import FloatingWindows from "../../AddUserInfo/src/CommonTools/floatingWindows"
+import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/BasicUserInputInterface.jsx"
 
 
 
