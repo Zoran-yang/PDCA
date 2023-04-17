@@ -23,7 +23,7 @@ function showNotification(notifier, path, BrowserWindow) {
             nodeIntegration: true
           }
         })
-        newWindow.loadFile(path.join(__dirname, "userInterface/",'index.html'))
+        newWindow.loadFile(path.join(__dirname, "../APP/AddUserInfo/dist",'index.html'))
         newWindow.on('ready-to-show', () => {
           newWindow.show()
         })

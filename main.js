@@ -1,9 +1,9 @@
 const { app, BrowserWindow, Menu, Tray, dialog} = require('electron')
 const path = require('path')
 const notifier = require('node-notifier')
-const createTray = require('./createTray.js')
+const createTray = require('./Function/createTray.js')
 const settings = require('electron-settings');
-const showNotification = require('./showNotification.js')
+const showNotification = require('./Function/showNotification.js')
 
 let timeId
 
