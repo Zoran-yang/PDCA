@@ -9,7 +9,6 @@ import Paper from '@mui/material/Paper';
 import { Chip } from '@mui/material';
 
 
-
 export default function TaskDisplayField({sopData, children}){
     let childrenData = JSON.parse(sopData.sop)
     let tasktag = sopData.tasktag

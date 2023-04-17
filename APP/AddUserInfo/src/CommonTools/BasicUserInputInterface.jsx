@@ -3,25 +3,38 @@ import {FreeSoloCreateOption} from '../Component/FreeSoloCreateOption.jsx';
 import Tags from '../Component/TaskTags.jsx';
 import Button from '@mui/material/Button';
 import TaskContentField from '../Component/TaskContentField.jsx';
-import {EditorState} from 'draft-js'
+import {EditorState, convertFromRaw} from 'draft-js'
 import {useEffect, useState} from 'react';
 import getTaskNames from './getTaskNames.jsx';
 import saveTasksData from './saveTasksData.jsx';
 
 
 
-export default function BasicUserInputInterface({title, dataSource, AfterSubmit}){
-
+export default function BasicUserInputInterface({
+    title, 
+    dataSource, 
+    AfterSubmit = ()=>window.close(), 
+    defaultValues = null, 
+    AfterCancel = ()=>window.close(), 
+    NextPage = null,
+}){
+    const sopId = defaultValues?.sopId || null;
     const [taskTypes, setTaskTypes] = useState(null);
-    const [taskTags, setTaskTags] = useState(null);
     const [taskNames, setTaskNames] = useState(null);
-    const [selectedTaskTypes, setSelectedTaskTypes] = useState(null);
-    const [selectedTaskNames, setSelectedTaskNames] = useState(null);
+    const [taskTags, setTaskTags] = useState(null);
+    const [selectedTaskTypes, setSelectedTaskTypes] = useState(defaultValues&&JSON.parse(defaultValues["tasktype"])||null);
+    const [selectedTaskNames, setSelectedTaskNames] = useState(defaultValues&&JSON.parse(defaultValues["taskname"])||null);
     // const [selectedTaskPhase, setSelectedTaskPhase] = useState(null);  considering to add concept of phase(timeline)
-    const [selectedTaskTags, setSelectedTaskTags] = useState(null);
-    const [addedTaskContent, setAddedTaskContent] = useState(() => EditorState.createEmpty());
+    const [selectedTaskTags, setSelectedTaskTags] = useState(defaultValues&&defaultValues["tasktag"]!=="null"&&JSON.parse(defaultValues["tasktag"]).map((item) => item.title)||undefined);
+    const [addedTaskContent, setAddedTaskContent] = useState(
+        defaultValues?.sop 
+        ? () => EditorState.createWithContent(convertFromRaw(JSON.parse(defaultValues["sop"]))) 
+        : () => EditorState.createEmpty()
+    );
     const [isMistake, setIsMistake] = useState(false);
     const [IsSubmitted, setIsSubmitted] = useState(false)
+
+
 
 
     function handleTaskTypes(newValue) {
@@ -138,11 +151,19 @@ export default function BasicUserInputInterface({title, dataSource, AfterSubmit}
         .catch(console.log)     
     },[])
     
-    if (!IsSubmitted) {
+    if (IsSubmitted && NextPage) {
+        return(
+            <NextPage  // if the user has submitted the form, go to the next page
+            selectedTaskTypes = {selectedTaskTypes} 
+            selectedTaskNames = {selectedTaskNames}
+            selectedTaskTags = {selectedTaskTags}
+            />
+        )        
+    } else {
         return (
-            <div>
+            <div style={{ width: "100%"}}>
                 <h1 style={{textAlign: "center"}}>Add My {title}</h1>
-                <div style={{display:"flex", flexWrap:"wrap"}}>     
+                <div style={{display:"flex", flexWrap:"wrap", boxSizing:"border-box",}}>     
                     <FreeSoloCreateOption 
                         labelName="Task Type" 
                         taskInfo={taskTypes||JSON.parse(JSON.stringify([{"title": ""}]))}
@@ -172,23 +193,16 @@ export default function BasicUserInputInterface({title, dataSource, AfterSubmit}
                     variant="outlined" 
                     sx={{ marginRight: 1}} 
                     onClick={()=>{
-                        saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
-                        AfterSubmit && handleIsSubmitted()
+                        saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, sopId, setIsMistake)
+                        AfterSubmit()
+                        handleIsSubmitted()
                     }}
                     >
                         Save
                     </Button>
-                    <Button id='cancel-btn' variant="outlined" onClick={()=>window.close()}>cancal</Button>
+                    <Button id='cancel-btn' variant="outlined" onClick={AfterCancel}>cancal</Button>
                 </div>
             </div> 
-        )
-    } else {
-        return(
-            <AfterSubmit
-            selectedTaskTypes = {selectedTaskTypes} 
-            selectedTaskNames = {selectedTaskNames}
-            selectedTaskTags = {selectedTaskTags}
-            />
         )
     }
 }

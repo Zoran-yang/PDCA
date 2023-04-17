@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import {useState, useRef} from 'react';
 import "./TaskContentField.css"
 
-const RichEditorExample = ({handleStatus, editorState, title}) => {
+const TaskContentField = ({handleStatus, editorState, title}) => {
     // const [editorState, setEditorState] = useState(() => EditorState.createEmpty());
     const editorRef = useRef(null);
 
@@ -41,8 +41,8 @@ const RichEditorExample = ({handleStatus, editorState, title}) => {
 
     return (
         <>
-            <div className="RichEditor-root" style={{ margin: 5, marginTop: 15, width: "100%" }}>
-                <div style={{width:"100%", display:"flex", flexWrap:"wrap", borderBottom: "1px solid #ddd", paddingBottom:10}}>
+            <div className="RichEditor-root" style={{ width:"98%", margin: 5, marginTop: 15, boxSizing:"border-box"}}>
+                <div style={{ display:"flex", flexWrap:"wrap", borderBottom: "1px solid #ddd", paddingBottom:10}}>
                     <div >
                         <span className='RichEditor-title'>Add {title}</span>    
                     </div>
@@ -71,7 +71,7 @@ const RichEditorExample = ({handleStatus, editorState, title}) => {
     );
 }
 
-export default RichEditorExample;
+export default TaskContentField;
 
 
 

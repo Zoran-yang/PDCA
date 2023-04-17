@@ -6,10 +6,11 @@ import TextField from '@mui/material/TextField';
 
 const filter = createFilterOptions();
 
-export default function Tags({handleSelectedTaskTags, taskInfo}) {
+export default function Tags({handleSelectedTaskTags, taskInfo, selectedTaskTags}) {
     return (
         <>
             <Autocomplete
+                value={selectedTaskTags}
                 multiple
                 id="tags-outlined"
                 options={taskInfo.map((option) => option.title)}
@@ -26,7 +27,6 @@ export default function Tags({handleSelectedTaskTags, taskInfo}) {
                             title: `Add "${inputValue}"`,
                         });
                     }
-
                     return filtered;
                 }}
                 renderTags={(value, getTagProps) =>{
@@ -68,3 +68,4 @@ export default function Tags({handleSelectedTaskTags, taskInfo}) {
         </>
     );
 }
+

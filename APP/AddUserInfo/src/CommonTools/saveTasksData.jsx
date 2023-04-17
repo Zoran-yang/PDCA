@@ -1,5 +1,5 @@
 
-import {EditorState, convertToRaw} from 'draft-js'
+import {convertToRaw} from 'draft-js'
 import {taskInfoFormat} from './taskInfoFormat.jsx'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,6 +9,7 @@ export default function saveTasksData(
     selectedTaskNames, 
     selectedTaskTags, 
     richEditorInput,
+    sopId,
     setIsMistake
 ){
   // if any of the input is null, return
@@ -30,9 +31,11 @@ export default function saveTasksData(
       updateTaskTags(selectedTaskTags)
       updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, richEditorInput)
       break;
+    case "ReviseTask":
+      reviseSop(sopId, selectedTaskTypes, selectedTaskNames, selectedTaskTags, richEditorInput)
+
   }
   console.log("saved")
-  // window.close()
 }
 
 
@@ -188,4 +191,36 @@ function updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, r
       throw new Error('Request failed.');
     }})
   .catch(console.log) 
+}
+
+
+function reviseSop(sopId, revisedTaskTypes, revisedTaskNames, revisedTaskTags, revisedRichEditorInput){
+  fetch("http://localhost:3000/reviseTaskInfos", 
+  {
+    method: 'PATCH', 
+    headers : {'Content-Type':'application/json'},
+    body : JSON.stringify(
+      {
+        "id" : "zoran",
+        "revisedInfo" : {
+          "requestType" : "TaskSOP",
+          "sopId" : sopId,
+          "taskType" : revisedTaskTypes,
+          "taskName" : revisedTaskNames,
+          "taskTag" : revisedTaskTags,
+          "sop" : revisedRichEditorInput,
+        }
+    })
+  })
+  .then(async(res) => {
+    if (res.ok) {
+      return res.json();
+    } else {
+      console.log(await res.json())
+      throw new Error('Request failed.');
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+  }) 
 }

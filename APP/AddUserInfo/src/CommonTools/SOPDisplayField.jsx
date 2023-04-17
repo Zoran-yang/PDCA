@@ -49,7 +49,6 @@ export default SOPDisplayField;
 
 
 
-
 const styleMap = {
 	CODE: {
 		backgroundColor: 'rgba(0, 0, 0, 0.05)',

@@ -7,7 +7,7 @@ import "./App.css"
 
 export default function App(){
   return (
-    <BasicUserInputInterface title = "Task" dataSource = "AddUserInfo" AfterSubmit = {CreateReminder}/>
+    <BasicUserInputInterface title = "Task" dataSource = "AddUserInfo" NextPage = {CreateReminder}/>
   )
 }
 

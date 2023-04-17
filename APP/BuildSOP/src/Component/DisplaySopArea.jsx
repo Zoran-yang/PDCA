@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import TaskDisplayField from "../../../AddUserInfo/src/CommonTools/TaskDisplayField"
 import { useEffect, useState } from 'react';
 import FloatingWindows from "../../../AddUserInfo/src/CommonTools/floatingWindows"
-import Reminder from "../../../AddUserInfo/src/Component/CreateReminder/Reminder"
+import BasicUserInputInterface from "../../../AddUserInfo/src/CommonTools/BasicUserInputInterface.jsx"
 
 
 
@@ -82,10 +82,17 @@ export default function DisplaySopArea() {
                     </Box>
                 )
             })}
-            <FloatingWindows isOpen={selectedSop} closeWindow={closeWindow}>
-                <Reminder sopData = {selectedSop} />
+            <FloatingWindows isOpen={selectedSop} closeWindow={closeWindow} >
+                <BasicUserInputInterface 
+                title = "Saved SOP" 
+                dataSource = "ReviseTask" 
+                defaultValues = {selectedSop} 
+                AfterSubmit={closeWindow} 
+                AfterCancel={closeWindow}
+                />
             </FloatingWindows>
         </div>
     );
 }
+
 
