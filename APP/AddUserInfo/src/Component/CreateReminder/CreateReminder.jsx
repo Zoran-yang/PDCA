@@ -54,7 +54,7 @@ export default function CreateReminder({selectedTaskTypes, selectedTaskNames, se
   }
 
   return (
-    <Reminder sopData = {sopData}/>
+    <Reminder sopData = {sopData[0]}/>
   )
 
 }

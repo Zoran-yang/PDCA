@@ -16,6 +16,7 @@ export default function saveTasksData(
   //   setIsMistake(true)
   //   return
   // }
+  
   switch (dataSource) {
     case "AddUserInfo":
       updateTaskTypes(selectedTaskTypes)
@@ -33,6 +34,7 @@ export default function saveTasksData(
   console.log("saved")
   // window.close()
 }
+
 
 
 
@@ -159,7 +161,6 @@ function updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, r
   selectedTaskNames = taskInfoFormat(selectedTaskNames)
   selectedTaskTags = taskInfoFormat(selectedTaskTags)
   richEditorInput = translateRichEditor(richEditorInput)
-  console.log("selectedTaskTags",selectedTaskTags)
 
   
   // update info to db of "taskcontent"  

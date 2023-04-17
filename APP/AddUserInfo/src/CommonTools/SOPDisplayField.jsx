@@ -31,8 +31,7 @@ const SOPDisplayField = ({sopInfo}) => {
                         <span>My SOP</span>    
                     </div>
                 </div>                  
-                <div className="RichEditor-hidePlaceholder">
- 
+                <div className="RichEditor-hidePlaceholder" style={{margin:15}}>
                     <Editor
                         blockStyleFn={getBlockStyle}
                         customStyleMap={styleMap}

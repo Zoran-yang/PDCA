@@ -11,7 +11,9 @@ import { Chip } from '@mui/material';
 
 
 export default function TaskDisplayField({sopData, children}){
-    let childrenData = JSON.parse(sopData[0].sop)
+    let childrenData = JSON.parse(sopData.sop)
+    let tasktag = sopData.tasktag
+    if (tasktag === "null") tasktag = '[{"title":"None"}]'
     return (
         <>
             <TableContainer component={Paper}>
@@ -32,7 +34,7 @@ export default function TaskDisplayField({sopData, children}){
                                 Task Type
                             </TableCell>
                             <TableCell align="right">
-                                {JSON.parse(sopData[0]["tasktype"]).title}
+                                {JSON.parse(sopData["tasktype"]).title}
                             </TableCell>
                         </TableRow>
                         <TableRow
@@ -43,7 +45,7 @@ export default function TaskDisplayField({sopData, children}){
                                 Task Name
                             </TableCell>
                             <TableCell align="right">
-                                {JSON.parse(sopData[0].taskname).title}
+                                {JSON.parse(sopData.taskname).title}
                             </TableCell>
                         </TableRow>
                         <TableRow
@@ -54,13 +56,13 @@ export default function TaskDisplayField({sopData, children}){
                                 Task Tag
                             </TableCell>
                             <TableCell align="right">
-                                {JSON.parse(sopData[0].tasktag).map((item) => <Chip label={`${item.title}`} key={`${item.title}`} variant="outlined" />)}
+                                {JSON.parse(tasktag).map((item) => <Chip label={`${item.title}`} key={`${item.title}`} variant="outlined" />)}
                             </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
-                {children(childrenData)}
+                {children && children(childrenData)}
             </TableContainer>
         </>
-    );    
+    );   
 }

@@ -6,6 +6,7 @@ import TaskContentField from '../Component/TaskContentField.jsx';
 import {EditorState} from 'draft-js'
 import {useEffect, useState} from 'react';
 import getTaskNames from './getTaskNames.jsx';
+import saveTasksData from './saveTasksData.jsx';
 
 
 
@@ -172,7 +173,7 @@ export default function BasicUserInputInterface({title, dataSource, AfterSubmit}
                     sx={{ marginRight: 1}} 
                     onClick={()=>{
                         saveTasksData(dataSource, selectedTaskTypes, selectedTaskNames, selectedTaskTags, addedTaskContent, setIsMistake)
-                        handleIsSubmitted()
+                        AfterSubmit && handleIsSubmitted()
                     }}
                     >
                         Save
