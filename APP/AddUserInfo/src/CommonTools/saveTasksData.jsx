@@ -32,6 +32,10 @@ export default function saveTasksData(
       updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, richEditorInput)
       break;
     case "ReviseTask":
+      // type, name, tag should also be updated, because user may add new type, name, tag.
+      updateTaskTypes(selectedTaskTypes)
+      updateTaskNames(selectedTaskTypes, selectedTaskNames)
+      updateTaskTags(selectedTaskTags)
       reviseSop(sopId, selectedTaskTypes, selectedTaskNames, selectedTaskTags, richEditorInput)
 
   }
@@ -163,7 +167,7 @@ function updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, r
   selectedTaskNames = taskInfoFormat(selectedTaskNames)
   selectedTaskTags = taskInfoFormat(selectedTaskTags)
   richEditorInput = translateRichEditor(richEditorInput)
-
+  console.log("updateTaskSOP")
   
   // update info to db of "taskcontent"  
   fetch("http://localhost:3000/updateTaskInfos", 
@@ -194,6 +198,11 @@ function updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, r
 
 
 function reviseSop(sopId, revisedTaskTypes, revisedTaskNames, revisedTaskTags, revisedRichEditorInput){
+  revisedTaskTypes = taskInfoFormat(revisedTaskTypes)
+  revisedTaskNames = taskInfoFormat(revisedTaskNames)
+  revisedTaskTags = taskInfoFormat(revisedTaskTags)
+  revisedRichEditorInput = translateRichEditor(revisedRichEditorInput)
+  
   fetch("http://localhost:3000/reviseTaskInfos", 
   {
     method: 'PATCH', 
@@ -223,3 +232,4 @@ function reviseSop(sopId, revisedTaskTypes, revisedTaskNames, revisedTaskTags, r
     console.log(error);
   }) 
 }
+

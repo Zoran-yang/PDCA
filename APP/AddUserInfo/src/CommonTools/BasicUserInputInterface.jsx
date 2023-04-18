@@ -11,18 +11,26 @@ import saveTasksData from "./saveTasksData.jsx";
 export default function BasicUserInputInterface({
   title,
   dataSource,
-  AfterSubmit = () => window.close(),
+  // AfterSubmit = () => window.close(),
+  AfterSubmit = () => console.log("submit"), // for debug
   defaultValues = null,
-  AfterCancel = () => window.close(),
+  // AfterCancel = () => window.close(),
+  AfterCancel = () => console.log("cancel"), // for debug
   NextPage = null,
 }) {
-  const sopId = defaultValues?.sopId || null;
+  const sopId = defaultValues&&defaultValues.sopid || null;
   const [taskTypes, setTaskTypes] = useState(null);
   const [taskNames, setTaskNames] = useState(null);
   const [taskTags, setTaskTags] = useState(null);
-  const [selectedTaskTypes, setSelectedTaskTypes] = useState(
-    (defaultValues && JSON.parse(defaultValues["tasktype"])) || null
-  );
+  const [selectedTaskTypes, setSelectedTaskTypes] = useState(() =>{
+    const defaultType = defaultValues && JSON.parse(defaultValues["tasktype"]);
+    if (defaultValues && defaultType) {
+      getTaskNames(defaultType, handleTaskNames); //When TaskTypes change, taskNames change
+      return defaultType;
+    } else {
+      return null;
+    }
+  });
   const [selectedTaskNames, setSelectedTaskNames] = useState(
     (defaultValues && JSON.parse(defaultValues["taskname"])) || null
   );
@@ -31,7 +39,7 @@ export default function BasicUserInputInterface({
     (defaultValues &&
       defaultValues["tasktag"] !== "null" &&
       JSON.parse(defaultValues["tasktag"]).map((item) => item.title)) ||
-      undefined
+      []  // if there is no task tags, set it to null
   );
   const [addedTaskContent, setAddedTaskContent] = useState(
     defaultValues?.sop
@@ -220,7 +228,13 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
-              AfterSubmit();
+              AfterSubmit(
+                selectedTaskTypes,  // for DisplaySopArea.jsx
+                selectedTaskNames,  // for DisplaySopArea.jsx
+                selectedTaskTags,   // for DisplaySopArea.jsx
+                addedTaskContent,   // for DisplaySopArea.jsx
+                sopId,              // for DisplaySopArea.jsx
+              );
               handleIsSubmitted();
             }}
           >
@@ -234,3 +248,4 @@ export default function BasicUserInputInterface({
     );
   }
 }
+

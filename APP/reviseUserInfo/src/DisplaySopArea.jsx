@@ -8,6 +8,7 @@ import TaskDisplayField from "../../AddUserInfo/src/CommonTools/TaskDisplayField
 import { useEffect, useState } from 'react';
 import FloatingWindows from "../../AddUserInfo/src/CommonTools/floatingWindows"
 import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/BasicUserInputInterface.jsx"
+import {convertToRaw} from 'draft-js'
 
 
 
@@ -28,6 +29,36 @@ export default function DisplaySopArea() {
     const closeWindow = () => {
         setSelectedSop(null);
     }
+
+    const handleUpdateSop = (  
+        selectedTaskTypes,
+        selectedTaskNames,
+        selectedTaskTags,
+        addedTaskContent,
+        sopId
+    ) => {
+        selectedTaskTags = selectedTaskTags.map((item) => {
+            return { title: item };
+        });
+        const updatedSop = {
+            "tasktype" : JSON.stringify(selectedTaskTypes),
+            "taskname" : JSON.stringify(selectedTaskNames),
+            "tasktag" : JSON.stringify(selectedTaskTags),
+            "sop" : JSON.stringify(convertToRaw(addedTaskContent.getCurrentContent())),
+            "sopid" : sopId
+        }
+
+        setAllSopData((prevSopData) =>
+            prevSopData.map((sop) => {
+                if (sop.sopid === updatedSop.sopid) {
+                    updatedSop.id = sop.id
+                    return updatedSop;
+                }else{
+                    return sop;
+                }
+            })
+        );
+    };
 
     useEffect(() => {
         // fetch task sops from server
@@ -59,10 +90,12 @@ export default function DisplaySopArea() {
         return <div>Loading...</div>;
     }
     
+    console.log("AllsopData", AllsopData)
     if (!AllsopData || !AllsopData.length || !AllsopData[0].tasktype) {
         return <div>Error: No data available</div>;
     }
 
+    
 
     return (
         <div style={{display:"flex", flexWrap:"wrap"}}>
@@ -87,7 +120,22 @@ export default function DisplaySopArea() {
                 title = "Saved SOP" 
                 dataSource = "ReviseTask" 
                 defaultValues = {selectedSop} 
-                AfterSubmit={closeWindow} 
+                AfterSubmit={(
+                selectedTaskTypes,
+                selectedTaskNames,
+                selectedTaskTags,
+                addedTaskContent,
+                sopId
+                ) => {
+                    handleUpdateSop(              
+                        selectedTaskTypes,
+                        selectedTaskNames,
+                        selectedTaskTags,
+                        addedTaskContent,
+                        sopId
+                    );
+                    closeWindow();
+                }}
                 AfterCancel={closeWindow}
                 />
             </FloatingWindows>
