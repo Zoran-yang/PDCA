@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 function FloatingWindow({children, isOpen,}) {
 
   return (

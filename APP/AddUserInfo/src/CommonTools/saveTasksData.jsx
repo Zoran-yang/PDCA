@@ -41,7 +41,6 @@ export default function saveTasksData(
 
 
 
-
 function updateTaskTypes(selectedTaskTypes){ 
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes)
 
