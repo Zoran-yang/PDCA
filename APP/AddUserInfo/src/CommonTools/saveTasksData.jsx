@@ -134,9 +134,38 @@ function updateTaskContent(selectedTaskTypes, selectedTaskNames, selectedTaskTag
   selectedTaskNames = taskInfoFormat(selectedTaskNames) 
   selectedTaskTags = taskInfoFormat(selectedTaskTags) 
   richEditorInput = translateRichEditor(richEditorInput) 
+
   let promises = []; 
   let sopId = uuidv4() 
   //multiple tags are selected and saved as an array 
+  if (selectedTaskTags.length === 0) {
+    console.log("no tag")
+    fetch("http://localhost:3000/updateTaskInfos",  
+    { 
+      method: 'PATCH',  
+      headers : {'Content-Type':'application/json'}, 
+      body : JSON.stringify( 
+        { 
+          "id" : "zoran", 
+          "updatedInfo" : { 
+            "requestType" : "taskContent", 
+            "taskType" : selectedTaskTypes, 
+            "taskName" : selectedTaskNames, 
+            "taskTag" : selectedTaskTags, 
+            "taskContent" : richEditorInput, 
+            "detailId" : sopId, 
+          } 
+      }) 
+    }) 
+    .then(async(res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw new Error('Request failed.');
+      }})
+    .catch(console.log) 
+  }
+  
   for (let element of selectedTaskTags || []){   
     promises.push( 
       // update info to db of "taskcontent"   
