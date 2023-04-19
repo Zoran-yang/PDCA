@@ -22,11 +22,11 @@ export default function DisplaySopArea() {
         setAllSopData(data)
     }
 
-    const popWindow = (data) => {
+    const popFloatingWindow = (data) => {
         setSelectedSop(data);
     };
 
-    const closeWindow = () => {
+    const closeFloatingWindow = () => {
         setSelectedSop(null);
     }
 
@@ -90,7 +90,6 @@ export default function DisplaySopArea() {
         return <div>Loading...</div>;
     }
     
-    console.log("AllsopData", AllsopData)
     if (!AllsopData || !AllsopData.length || !AllsopData[0].tasktype) {
         return <div>Error: No data available</div>;
     }
@@ -108,14 +107,14 @@ export default function DisplaySopArea() {
                                     <TaskDisplayField sopData={item}></TaskDisplayField>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" onClick={()=>popWindow(item)}>Revise</Button>
+                                    <Button size="small" onClick={()=>popFloatingWindow(item)}>Revise</Button>
                                 </CardActions>
                             </React.Fragment>                    
                         </Card>
                     </Box>
                 )
             })}
-            <FloatingWindows isOpen={selectedSop} closeWindow={closeWindow} >
+            <FloatingWindows isOpen={selectedSop}>
                 <BasicUserInputInterface 
                 title = "Saved SOP" 
                 dataSource = "ReviseTask" 
@@ -134,13 +133,14 @@ export default function DisplaySopArea() {
                         addedTaskContent,
                         sopId
                     );
-                    closeWindow();
+                    closeFloatingWindow();
                 }}
-                AfterCancel={closeWindow}
+                AfterCancel={closeFloatingWindow}
                 />
             </FloatingWindows>
         </div>
     );
 }
+
 
 

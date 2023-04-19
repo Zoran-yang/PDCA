@@ -50,7 +50,7 @@ export default function CreateReminder({selectedTaskTypes, selectedTaskNames, se
   }
 
   if (!sopData || !sopData.length || !sopData[0].tasktype) {
-    return <div>Error: No data available</div>;
+    window.close()
   }
 
   return (

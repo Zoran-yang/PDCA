@@ -7,6 +7,7 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { useEffect, useState } from "react";
 import getTaskNames from "./getTaskNames.jsx";
 import saveTasksData from "./saveTasksData.jsx";
+import ErrorWarning from "./ErrorWarning.jsx";
 
 export default function BasicUserInputInterface({
   title,
@@ -228,14 +229,14 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
-              AfterSubmit(
+              !isMistake && AfterSubmit(
                 selectedTaskTypes,  // for DisplaySopArea.jsx
                 selectedTaskNames,  // for DisplaySopArea.jsx
                 selectedTaskTags,   // for DisplaySopArea.jsx
                 addedTaskContent,   // for DisplaySopArea.jsx
                 sopId,              // for DisplaySopArea.jsx
               );
-              handleIsSubmitted();
+              !isMistake && handleIsSubmitted();
             }}
           >
             Save
@@ -243,9 +244,14 @@ export default function BasicUserInputInterface({
           <Button id="cancel-btn" variant="outlined" onClick={AfterCancel}>
             cancal
           </Button>
+          <div style={{marginLeft:10, marginBottom:0}}>
+            {isMistake && <ErrorWarning error={isMistake} />}
+          </div>
+          
         </div>
       </div>
     );
   }
 }
+
 

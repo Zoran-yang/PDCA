@@ -2,6 +2,7 @@
 import {convertToRaw} from 'draft-js'
 import {taskInfoFormat} from './taskInfoFormat.jsx'
 import { v4 as uuidv4 } from 'uuid';
+import { set } from 'lodash';
 
 export default function saveTasksData(
     dataSource,
@@ -13,11 +14,13 @@ export default function saveTasksData(
     setIsMistake
 ){
   // if any of the input is null, return
-  // if (!selectedTaskTypes || !selectedTaskNames || !selectedTaskTags || !richEditorInput) {
-  //   setIsMistake(true)
-  //   return
-  // }
-  
+  if (!selectedTaskTypes || !selectedTaskNames) {
+    setIsMistake("task type or task name is empty")
+    console.log("task type or task name is empty")
+    return
+  }
+  setIsMistake(false)
+
   switch (dataSource) {
     case "AddUserInfo":
       updateTaskTypes(selectedTaskTypes)
@@ -39,6 +42,7 @@ export default function saveTasksData(
       reviseSop(sopId, selectedTaskTypes, selectedTaskNames, selectedTaskTags, richEditorInput)
 
   }
+  
   console.log("saved")
 }
 
@@ -218,10 +222,16 @@ function updateTaskSOP(selectedTaskTypes, selectedTaskNames, selectedTaskTags, r
   })
   .then(async(res) => {
     if (res.ok) {
+      setIsMistake(false)
       return res.json();
     } else {
+      res = await res.json()
+      if (res = "SOP already exist, please revise your SOP infomation"){ //if SOP already exist, set error message
+        setIsMistake("SOP already exist, please revise your SOP infomation")
+      }
       throw new Error('Request failed.');
-    }})
+    }
+  })
   .catch(console.log) 
 }
 
@@ -251,14 +261,19 @@ function reviseSop(sopId, revisedTaskTypes, revisedTaskNames, revisedTaskTags, r
   })
   .then(async(res) => {
     if (res.ok) {
+      setIsMistake(false)
       return res.json();
     } else {
-      console.log(await res.json())
+      res = await res.json()
+      if (res = "SOP already exist, please revise it directly"){ //if SOP already exist, set error message
+        setIsMistake("SOP already exist, please revise it directly")
+      }
       throw new Error('Request failed.');
     }
   })
-  .catch((error) => {
+  .catch(async(error) => {
     console.log(error);
   }) 
 }
+
 
