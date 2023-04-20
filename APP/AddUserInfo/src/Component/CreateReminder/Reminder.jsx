@@ -1,5 +1,5 @@
-import SOPDisplayField from "../../CommonTools/SOPDisplayField.jsx";
-import TaskDisplayField from "../../CommonTools/TaskDisplayField.jsx";
+import SOPDisplayField from "../../CommonTools/Component/SOPDisplayField.jsx";
+import TaskDisplayField from "../../CommonTools/Component/TaskDisplayField.jsx";
 
 export default function Reminder({ sopData }) {
   return (

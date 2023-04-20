@@ -5,8 +5,8 @@ import Button from "@mui/material/Button";
 import TaskContentField from "../../Component/TaskContentField.jsx";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useEffect, useState } from "react";
-import getTaskNames from "../getTaskNames.jsx";
-import saveTasksData from "../saveTasksData.jsx";
+import getTaskNames from "../Function/getTaskNames.jsx";
+import saveTasksData from "../Function/saveTasksData.jsx";
 import ErrorWarning from "./ErrorWarning.jsx";
 
 export default function BasicUserInputInterface({

@@ -22,14 +22,14 @@ export default function saveTasksData(
   switch (dataSource) {
     case "AddUserInfo":
       updateTaskTypes(selectedTaskTypes);
-      updateTaskNames(selectedTaskTypes, selectedTaskNames);
-      updateTaskTags(selectedTaskTags);
-      updateTaskContent(
-        selectedTaskTypes,
-        selectedTaskNames,
-        selectedTaskTags,
-        richEditorInput
-      );
+      // updateTaskNames(selectedTaskTypes, selectedTaskNames);
+      // updateTaskTags(selectedTaskTags);
+      // updateTaskContent(
+      //   selectedTaskTypes,
+      //   selectedTaskNames,
+      //   selectedTaskTags,
+      //   richEditorInput
+      // );
       break;
     case "BuildSOP":
       updateTaskTypes(selectedTaskTypes);
@@ -63,48 +63,27 @@ function updateTaskTypes(selectedTaskTypes) {
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
 
   // update info to db of "tasktypes"
-  fetch("http://localhost:3000/updateTaskInfos", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id: "zoran",
-      updatedInfo: {
-        requestType: "taskTypes",
-        taskType: selectedTaskTypes,
-      },
-    }),
-  })
-    .then(async (res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        console.log(await res.json());
-        throw new Error("Request failed.");
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  fetchToServer("updateTaskInfos", {
+    id: "zoran",
+    updatedInfo: {
+      requestType: "taskTypes",
+      taskType: selectedTaskTypes,
+    },
+  });
 }
 
 function updateTaskNames(selectedTaskTypes, selectedTaskNames) {
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
   selectedTaskNames = taskInfoFormat(selectedTaskNames);
 
-  fetch("http://localhost:3000/updateTaskInfos", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id: "zoran",
-      updatedInfo: {
-        requestType: "taskNames",
-        taskType: selectedTaskTypes,
-        taskName: selectedTaskNames,
-      },
-    }),
-  })
-    .then((res) => res.json())
-    .catch(console.log);
+  fetchToServer("updateTaskInfos", {
+    id: "zoran",
+    updatedInfo: {
+      requestType: "taskNames",
+      taskType: selectedTaskTypes,
+      taskName: selectedTaskNames,
+    },
+  });
 }
 
 function updateTaskTags(selectedTaskTags) {
@@ -114,16 +93,15 @@ function updateTaskTags(selectedTaskTags) {
     element = taskInfoFormat(element);
 
     promises.push(
-      fetch("http://localhost:3000/updateTaskInfos", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      fetchToServer("updateTaskInfos", {
+        id: "zoran",
+        updatedInfo: {
           id: "zoran",
           updatedInfo: {
             requestType: "taskTags",
             TaskTag: element,
           },
-        }),
+        },
       })
     );
   }
@@ -150,49 +128,32 @@ function updateTaskContent(
   let sopId = uuidv4();
   //multiple tags are selected and saved as an array
   if (selectedTaskTags.length === 0) {
-    console.log("no tag");
-    fetch("http://localhost:3000/updateTaskInfos", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: "zoran",
-        updatedInfo: {
-          requestType: "taskContent",
-          taskType: selectedTaskTypes,
-          taskName: selectedTaskNames,
-          taskTag: selectedTaskTags,
-          taskContent: richEditorInput,
-          detailId: sopId,
-        },
-      }),
-    })
-      .then(async (res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error("Request failed.");
-        }
-      })
-      .catch(console.log);
+    fetchToServer("updateTaskInfos", {
+      id: "zoran",
+      updatedInfo: {
+        requestType: "taskContent",
+        taskType: selectedTaskTypes,
+        taskName: selectedTaskNames,
+        taskTag: selectedTaskTags,
+        taskContent: richEditorInput,
+        detailId: sopId,
+      },
+    });
   }
 
   for (let element of selectedTaskTags || []) {
     promises.push(
       // update info to db of "taskcontent"
-      fetch("http://localhost:3000/updateTaskInfos", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: "zoran",
-          updatedInfo: {
-            requestType: "taskContent",
-            taskType: selectedTaskTypes,
-            taskName: selectedTaskNames,
-            taskTag: element,
-            taskContent: richEditorInput,
-            detailId: sopId,
-          },
-        }),
+      fetchToServer("updateTaskInfos", {
+        id: "zoran",
+        updatedInfo: {
+          requestType: "taskContent",
+          taskType: selectedTaskTypes,
+          taskName: selectedTaskNames,
+          taskTag: element,
+          taskContent: richEditorInput,
+          detailId: sopId,
+        },
       })
     );
   }
@@ -209,13 +170,11 @@ function updateTaskSOP(
   selectedTaskNames = taskInfoFormat(selectedTaskNames);
   selectedTaskTags = taskInfoFormat(selectedTaskTags);
   richEditorInput = translateRichEditor(richEditorInput);
-  console.log("updateTaskSOP");
 
   // update info to db of "taskcontent"
-  fetch("http://localhost:3000/updateTaskInfos", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  fetchToServer(
+    "updateTaskInfos",
+    {
       id: "zoran",
       updatedInfo: {
         requestType: "TaskSOP",
@@ -225,22 +184,20 @@ function updateTaskSOP(
         sop: richEditorInput,
         sopId: uuidv4(),
       },
+    },
+    (serverResponseHandle = async () => {
+      setIsMistake(false);
+      return res.json();
     }),
-  })
-    .then(async (res) => {
-      if (res.ok) {
-        setIsMistake(false);
-        return res.json();
-      } else {
-        res = await res.json();
-        if ((res = "SOP already exist, please revise your SOP infomation")) {
-          //if SOP already exist, set error message
-          setIsMistake("SOP already exist, please revise your SOP infomation");
-        }
-        throw new Error("Request failed.");
+    (serverErrorHandle = async () => {
+      res = await res.json();
+      if ((res = "SOP already exist, please revise your SOP infomation")) {
+        //if SOP already exist, set error message
+        setIsMistake("SOP already exist, please revise your SOP infomation");
       }
+      throw new Error("Request failed.");
     })
-    .catch(console.log);
+  );
 }
 
 function reviseSop(
@@ -255,10 +212,9 @@ function reviseSop(
   revisedTaskTags = taskInfoFormat(revisedTaskTags);
   revisedRichEditorInput = translateRichEditor(revisedRichEditorInput);
 
-  fetch("http://localhost:3000/reviseTaskInfos", {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  fetchToServer(
+    "reviseTaskInfos",
+    {
       id: "zoran",
       revisedInfo: {
         requestType: "TaskSOP",
@@ -268,22 +224,18 @@ function reviseSop(
         taskTag: revisedTaskTags,
         sop: revisedRichEditorInput,
       },
+    },
+    (serverResponseHandle = async () => {
+      setIsMistake(false);
+      return res.json();
     }),
-  })
-    .then(async (res) => {
-      if (res.ok) {
-        setIsMistake(false);
-        return res.json();
-      } else {
-        res = await res.json();
-        if ((res = "SOP already exist, please revise it directly")) {
-          //if SOP already exist, set error message
-          setIsMistake("SOP already exist, please revise it directly");
-        }
-        throw new Error("Request failed.");
+    (serverErrorHandle = async () => {
+      res = await res.json();
+      if ((res = "SOP already exist, please revise it directly")) {
+        //if SOP already exist, set error message
+        setIsMistake("SOP already exist, please revise it directly");
       }
+      throw new Error("Request failed.");
     })
-    .catch(async (error) => {
-      console.log(error);
-    });
+  );
 }

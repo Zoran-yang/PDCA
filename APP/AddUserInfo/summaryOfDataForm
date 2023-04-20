@@ -1,124 +1,45 @@
+"origin";
+//taskTypes data
+//null
+//{ title: 'Work'}
 
-// const taskPhase = [
-//   "Plan", "Do", "Check", "Act"
-// ];
+//taskNames data
+//null
+//{ title: 'Writing the code' }
 
+//taskTags data
+//[]
+//[{inputValue: 'evwev', title: 'Add "evwev"'}]
+//[{'Planning'}]
 
-// const taskTypes = [
-//   { title: 'Work'},
-//   { title: 'Sleep'},
-//   { title: 'Play' },
-//   { title: 'Eat' },
-// ];
+//taskContents data
+//EditorState2 {_immutable: Record2}
 
+"after transform by translateRichEditor and taskInfoFormat in saveTasksData";
+let sopData = [
+  {
+    id: "10",
+    tasktype: '{"title":"工作"}', //After transform by taskInfoFormat
+    taskname: '{"title":"寫程式"}', //After transform by taskInfoFormat
+    tasktag: '[{"title":"React"},{"title":"Doing"}]', //After transform by taskInfoFormat
+    // after transform by translateRichEditor
+    sop: '{"blocks":[{"key":"cn15","text":"https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ","type":"unordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
+    created_at: "2023-04-14T01:57:47.013Z",
+    sopid: "cc1e4f1a-fe5a-4324-bb99-f730c556b03e",
+  },
+];
 
-// const taskNames = {
-//   Work: [
-//     { title: 'Writing the code' },
-//     { title: 'Apply jobs' },
-//   ] ,
-//   Sleep:[
-//     { title: 'Sleep-A' },
-//     { title: 'Sleep-S' },
-//   ]
-// };
-
-// const taskTags = [
-//   { title: "Planning" },
-//   { title: "Doing" },
-//   { title: "Checking" },
-//   { title: "Acting" },
-//   { title: "React" },
-//   { title: "None" },
-// ];
-
-const taskContents = {
-    Work : [
-      {
-        taskNames : 'Writing the code',
-        taskTags : [{ title: "Planning" },{ title: "React" }],
-        taskContent : ['Planning the code structure', 'Writing the notification function']
-      },
-      {
-        taskNames : 'Apply jobs',
-        taskTags : [{ title: "Doing" }],
-        taskContent : ['Writing the resume', 'Writing the cover letter']
-      },
-    ]
-  }
-
-  const prompts = {
-    Work : [
-      {
-        taskNames : 'Practice the interview code questions',
-        taskTags : [{ title: "Planning" }],
-        reminder : ["https://www.evernote.com/shard/s608/sh/84270d5e-1e5c-e551-c271-c40e222ba7b6/YVMYzkAcZqMkBcE5SRQAsQDHodA_CNhz54cDZ2i5JVn9-vwKG7hMiNW5Lg",
-                    ]
-      },
-      {
-        taskNames : 'Writing the code',
-        taskTags : [{ title: "Planning" }],
-        reminder : ["https://www.evernote.com/shard/s608/sh/84270d5e-1e5c-e551-c271-c40e222ba7b6/YVMYzkAcZqMkBcE5SRQAsQDHodA_CNhz54cDZ2i5JVn9-vwKG7hMiNW5Lg",
-                    ]
-      },
-      {
-        taskNames : 'Writing the code',
-        taskTags : [{ title: "Doing" },{ title: "React" }],
-        reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
-                    'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
-                    ]
-      },
-      {
-        taskNames : 'Writing the code',
-        taskTags : [{ title: "Checking" },{ title: "React" }],
-        reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
-                    'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
-                    ]
-      },
-      {
-        taskNames : 'Writing the code',
-        taskTags : [{ title: "Doing" },{ title: "React" }],
-        reminder : ['https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ', 
-                    'https://www.evernote.com/shard/s608/sh/5a240998-6200-da61-1051-b44c1e14e07d/D1xqCgjUk5fD2sUfoOt_xElSdyUOwoyQNxPqd-raSbamL0WyPIh8yLkQng'
-                    ]
-      },
-      {
-        taskNames : 'Apply jobs',
-        taskTags : [{ title: "Doing" }],
-        reminder : ['https://www.evernote.com/shard/s608/sh/5af1507d-3af3-0988-f68f-433428038f86/oXJlO12snMJL7_Gn-SBi6k1ZTfVO-WNnmEm01yFx4lf97g_hf_cc8Rf3yA']
-      },
-    ]
-  }
-
-  // FreeSoloCreateOption 輸出資料
-  TaskTag: [ { inputValue: 'A', title: 'Add "A"' }, 'B' ,{"title":"tag2"} ]
-  
-
-  
-
+("db");
 // CEATE TABLE tasktypes (id BIGSERIAL UNIQUE , taskType text, PRIMARY KEY(id));
 // CREATE TABLE tasknames (id BIGSERIAL UNIQUE, taskType text, taskName text, PRIMARY KEY(id));
 // CREATE TABLE tasksops (id BIGSERIAL UNIQUE, taskType text NOT NULL, taskName text NOT NULL, taskTag text, sop text NOT NULL,PRIMARY KEY(id));
 // CREATE TABLE taskdetails (id BIGSERIAL UNIQUE, taskType text NOT NULL, taskName text NOT NULL, taskTag text, taskDetail text NOT NULL,PRIMARY KEY(id));
 // CREATE TABLE tasktags (id BIGSERIAL UNIQUE, taskTag text, PRIMARY KEY(id));
 
-
-// All sop data from database
-let sopData = 
-[{
-    id: '10',
-    tasktype: '{"title":"工作"}',
-    taskname: '{"title":"寫程式"}',
-    tasktag: '[{"title":"React"},{"title":"Doing"}]',
-    sop: '{"blocks":[{"key":"cn15","text":"https://www.evernote.com/shard/s608/sh/1516c774-9391-1209-4ac9-c356c93f7435/gSVCLsG0ctONe3tBXrJEpExl4tozCaI4SxV2JLF0mhYZhWSjKYMfFcfeoQ","type":"unordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}',
-    created_at: "2023-04-14T01:57:47.013Z",
-    sopid: 'cc1e4f1a-fe5a-4324-bb99-f730c556b03e'
-}]
-
 // data = Object.entries(data[0]).map(([key, value]) => {
 //     if (key === 'created_at' || key === 'sopid'){
 //         value = value
-//     } else if (key === 'tasktype' || key === 'taskname' ) { 
+//     } else if (key === 'tasktype' || key === 'taskname' ) {
 //         value = JSON.parse(value).title
 //     }else if (key === 'tasktag') {
 //         value = JSON.parse(value).map((item) => item.title)
@@ -127,3 +48,6 @@ let sopData =
 //     }
 //     return [key, value];
 // })
+
+// FreeSoloCreateOption 輸出資料
+// TaskTag: [{ inputValue: "A", title: 'Add "A"' }, "B", { title: "tag2" }];

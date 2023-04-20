@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Editor, EditorState, convertFromRaw } from "draft-js";
 import { useState } from "react";
-import "../Component/TaskContentField.css";
+import "../../Component/TaskContentField.css";
 
 const SOPDisplayField = ({ sopInfo }) => {
   const [editorState, setEditorState] = useState(() =>
