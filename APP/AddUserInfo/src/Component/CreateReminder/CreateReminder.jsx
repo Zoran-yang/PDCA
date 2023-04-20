@@ -1,48 +1,48 @@
-import {taskInfoFormat} from '../../CommonTools/taskInfoFormat.jsx'
-import {useEffect, useState} from 'react';
-import Reminder from './Reminder.jsx';
+import { taskInfoFormat } from "../../CommonTools/taskInfoFormat.jsx";
+import { useEffect, useState } from "react";
+import Reminder from "./Reminder.jsx";
 
+export default function CreateReminder({
+  selectedTaskTypes,
+  selectedTaskNames,
+  selectedTaskTags,
+}) {
+  selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
+  selectedTaskNames = taskInfoFormat(selectedTaskNames);
+  selectedTaskTags = taskInfoFormat(selectedTaskTags);
 
-export default function CreateReminder({selectedTaskTypes, selectedTaskNames, selectedTaskTags}) {
-
-  selectedTaskTypes = taskInfoFormat(selectedTaskTypes)
-  selectedTaskNames = taskInfoFormat(selectedTaskNames)
-  selectedTaskTags = taskInfoFormat(selectedTaskTags)
-  
-  const [sopData, setSopData] = useState([])
+  const [sopData, setSopData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   function handleSopData(data) {
-    setSopData(data)
+    setSopData(data);
   }
 
   useEffect(() => {
     // fetch task sops from server
-    fetch("http://localhost:3000/getTaskInfos", 
-    {
-      method: 'POST', 
-      headers : {'Content-Type':'application/json'},
-      body : JSON.stringify(
-        {
-          "id" : "zoran",
-          "requestInfo" : {
-            "requestType" : "taskSOP",
-            "taskType" : selectedTaskTypes,
-            "taskName" : selectedTaskNames,
-            "taskTags" : selectedTaskTags,
-          }
-        }
-      )
+    fetch("http://localhost:3000/getTaskInfos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: "zoran",
+        requestInfo: {
+          requestType: "taskSOP",
+          taskType: selectedTaskTypes,
+          taskName: selectedTaskNames,
+          taskTags: selectedTaskTags,
+        },
+      }),
     })
-    .then(async(res) => {
-      if (res.ok) {
-        handleSopData(await res.json())
-        setIsLoading(false);
-      } else {
-        throw new Error('Request failed.');
-      }})
-    .catch(console.log) 
-  },[])
+      .then(async (res) => {
+        if (res.ok) {
+          handleSopData(await res.json());
+          setIsLoading(false);
+        } else {
+          throw new Error("Request failed.");
+        }
+      })
+      .catch(console.log);
+  }, []);
 
   // render task sops
   if (isLoading) {
@@ -50,11 +50,8 @@ export default function CreateReminder({selectedTaskTypes, selectedTaskNames, se
   }
 
   if (!sopData || !sopData.length || !sopData[0].tasktype) {
-    window.close()
+    window.close();
   }
 
-  return (
-    <Reminder sopData = {sopData[0]}/>
-  )
-
+  return <Reminder sopData={sopData[0]} />;
 }

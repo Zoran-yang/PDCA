@@ -1,12 +1,12 @@
-import { FreeSoloCreateOption } from "../Component/FreeSoloCreateOption.jsx";
+import { FreeSoloCreateOption } from "../../Component/FreeSoloCreateOption.jsx";
 // import ComboBox from "../Component/Autocomplete.jsx";
-import Tags from "../Component/TaskTags.jsx";
+import Tags from "../../Component/TaskTags.jsx";
 import Button from "@mui/material/Button";
-import TaskContentField from "../Component/TaskContentField.jsx";
+import TaskContentField from "../../Component/TaskContentField.jsx";
 import { EditorState, convertFromRaw } from "draft-js";
 import { useEffect, useState } from "react";
-import getTaskNames from "./getTaskNames.jsx";
-import saveTasksData from "./saveTasksData.jsx";
+import getTaskNames from "../getTaskNames.jsx";
+import saveTasksData from "../saveTasksData.jsx";
 import ErrorWarning from "./ErrorWarning.jsx";
 
 export default function BasicUserInputInterface({
@@ -19,11 +19,11 @@ export default function BasicUserInputInterface({
   AfterCancel = () => console.log("cancel"), // for debug
   NextPage = null,
 }) {
-  const sopId = defaultValues&&defaultValues.sopid || null;
+  const sopId = (defaultValues && defaultValues.sopid) || null;
   const [taskTypes, setTaskTypes] = useState(null);
   const [taskNames, setTaskNames] = useState(null);
   const [taskTags, setTaskTags] = useState(null);
-  const [selectedTaskTypes, setSelectedTaskTypes] = useState(() =>{
+  const [selectedTaskTypes, setSelectedTaskTypes] = useState(() => {
     const defaultType = defaultValues && JSON.parse(defaultValues["tasktype"]);
     if (defaultValues && defaultType) {
       getTaskNames(defaultType, handleTaskNames); //When TaskTypes change, taskNames change
@@ -40,7 +40,7 @@ export default function BasicUserInputInterface({
     (defaultValues &&
       defaultValues["tasktag"] !== "null" &&
       JSON.parse(defaultValues["tasktag"]).map((item) => item.title)) ||
-      []  // if there is no task tags, set it to null
+      [] // if there is no task tags, set it to null
   );
   const [addedTaskContent, setAddedTaskContent] = useState(
     defaultValues?.sop
@@ -215,6 +215,9 @@ export default function BasicUserInputInterface({
             marginRight: 5,
           }}
         >
+          <div style={{ textAlign: "right", padding: 5 }}>
+            {isMistake && <ErrorWarning error={isMistake} />}
+          </div>
           <Button
             id="submit-btn"
             variant="outlined"
@@ -229,14 +232,15 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
-              !isMistake && AfterSubmit(
-                selectedTaskTypes,  // for DisplaySopArea.jsx
-                selectedTaskNames,  // for DisplaySopArea.jsx
-                selectedTaskTags,   // for DisplaySopArea.jsx
-                addedTaskContent,   // for DisplaySopArea.jsx
-                sopId,              // for DisplaySopArea.jsx
+              if (!isMistake) return;
+              AfterSubmit(
+                selectedTaskTypes, // for DisplaySopArea.jsx
+                selectedTaskNames, // for DisplaySopArea.jsx
+                selectedTaskTags, // for DisplaySopArea.jsx
+                addedTaskContent, // for DisplaySopArea.jsx
+                sopId // for DisplaySopArea.jsx
               );
-              !isMistake && handleIsSubmitted();
+              handleIsSubmitted();
             }}
           >
             Save
@@ -244,14 +248,8 @@ export default function BasicUserInputInterface({
           <Button id="cancel-btn" variant="outlined" onClick={AfterCancel}>
             cancal
           </Button>
-          <div style={{marginLeft:10, marginBottom:0}}>
-            {isMistake && <ErrorWarning error={isMistake} />}
-          </div>
-          
         </div>
       </div>
     );
   }
 }
-
-

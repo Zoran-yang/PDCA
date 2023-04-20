@@ -1,12 +1,5 @@
+import BasicUserInputInterface from "../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx/index.js";
 
-import BasicUserInputInterface from "../../../AddUserInfo/src/CommonTools/BasicUserInputInterface.jsx";
-
-
-export default function App(){
-  return (
-    <BasicUserInputInterface title = "SOP" dataSource = "BuildSOP" />
-  )
+export default function App() {
+  return <BasicUserInputInterface title="SOP" dataSource="BuildSOP" />;
 }
-
-
-
