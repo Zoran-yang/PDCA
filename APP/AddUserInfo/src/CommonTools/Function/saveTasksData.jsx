@@ -96,11 +96,8 @@ function updateTaskTags(selectedTaskTags) {
       fetchToServer("updateTaskInfos", {
         id: "zoran",
         updatedInfo: {
-          id: "zoran",
-          updatedInfo: {
-            requestType: "taskTags",
-            TaskTag: element,
-          },
+          requestType: "taskTags",
+          TaskTag: element,
         },
       })
     );
