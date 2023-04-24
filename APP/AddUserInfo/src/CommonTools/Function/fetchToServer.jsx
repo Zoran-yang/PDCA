@@ -1,10 +1,10 @@
 export default function fetchToServer(
   situation,
   data,
-  serverResponseHandle = async () => {
+  serverResponseHandle = async (res) => {
     return await res.json();
   },
-  serverErrorHandle = async () => {
+  serverErrorHandle = async (res) => {
     console.log(await res.json());
     throw new Error("Request failed.");
   }
@@ -54,9 +54,9 @@ async function fetchData(
   })
     .then(async (res) => {
       if (res.ok) {
-        serverResponseHandle();
+        serverResponseHandle(res);
       } else {
-        serverErrorHandle();
+        serverErrorHandle(res);
       }
     })
     .catch((error) => {

@@ -123,7 +123,7 @@ function updateTaskContent(
 
   let promises = [];
   let sopId = uuidv4();
-  //multiple tags are selected and saved as an array
+  // if no tag is selected, save as "null"
   if (selectedTaskTags.length === 0) {
     fetchToServer("updateTaskInfos", {
       id: "zoran",
@@ -137,7 +137,7 @@ function updateTaskContent(
       },
     });
   }
-
+  //multiple tags are selected and saved as an array
   for (let element of selectedTaskTags || []) {
     promises.push(
       // update info to db of "taskcontent"
