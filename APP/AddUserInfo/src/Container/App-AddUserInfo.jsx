@@ -4,13 +4,17 @@ import "./App.css";
 
 export default function App() {
   return (
-    // <BasicUserInputInterface title = "Task" dataSource = "AddUserInfo" NextPage = {CreateReminder}/>
     <BasicUserInputInterface
       title="Task"
       dataSource="AddUserInfo"
-      NextPage={() => {
-        console.log("KO");
-      }}
+      NextPage={CreateReminder}
     />
+    // <BasicUserInputInterface  // for debug
+    //   title="Task"
+    //   dataSource="AddUserInfo"
+    //   NextPage={() => {
+    //     console.log("KO");
+    //   }}
+    // />
   );
 }

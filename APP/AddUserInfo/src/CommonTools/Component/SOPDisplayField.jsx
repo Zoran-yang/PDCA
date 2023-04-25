@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import {
+  CompositeDecorator,
+  Editor,
+  EditorState,
+  convertFromRaw,
+} from "draft-js";
 import { useState } from "react";
 import "../../Component/TaskContentField.css";
 
@@ -9,7 +14,9 @@ const SOPDisplayField = ({ sopInfo }) => {
   );
 
   const handleStatus = (sopInfo) => {
-    setEditorState(EditorState.createWithContent(convertFromRaw(sopInfo)));
+    setEditorState(
+      EditorState.createWithContent(convertFromRaw(sopInfo), strategyDecorator)
+    );
   };
 
   useEffect(() => {
@@ -46,6 +53,7 @@ const SOPDisplayField = ({ sopInfo }) => {
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={editorState}
+            readOnly={true}
           />
         </div>
       </div>
@@ -77,3 +85,32 @@ function getBlockStyle(block) {
       return null;
   }
 }
+
+// LINKS
+const findLinkEntities = (contentBlock, callback, contentState) => {
+  contentBlock.findEntityRanges((character) => {
+    const entityKey = character.getEntity();
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === "LINK"
+    );
+  }, callback);
+};
+const Link = (props) => {
+  const { url } = props.contentState.getEntity(props.entityKey).getData();
+  return (
+    <a
+      style={{ color: "blue", fontStyle: "italic" }}
+      href={url}
+      target="_blank"
+    >
+      {props.children}
+    </a>
+  );
+};
+const strategyDecorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link,
+  },
+]);

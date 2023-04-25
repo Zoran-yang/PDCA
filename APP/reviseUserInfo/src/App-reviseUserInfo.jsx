@@ -1,11 +1,7 @@
-
-
-import DisplaySopArea from './DisplaySopArea.jsx'
+import DisplaySopArea from "./DisplaySopArea.jsx";
 
 function App() {
-  return(
-    <DisplaySopArea />
-  )
+  return <DisplaySopArea />;
 }
 
-export default App
+export default App;

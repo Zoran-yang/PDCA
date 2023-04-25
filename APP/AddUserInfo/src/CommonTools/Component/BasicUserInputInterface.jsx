@@ -3,7 +3,7 @@ import { FreeSoloCreateOption } from "../../Component/FreeSoloCreateOption.jsx";
 import Tags from "../../Component/TaskTags.jsx";
 import Button from "@mui/material/Button";
 import TaskContentField from "../../Component/TaskContentField.jsx";
-import { EditorState, convertFromRaw } from "draft-js";
+import { EditorState, convertFromRaw, CompositeDecorator } from "draft-js";
 import { useEffect, useState } from "react";
 import getTaskNames from "../Function/getTaskNames.jsx";
 import saveTasksData from "../Function/saveTasksData.jsx";
@@ -46,12 +46,13 @@ export default function BasicUserInputInterface({
     defaultValues?.sop
       ? () =>
           EditorState.createWithContent(
-            convertFromRaw(JSON.parse(defaultValues["sop"]))
+            convertFromRaw(JSON.parse(defaultValues["sop"])),
+            strategyDecorator
           )
-      : () => EditorState.createEmpty()
+      : () => EditorState.createEmpty(strategyDecorator)
   );
   const [isMistake, setIsMistake] = useState(false);
-  const [IsSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   function handleTaskTypes(newValue) {
     if (newValue === null) return;
@@ -168,15 +169,17 @@ export default function BasicUserInputInterface({
       .catch(console.log);
   }, []);
 
-  if (IsSubmitted && NextPage) {
+  if (isSubmitted && NextPage) {
+    // if the user has submitted the form, go to the next page
     return (
-      <NextPage // if the user has submitted the form, go to the next page
+      <NextPage
         selectedTaskTypes={selectedTaskTypes}
         selectedTaskNames={selectedTaskNames}
         selectedTaskTags={selectedTaskTags}
       />
     );
   } else {
+    // General Layout of the page
     return (
       <div style={{ width: "100%" }}>
         <h1 style={{ textAlign: "center" }}>Add My {title}</h1>
@@ -232,7 +235,7 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
-              if (!isMistake) return;
+              if (isMistake) return;
               AfterSubmit(
                 selectedTaskTypes, // for DisplaySopArea.jsx
                 selectedTaskNames, // for DisplaySopArea.jsx
@@ -253,3 +256,33 @@ export default function BasicUserInputInterface({
     );
   }
 }
+
+// Change LINKS format
+const findLinkEntities = (contentBlock, callback, contentState) => {
+  contentBlock.findEntityRanges((character) => {
+    const entityKey = character.getEntity();
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === "LINK"
+    );
+  }, callback);
+};
+const Link = (props) => {
+  const { url } = props.contentState.getEntity(props.entityKey).getData();
+  return (
+    <a
+      style={{ color: "blue", fontStyle: "italic" }}
+      href={url}
+      target="_blank"
+    >
+      {props.children}
+    </a>
+  );
+};
+
+const strategyDecorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link,
+  },
+]);

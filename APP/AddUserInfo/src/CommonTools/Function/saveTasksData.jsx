@@ -20,6 +20,7 @@ export default function saveTasksData(
     setIsMistake("task type or task name is empty");
     return;
   }
+  // reset the mistake message
   setIsMistake(false);
 
   switch (dataSource) {
@@ -42,7 +43,8 @@ export default function saveTasksData(
         selectedTaskTypes,
         selectedTaskNames,
         selectedTaskTags,
-        richEditorInput
+        richEditorInput,
+        setIsMistake
       );
       break;
     case "ReviseTask":
@@ -55,7 +57,8 @@ export default function saveTasksData(
         selectedTaskTypes,
         selectedTaskNames,
         selectedTaskTags,
-        richEditorInput
+        richEditorInput,
+        setIsMistake
       );
   }
 
@@ -164,7 +167,8 @@ function updateTaskSOP(
   selectedTaskTypes,
   selectedTaskNames,
   selectedTaskTags,
-  richEditorInput
+  richEditorInput,
+  setIsMistake
 ) {
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
   selectedTaskNames = taskInfoFormat(selectedTaskNames);
@@ -208,12 +212,26 @@ function reviseSop(
   revisedTaskTypes,
   revisedTaskNames,
   revisedTaskTags,
-  revisedRichEditorInput
+  revisedRichEditorInput,
+  setIsMistake
 ) {
   revisedTaskTypes = taskInfoFormat(revisedTaskTypes);
   revisedTaskNames = taskInfoFormat(revisedTaskNames);
   revisedTaskTags = taskInfoFormat(revisedTaskTags);
   revisedRichEditorInput = translateRichEditor(revisedRichEditorInput);
+
+  let serverResponseHandle = async (res) => {
+    setIsMistake(false);
+    return res.json();
+  };
+  let serverErrorHandle = async (res) => {
+    res = await res.json();
+    if ((res = "SOP already exist, please revise it directly")) {
+      //if SOP already exist, set error message
+      setIsMistake("SOP already exist, please revise it directly");
+    }
+    throw new Error("Request failed.");
+  };
 
   fetchToServer(
     "reviseTaskInfos",
@@ -228,17 +246,7 @@ function reviseSop(
         sop: revisedRichEditorInput,
       },
     },
-    (serverResponseHandle = async (res) => {
-      setIsMistake(false);
-      return res.json();
-    }),
-    (serverErrorHandle = async (res) => {
-      res = await res.json();
-      if ((res = "SOP already exist, please revise it directly")) {
-        //if SOP already exist, set error message
-        setIsMistake("SOP already exist, please revise it directly");
-      }
-      throw new Error("Request failed.");
-    })
+    serverResponseHandle,
+    serverErrorHandle
   );
 }
