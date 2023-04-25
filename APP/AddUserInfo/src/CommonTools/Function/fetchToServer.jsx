@@ -1,10 +1,12 @@
 export default function fetchToServer(
-  situation,
-  data,
+  situation, //the type of operation to server by "updateTaskInfos", "reviseTaskInfos", "deleteTaskInfos"
+  data, // the data to be sent to server
   serverResponseHandle = async (res) => {
+    // the function to handle the response from server
     return await res.json();
   },
   serverErrorHandle = async (res) => {
+    // the function to handle the error from server
     console.log(await res.json());
     throw new Error("Request failed.");
   }
@@ -27,6 +29,15 @@ export default function fetchToServer(
       );
     case "reviseTaskInfos":
       method = "PATCH";
+      return fetchData(
+        url,
+        method,
+        data,
+        serverResponseHandle,
+        serverErrorHandle
+      );
+    case "deleteTaskInfos":
+      method = "DELETE";
       return fetchData(
         url,
         method,

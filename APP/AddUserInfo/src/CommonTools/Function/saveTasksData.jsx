@@ -3,14 +3,17 @@ import { taskInfoFormat } from "./taskInfoFormat.jsx";
 import { v4 as uuidv4 } from "uuid";
 import fetchToServer from "./fetchToServer.jsx";
 
+// this function is called in AddUserInfo.jsx, BuildSOP.jsx, ReviseTask.jsx
+// it is used to save task data to database
+// add and updatetask data
 export default function saveTasksData(
-  dataSource,
-  selectedTaskTypes,
-  selectedTaskNames,
-  selectedTaskTags,
-  richEditorInput,
-  sopId,
-  setIsMistake
+  dataSource, // define the operation to server by "AddUserInfo", "BuildSOP", "ReviseTask"
+  selectedTaskTypes, //updated task types
+  selectedTaskNames, //updated task names
+  selectedTaskTags, // updated task tags
+  richEditorInput, // updated task content
+  sopId, // sop id
+  setIsMistake // set the mistake message
 ) {
   // if any of the input is null, return
   if (!selectedTaskTypes || !selectedTaskNames) {
@@ -22,14 +25,14 @@ export default function saveTasksData(
   switch (dataSource) {
     case "AddUserInfo":
       updateTaskTypes(selectedTaskTypes);
-      // updateTaskNames(selectedTaskTypes, selectedTaskNames);
-      // updateTaskTags(selectedTaskTags);
-      // updateTaskContent(
-      //   selectedTaskTypes,
-      //   selectedTaskNames,
-      //   selectedTaskTags,
-      //   richEditorInput
-      // );
+      updateTaskNames(selectedTaskTypes, selectedTaskNames);
+      updateTaskTags(selectedTaskTags);
+      updateTaskContent(
+        selectedTaskTypes,
+        selectedTaskNames,
+        selectedTaskTags,
+        richEditorInput
+      );
       break;
     case "BuildSOP":
       updateTaskTypes(selectedTaskTypes);
@@ -169,6 +172,19 @@ function updateTaskSOP(
   richEditorInput = translateRichEditor(richEditorInput);
 
   // update info to db of "taskcontent"
+  let serverResponseHandle = async () => {
+    setIsMistake(false);
+    return res.json();
+  };
+  let serverErrorHandle = async () => {
+    res = await res.json();
+    if ((res = "SOP already exist, please revise your SOP infomation")) {
+      //if SOP already exist, set error message
+      setIsMistake("SOP already exist, please revise your SOP infomation");
+    }
+    throw new Error("Request failed.");
+  };
+
   fetchToServer(
     "updateTaskInfos",
     {
@@ -182,18 +198,8 @@ function updateTaskSOP(
         sopId: uuidv4(),
       },
     },
-    (serverResponseHandle = async () => {
-      setIsMistake(false);
-      return res.json();
-    }),
-    (serverErrorHandle = async () => {
-      res = await res.json();
-      if ((res = "SOP already exist, please revise your SOP infomation")) {
-        //if SOP already exist, set error message
-        setIsMistake("SOP already exist, please revise your SOP infomation");
-      }
-      throw new Error("Request failed.");
-    })
+    serverResponseHandle,
+    serverErrorHandle
   );
 }
 
@@ -222,11 +228,11 @@ function reviseSop(
         sop: revisedRichEditorInput,
       },
     },
-    (serverResponseHandle = async () => {
+    (serverResponseHandle = async (res) => {
       setIsMistake(false);
       return res.json();
     }),
-    (serverErrorHandle = async () => {
+    (serverErrorHandle = async (res) => {
       res = await res.json();
       if ((res = "SOP already exist, please revise it directly")) {
         //if SOP already exist, set error message

@@ -4,11 +4,12 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import TaskDisplayField from "../../AddUserInfo/src/CommonTools/TaskDisplayField";
+import TaskDisplayField from "../../AddUserInfo/src/CommonTools/Component/TaskDisplayField";
 import { useEffect, useState } from "react";
-import FloatingWindows from "../../AddUserInfo/src/CommonTools/floatingWindows";
-import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx/index.js";
+import FloatingWindows from "../../AddUserInfo/src/CommonTools/Component/floatingWindows";
+import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
 import { convertToRaw } from "draft-js";
+import delTaskData from "../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);
@@ -27,6 +28,7 @@ export default function DisplaySopArea() {
     setSelectedSop(null);
   };
 
+  // re-render the updated sop data to DisplaySopArea
   const handleUpdateSop = (
     selectedTaskTypes,
     selectedTaskNames,
@@ -45,6 +47,7 @@ export default function DisplaySopArea() {
       sopid: sopId,
     };
 
+    // upadte data to revised sop card
     setAllSopData((prevSopData) =>
       prevSopData.map((sop) => {
         if (sop.sopid === updatedSop.sopid) {
@@ -54,6 +57,15 @@ export default function DisplaySopArea() {
           return sop;
         }
       })
+    );
+  };
+
+  // re-render the delete info to DisplaySopArea
+  const handleDeletedSop = (sopId) => {
+    // delete sop card
+    setAllSopData(
+      (prevSopData) =>
+        (prevSopData = prevSopData.filter((sop) => sop.sopid !== sopId))
     );
   };
 
@@ -96,12 +108,22 @@ export default function DisplaySopArea() {
           <Box sx={{ maxWidth: 275, margin: 1 }} key={item.id}>
             <Card variant="outlined">
               <React.Fragment>
-                <CardContent>
+                <CardContent sx={{ paddingBottom: "8px" }}>
                   <TaskDisplayField sopData={item}></TaskDisplayField>
                 </CardContent>
-                <CardActions>
+                <CardActions sx={{ paddingTop: 0 }}>
                   <Button size="small" onClick={() => popFloatingWindow(item)}>
                     Revise
+                  </Button>
+                  <Button
+                    size="small"
+                    sx={{ color: "red" }}
+                    onClick={() => {
+                      delTaskData(item.sopid);
+                      handleDeletedSop(item.sopid);
+                    }}
+                  >
+                    Delete
                   </Button>
                 </CardActions>
               </React.Fragment>
@@ -109,6 +131,7 @@ export default function DisplaySopArea() {
           </Box>
         );
       })}
+
       <FloatingWindows isOpen={selectedSop}>
         <BasicUserInputInterface
           title="Saved SOP"
@@ -119,7 +142,7 @@ export default function DisplaySopArea() {
             selectedTaskNames,
             selectedTaskTags,
             addedTaskContent,
-            sopId
+            sopId // render props from BasicUserInputInterface
           ) => {
             handleUpdateSop(
               selectedTaskTypes,
