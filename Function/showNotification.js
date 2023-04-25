@@ -1,4 +1,8 @@
-function showNotification(notifier, path, BrowserWindow) {
+const { BrowserWindow } = require("electron");
+const notifier = require("node-notifier");
+const path = require("path");
+
+function showNotification() {
   notifier.notify(
     {
       title: "What are you doing?",
