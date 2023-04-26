@@ -1,13 +1,7 @@
-const settings = require("electron-settings");
 const notifier = require("node-notifier");
 const path = require("path");
-const showNotification = require("./showNotification.js");
-const setTimer = require("./setTimer.js");
 
-async function intialNotification(timeId) {
-  // let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
-  let minuteSetting = (await settings.get("setting.minute")) || 0.2; // for debug
-  let startingTime = (await settings.get("setting.startTime")) || "From Now"; // default from now
+function intialNotification(minuteSetting) {
   // Timer was stopped before, so do not start it again
   if (minuteSetting === "Stop") {
     notifier.notify({
@@ -30,10 +24,6 @@ async function intialNotification(timeId) {
     timeout: 3,
     reply: true,
   });
-
-  timeId = setTimer(timeId, minuteSetting, startingTime, showNotification);
-
-  return timeId;
 }
 
 module.exports = intialNotification;

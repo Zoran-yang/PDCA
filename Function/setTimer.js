@@ -1,21 +1,25 @@
-function setTimer(timeId, minute, startingTime, callback) {
+function setTimer(timerObj, minute, startingTime, callback) {
   const now = new Date();
   const Start = chooseStartTime(startingTime);
-  console.log(`Set to ${minute} minutes`);
 
   // clear the old timer
-  clearInterval(timeId);
+  clearInterval(timerObj.timeId);
+
+  // if the minute is "Stop", stop the timer
+  if (minute === "Stop") return;
+  console.log(`Set to ${minute} minutes`);
 
   // set the new timer by the new starting time and interval
-  timeId = setTimeout(() => {
-    clearTimeout(timeId);
+  // the first time is the starting time, and then the interval is the minute
+  const newTimeId = setTimeout(() => {
+    clearTimeout(newTimeId);
     callback();
-    timeId = setInterval(() => {
+    const intervalId = setInterval(() => {
       callback();
     }, minute * 60 * 1000);
+    timerObj.timeId = intervalId;
   }, Start.getTime() - now.getTime());
-  console.log(`Set timer`, timeId);
-  return timeId;
+  console.log(`Set timer`, timerObj.timeId);
 }
 
 function chooseStartTime(startingTime) {

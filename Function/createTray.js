@@ -4,12 +4,12 @@ const settings = require("electron-settings");
 const showNotification = require("./showNotification.js");
 const setTimer = require("./setTimer.js");
 
-async function createTray(timeId) {
+async function createTray(timerObj) {
   let tray = new Tray(path.join(__dirname, "../Asset/Icon.png"));
   let startingTime = (await settings.get("setting.startTime")) || "From Now";
   let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
-  // create context menu
-  const contextMenu = Menu.buildFromTemplate([
+  // set main menu
+  const menu = [
     // set frequency
     {
       label: "Choose Frequency And Start",
@@ -22,8 +22,9 @@ async function createTray(timeId) {
             return {
               label: minute,
               click: () => {
+                minuteSetting = minute;
                 console.log("Stop asking");
-                clearInterval(timeId);
+                clearInterval(timerObj.timeId);
               },
             };
           }
@@ -32,7 +33,12 @@ async function createTray(timeId) {
             label: `${minute} minutes`,
             click: () => {
               minuteSetting = minute;
-              setTimer(timeId, minuteSetting, startingTime, showNotification);
+              timerObj.timeId = setTimer(
+                timerObj,
+                minuteSetting,
+                startingTime,
+                showNotification
+              );
             },
           };
         }
@@ -50,7 +56,12 @@ async function createTray(timeId) {
             click: () => {
               console.log(`Set to ${startTime}`);
               startingTime = startTime;
-              setTimer(timeId, minuteSetting, startingTime, showNotification);
+              timerObj.timeId = setTimer(
+                timerObj,
+                minuteSetting,
+                startingTime,
+                showNotification
+              );
             },
           };
         }
@@ -81,6 +92,30 @@ async function createTray(timeId) {
         });
       },
     },
+    // revise SOP
+    {
+      label: "Revise My SOP",
+      click: () => {
+        const newWindow = new BrowserWindow({
+          width: 700,
+          height: 600,
+          webPreferences: {
+            nodeIntegration: true,
+          },
+        });
+        newWindow.loadFile(
+          path.join(__dirname, "../APP/reviseUserInfo/dist", "index.html")
+        );
+        newWindow.on("ready-to-show", () => {
+          newWindow.show();
+        });
+        // Add an event listener for the close event of the window
+        newWindow.on("close", (event) => {
+          event.preventDefault(); // Prevent the default behavior of the event
+          newWindow.hide(); // Hide the window instead of closing it
+        });
+      },
+    },
     // close app
     {
       label: "quit",
@@ -99,13 +134,14 @@ async function createTray(timeId) {
           windows.forEach((window) => {
             window.close();
           });
-          clearInterval(timeId);
+          clearInterval(timerObj.timeId);
           app.quit(); // quit the app
         }
       },
     },
-  ]);
-
+  ];
+  // create context menu
+  const contextMenu = Menu.buildFromTemplate(menu);
   tray.setToolTip("MindResetter");
   tray.setContextMenu(contextMenu);
 }
