@@ -2,9 +2,10 @@ const { app, BrowserWindow, Menu, Tray, dialog } = require("electron");
 const path = require("path");
 const settings = require("electron-settings");
 const showNotification = require("./showNotification.js");
+const setTimer = require("./setTimer.js");
 
 async function createTray(timeId) {
-  let tray = new Tray(path.join(__dirname, "icon.png"));
+  let tray = new Tray(path.join(__dirname, "../Asset/Icon.png"));
   let startingTime = (await settings.get("setting.startTime")) || "From Now";
   let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
   // create context menu
@@ -31,7 +32,7 @@ async function createTray(timeId) {
             label: `${minute} minutes`,
             click: () => {
               minuteSetting = minute;
-              setTimer(minuteSetting, startingTime, showNotification);
+              setTimer(timeId, minuteSetting, startingTime, showNotification);
             },
           };
         }
@@ -49,11 +50,36 @@ async function createTray(timeId) {
             click: () => {
               console.log(`Set to ${startTime}`);
               startingTime = startTime;
-              setTimer(minuteSetting, startingTime, showNotification);
+              setTimer(timeId, minuteSetting, startingTime, showNotification);
             },
           };
         }
       ),
+    },
+    // build SOP
+    {
+      label: "Build My SOP",
+      click: () => {
+        const newWindow = new BrowserWindow({
+          width: 700,
+          height: 600,
+          webPreferences: {
+            nodeIntegration: true,
+          },
+        });
+        newWindow.loadFile(
+          path.join(__dirname, "../APP/BuildSOP/dist", "index.html")
+        );
+        newWindow.on("ready-to-show", () => {
+          newWindow.show();
+        });
+
+        // Add an event listener for the close event of the window
+        newWindow.on("close", (event) => {
+          event.preventDefault(); // Prevent the default behavior of the event
+          newWindow.hide(); // Hide the window instead of closing it
+        });
+      },
     },
     // close app
     {

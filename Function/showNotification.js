@@ -7,7 +7,7 @@ function showNotification() {
     {
       title: "What are you doing?",
       message: "Would you tell us what you are doing?",
-      icon: path.join(__dirname, "Icon.png"),
+      icon: path.join(__dirname, "../Asset/Icon.png"),
       sound: true,
       timeout: 10,
       reply: true,

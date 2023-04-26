@@ -2,18 +2,24 @@ function setTimer(timeId, minute, startingTime, callback) {
   const now = new Date();
   const Start = chooseStartTime(startingTime);
   console.log(`Set to ${minute} minutes`);
+
   // clear the old timer
   clearInterval(timeId);
+
   // set the new timer by the new starting time and interval
   timeId = setTimeout(() => {
+    clearTimeout(timeId);
     callback();
     timeId = setInterval(() => {
       callback();
     }, minute * 60 * 1000);
   }, Start.getTime() - now.getTime());
+  console.log(`Set timer`, timeId);
+  return timeId;
 }
 
 function chooseStartTime(startingTime) {
+  let now = new Date();
   switch (startingTime) {
     case "From Now":
       return now;
