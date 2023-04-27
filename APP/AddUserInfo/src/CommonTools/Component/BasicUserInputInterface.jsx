@@ -3,11 +3,47 @@ import { FreeSoloCreateOption } from "../../Component/FreeSoloCreateOption.jsx";
 import Tags from "../../Component/TaskTags.jsx";
 import Button from "@mui/material/Button";
 import TaskContentField from "../../Component/TaskContentField.jsx";
-import { EditorState, convertFromRaw, CompositeDecorator } from "draft-js";
+import {
+  EditorState,
+  convertFromRaw,
+  CompositeDecorator,
+  ContentBlock,
+  convertToRaw,
+} from "draft-js";
 import { useEffect, useState } from "react";
 import getTaskNames from "../Function/getTaskNames.jsx";
 import saveTasksData from "../Function/saveTasksData.jsx";
 import ErrorWarning from "./ErrorWarning.jsx";
+
+// Change LINKS format
+const findLinkEntities = (contentBlock, callback, contentState) => {
+  contentBlock.findEntityRanges((character) => {
+    const entityKey = character.getEntity();
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === "LINK"
+    );
+  }, callback);
+};
+const Link = (props) => {
+  const { url } = props.contentState.getEntity(props.entityKey).getData();
+  return (
+    <a
+      style={{ color: "blue", fontStyle: "italic" }}
+      href={url}
+      target="_blank"
+    >
+      {props.children}
+    </a>
+  );
+};
+
+const strategyDecorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link,
+  },
+]);
 
 export default function BasicUserInputInterface({
   title,
@@ -111,7 +147,11 @@ export default function BasicUserInputInterface({
   }
 
   function handleAddedTaskContent(newEditorState) {
-    // console.log(JSON.stringify(convertToRaw(addedTaskContent.getCurrentContent())))
+    // console.log(
+    //   "handleAddedTaskContent",
+    //   JSON.stringify(convertToRaw(newEditorState.getCurrentContent()))
+    // );
+
     setAddedTaskContent(newEditorState);
   }
 
@@ -235,12 +275,15 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
+              console.log("isMistake", isMistake);
               if (isMistake) return;
               AfterSubmit(
                 selectedTaskTypes, // for DisplaySopArea.jsx
                 selectedTaskNames, // for DisplaySopArea.jsx
                 selectedTaskTags, // for DisplaySopArea.jsx
-                addedTaskContent, // for DisplaySopArea.jsx
+                JSON.stringify(
+                  convertToRaw(addedTaskContent.getCurrentContent())
+                ), // for DisplaySopArea.jsx // If render addedTaskContent to DisplaySopArea will cause error in production mode.
                 sopId // for DisplaySopArea.jsx
               );
               handleIsSubmitted();
@@ -256,33 +299,3 @@ export default function BasicUserInputInterface({
     );
   }
 }
-
-// Change LINKS format
-const findLinkEntities = (contentBlock, callback, contentState) => {
-  contentBlock.findEntityRanges((character) => {
-    const entityKey = character.getEntity();
-    return (
-      entityKey !== null &&
-      contentState.getEntity(entityKey).getType() === "LINK"
-    );
-  }, callback);
-};
-const Link = (props) => {
-  const { url } = props.contentState.getEntity(props.entityKey).getData();
-  return (
-    <a
-      style={{ color: "blue", fontStyle: "italic" }}
-      href={url}
-      target="_blank"
-    >
-      {props.children}
-    </a>
-  );
-};
-
-const strategyDecorator = new CompositeDecorator([
-  {
-    strategy: findLinkEntities,
-    component: Link,
-  },
-]);

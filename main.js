@@ -8,7 +8,8 @@ const showNotification = require("./Function/showNotification.js");
 async function main() {
   const timerObj = { timeId: null };
   // let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
-  let minuteSetting = (await settings.get("setting.minute")) || 0.2; // for debug
+  // let minuteSetting = (await settings.get("setting.minute")) || 0.2 // for debug
+  let minuteSetting = (await settings.get("setting.minute")) || "Stop"; // for debug
   let startingTime = (await settings.get("setting.startTime")) || "From Now";
 
   intialNotification(minuteSetting);

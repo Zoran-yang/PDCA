@@ -52,16 +52,15 @@ export default function saveTasksData(
       updateTaskTypes(selectedTaskTypes);
       updateTaskNames(selectedTaskTypes, selectedTaskNames);
       updateTaskTags(selectedTaskTags);
-      reviseSop(
-        sopId,
-        selectedTaskTypes,
-        selectedTaskNames,
-        selectedTaskTags,
-        richEditorInput,
-        setIsMistake
-      );
+    // reviseSop(
+    //   sopId,
+    //   selectedTaskTypes,
+    //   selectedTaskNames,
+    //   selectedTaskTags,
+    //   richEditorInput,
+    //   setIsMistake
+    // );
   }
-
   console.log("saved");
 }
 
@@ -111,10 +110,12 @@ function updateTaskTags(selectedTaskTags) {
   Promise.all(promises).catch((error) => console.log("Error" + error));
 }
 
-function translateRichEditor(input) {
-  // console.log(JSON.stringify(convertToRaw(input.getCurrentContent())))
-  return convertToRaw(input.getCurrentContent());
-}
+// function translateRichEditor(input) {
+//   console.log(input);
+//   console.log(convertToRaw(input.getCurrentContent()));
+//   console.log(JSON.stringify(convertToRaw(input.getCurrentContent())));
+//   return convertToRaw(input.getCurrentContent());
+// }
 
 function updateTaskContent(
   selectedTaskTypes,
@@ -221,8 +222,9 @@ function reviseSop(
   revisedRichEditorInput = translateRichEditor(revisedRichEditorInput);
 
   let serverResponseHandle = async (res) => {
+    let data = await res.json();
     setIsMistake(false);
-    return res.json();
+    return data;
   };
   let serverErrorHandle = async (res) => {
     res = await res.json();

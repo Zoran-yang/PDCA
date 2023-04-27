@@ -19,7 +19,6 @@ function setTimer(timerObj, minute, startingTime, callback) {
     }, minute * 60 * 1000);
     timerObj.timeId = intervalId;
   }, Start.getTime() - now.getTime());
-  console.log(`Set timer`, timerObj.timeId);
 }
 
 function chooseStartTime(startingTime) {
