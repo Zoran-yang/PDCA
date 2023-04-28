@@ -17,7 +17,8 @@ async function main() {
     };
     await settings.set("setting", settingObj);
   }
-
+  console.log("main", "settingObj", settingObj);
+  // show notification when app is started
   intialNotification(settingObj.minute);
   // set timer
   timerObj.timeId = setTimer(timerObj, settingObj, showNotification);
