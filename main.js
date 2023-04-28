@@ -9,19 +9,20 @@ async function main() {
   const timerObj = { timeId: null };
   // let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
   // let minuteSetting = (await settings.get("setting.minute")) || 0.2 // for debug
-  let minuteSetting = (await settings.get("setting.minute")) || "Stop"; // for debug
-  let startingTime = (await settings.get("setting.startTime")) || "From Now";
+  let settingObj = await settings.get("setting");
+  if (!settingObj.minute || !settingObj.startTime) {
+    settingObj = {
+      minute: "Stop",
+      startTime: "From Now",
+    };
+    await settings.set("setting", settingObj);
+  }
 
-  intialNotification(minuteSetting);
+  intialNotification(settingObj.minute);
   // set timer
-  timerObj.timeId = setTimer(
-    timerObj,
-    minuteSetting,
-    startingTime,
-    showNotification
-  );
+  timerObj.timeId = setTimer(timerObj, settingObj, showNotification);
   // create tray
-  await createTray(timerObj);
+  createTray(timerObj, settingObj);
 }
 
 // auto start when login

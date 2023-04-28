@@ -4,25 +4,23 @@ const settings = require("electron-settings");
 const showNotification = require("./showNotification.js");
 const setTimer = require("./setTimer.js");
 
-async function createTray(timerObj) {
+async function createTray(timerObj, settingObj) {
   let tray = new Tray(path.join(__dirname, "../Asset/Icon.png"));
-  let startingTime = (await settings.get("setting.startTime")) || "From Now";
-  let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
   // set main menu
   const menu = [
     // set frequency
     {
       label: "Choose Frequency And Start",
       submenu: [0.2, 10, 15, 30, 60, 90, 120, 150, 180, 240, "Stop"].map(
-        (minute) => {
-          // save setting
-          settings.set("setting", { minute: minute });
+        (min) => {
           // stop timer
-          if (minute === "Stop") {
+          if (min === "Stop") {
             return {
-              label: minute,
+              label: min,
               click: () => {
-                minuteSetting = minute;
+                settingObj.minute = min;
+                // save setting
+                settings.set("setting", settingObj);
                 console.log("Stop asking");
                 clearInterval(timerObj.timeId);
               },
@@ -30,13 +28,13 @@ async function createTray(timerObj) {
           }
 
           return {
-            label: `${minute} minutes`,
-            click: () => {
-              minuteSetting = minute;
+            label: `${min} minutes`,
+            click: async () => {
+              settingObj.minute = min;
+              await settings.set("setting", settingObj);
               timerObj.timeId = setTimer(
                 timerObj,
-                minuteSetting,
-                startingTime,
+                settingObj,
                 showNotification
               );
             },
@@ -49,22 +47,19 @@ async function createTray(timerObj) {
       label: "Choose Start Time",
       submenu: [
         "Start From Now",
-        "Start From Next o'clock",
-        "Start From Next o'clock or half",
+        "Start From Next O'clock",
+        "Start From Next O'clock Or Half",
+        "Start From Next Quarter Hour",
       ].map((startTime) => {
         // save setting
-        settings.set("setting", { startTime: startTime });
+
         return {
           label: startTime,
-          click: () => {
+          click: async () => {
             console.log(`Set to ${startTime}`);
-            startingTime = startTime;
-            timerObj.timeId = setTimer(
-              timerObj,
-              minuteSetting,
-              startingTime,
-              showNotification
-            );
+            settingObj.startTime = startTime;
+            await settings.set("setting", settingObj);
+            timerObj.timeId = setTimer(timerObj, settingObj, showNotification);
           },
         };
       }),
