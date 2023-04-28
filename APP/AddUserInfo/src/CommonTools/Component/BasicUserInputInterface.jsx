@@ -1,13 +1,10 @@
 import { FreeSoloCreateOption } from "../../Component/FreeSoloCreateOption.jsx";
 // import ComboBox from "../Component/Autocomplete.jsx";
 import Tags from "../../Component/TaskTags.jsx";
-import Button from "@mui/material/Button";
 import TaskContentField from "../../Component/TaskContentField.jsx";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import { useEffect, useState } from "react";
 import getTaskNames from "../Function/getTaskNames.jsx";
-import saveTasksData from "../Function/saveTasksData.jsx";
-import ErrorWarning from "./ErrorWarning.jsx";
 import strategyDecorator from "../Function/linkFormatOfTexteditor.jsx";
 
 export default function BasicUserInputInterface({
@@ -18,6 +15,7 @@ export default function BasicUserInputInterface({
   AfterCancel = () => window.close(),
   // AfterCancel = () => console.log("cancel"), // for debug
   NextPage = null,
+  children,
 }) {
   const sopId = (defaultValues && defaultValues.sopid) || null;
   const [taskTypes, setTaskTypes] = useState(null);
@@ -115,7 +113,6 @@ export default function BasicUserInputInterface({
     //   "handleAddedTaskContent",
     //   JSON.stringify(convertToRaw(newEditorState.getCurrentContent()))
     // );
-
     setAddedTaskContent(newEditorState);
   }
 
@@ -221,53 +218,20 @@ export default function BasicUserInputInterface({
             title={title}
           />
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            flexWrap: "wrap",
-            marginRight: 5,
-          }}
-        >
-          <div style={{ textAlign: "right", padding: 5 }}>
-            {isMistake && <ErrorWarning error={isMistake} />}
-          </div>
-          <Button
-            id="submit-btn"
-            variant="outlined"
-            sx={{ marginRight: 1 }}
-            onClick={async () => {
-              await saveTasksData(
-                dataSource,
-                selectedTaskTypes,
-                selectedTaskNames,
-                selectedTaskTags,
-                addedTaskContent,
-                sopId,
-                setIsMistake
-              );
-              console.log("BasicUserInputInterface", "isMistake", isMistake);
-
-              if (isMistake) return; // if there is a mistake, don't go to the next page
-              clearUserInput();
-              AfterSubmit(
-                selectedTaskTypes, // for DisplaySopArea.jsx
-                selectedTaskNames, // for DisplaySopArea.jsx
-                selectedTaskTags, // for DisplaySopArea.jsx
-                JSON.stringify(
-                  convertToRaw(addedTaskContent.getCurrentContent())
-                ), // for DisplaySopArea.jsx // If render addedTaskContent to DisplaySopArea will cause error in production mode.
-                sopId // for DisplaySopArea.jsx
-              );
-              handleIsSubmitted();
-            }}
-          >
-            Save
-          </Button>
-          <Button id="cancel-btn" variant="outlined" onClick={AfterCancel}>
-            cancal
-          </Button>
-        </div>
+        {children(
+          dataSource,
+          AfterSubmit,
+          AfterCancel,
+          clearUserInput,
+          handleIsSubmitted,
+          selectedTaskTypes,
+          selectedTaskNames,
+          selectedTaskTags,
+          addedTaskContent,
+          sopId,
+          setIsMistake,
+          isMistake
+        )}
       </div>
     );
   }

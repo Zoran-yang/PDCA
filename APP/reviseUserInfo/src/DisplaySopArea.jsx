@@ -8,38 +8,8 @@ import TaskDisplayField from "../../AddUserInfo/src/CommonTools/Component/TaskDi
 import { useEffect, useState } from "react";
 import FloatingWindows from "../../AddUserInfo/src/CommonTools/Component/floatingWindows";
 import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
-import { CompositeDecorator, EditorState, convertToRaw } from "draft-js";
 import delTaskData from "../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
-
-// Change LINKS format
-const findLinkEntities = (contentBlock, callback, contentState) => {
-  contentBlock.findEntityRanges((character) => {
-    const entityKey = character.getEntity();
-    return (
-      entityKey !== null &&
-      contentState.getEntity(entityKey).getType() === "LINK"
-    );
-  }, callback);
-};
-const Link = (props) => {
-  const { url } = props.contentState.getEntity(props.entityKey).getData();
-  return (
-    <a
-      style={{ color: "blue", fontStyle: "italic" }}
-      href={url}
-      target="_blank"
-    >
-      {props.children}
-    </a>
-  );
-};
-
-const strategyDecorator = new CompositeDecorator([
-  {
-    strategy: findLinkEntities,
-    component: Link,
-  },
-]);
+import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);
@@ -185,7 +155,37 @@ export default function DisplaySopArea() {
             closeFloatingWindow();
           }}
           AfterCancel={closeFloatingWindow}
-        />
+        >
+          {(
+            dataSource,
+            AfterSubmit,
+            AfterCancel,
+            clearUserInput,
+            handleIsSubmitted,
+            selectedTaskTypes,
+            selectedTaskNames,
+            selectedTaskTags,
+            addedTaskContent,
+            sopId,
+            setIsMistake,
+            isMistake
+          ) => (
+            <ButtonGruopOfReviseUserInfo
+              dataSource={dataSource}
+              AfterSubmit={AfterSubmit}
+              AfterCancel={AfterCancel}
+              clearUserInput={clearUserInput}
+              handleIsSubmitted={handleIsSubmitted}
+              selectedTaskTypes={selectedTaskTypes}
+              selectedTaskNames={selectedTaskNames}
+              selectedTaskTags={selectedTaskTags}
+              addedTaskContent={addedTaskContent}
+              sopId={sopId}
+              setIsMistake={setIsMistake}
+              isMistake={isMistake}
+            />
+          )}
+        </BasicUserInputInterface>
       </FloatingWindows>
     </div>
   );
