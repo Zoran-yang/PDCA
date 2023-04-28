@@ -52,14 +52,14 @@ export default function saveTasksData(
       updateTaskTypes(selectedTaskTypes);
       updateTaskNames(selectedTaskTypes, selectedTaskNames);
       updateTaskTags(selectedTaskTags);
-    // reviseSop(
-    //   sopId,
-    //   selectedTaskTypes,
-    //   selectedTaskNames,
-    //   selectedTaskTags,
-    //   richEditorInput,
-    //   setIsMistake
-    // );
+      reviseSop(
+        sopId,
+        selectedTaskTypes,
+        selectedTaskNames,
+        selectedTaskTags,
+        richEditorInput,
+        setIsMistake
+      );
   }
   console.log("saved");
 }
@@ -110,12 +110,9 @@ function updateTaskTags(selectedTaskTags) {
   Promise.all(promises).catch((error) => console.log("Error" + error));
 }
 
-// function translateRichEditor(input) {
-//   console.log(input);
-//   console.log(convertToRaw(input.getCurrentContent()));
-//   console.log(JSON.stringify(convertToRaw(input.getCurrentContent())));
-//   return convertToRaw(input.getCurrentContent());
-// }
+function translateRichEditor(input) {
+  return convertToRaw(input.getCurrentContent());
+}
 
 function updateTaskContent(
   selectedTaskTypes,

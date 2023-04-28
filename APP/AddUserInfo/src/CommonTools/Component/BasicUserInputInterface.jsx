@@ -275,7 +275,6 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
-              console.log("isMistake", isMistake);
               if (isMistake) return;
               AfterSubmit(
                 selectedTaskTypes, // for DisplaySopArea.jsx
