@@ -3,56 +3,20 @@ import { FreeSoloCreateOption } from "../../Component/FreeSoloCreateOption.jsx";
 import Tags from "../../Component/TaskTags.jsx";
 import Button from "@mui/material/Button";
 import TaskContentField from "../../Component/TaskContentField.jsx";
-import {
-  EditorState,
-  convertFromRaw,
-  CompositeDecorator,
-  ContentBlock,
-  convertToRaw,
-} from "draft-js";
+import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import { useEffect, useState } from "react";
 import getTaskNames from "../Function/getTaskNames.jsx";
 import saveTasksData from "../Function/saveTasksData.jsx";
 import ErrorWarning from "./ErrorWarning.jsx";
-
-// Change LINKS format
-const findLinkEntities = (contentBlock, callback, contentState) => {
-  contentBlock.findEntityRanges((character) => {
-    const entityKey = character.getEntity();
-    return (
-      entityKey !== null &&
-      contentState.getEntity(entityKey).getType() === "LINK"
-    );
-  }, callback);
-};
-const Link = (props) => {
-  const { url } = props.contentState.getEntity(props.entityKey).getData();
-  return (
-    <a
-      style={{ color: "blue", fontStyle: "italic" }}
-      href={url}
-      target="_blank"
-    >
-      {props.children}
-    </a>
-  );
-};
-
-const strategyDecorator = new CompositeDecorator([
-  {
-    strategy: findLinkEntities,
-    component: Link,
-  },
-]);
+import strategyDecorator from "../Function/linkFormatOfTexteditor.jsx";
 
 export default function BasicUserInputInterface({
   title,
   dataSource,
-  // AfterSubmit = () => window.close(),
-  AfterSubmit = () => console.log("submit"), // for debug
+  AfterSubmit = () => console.log("submit"), // not close window,
   defaultValues = null,
-  // AfterCancel = () => window.close(),
-  AfterCancel = () => console.log("cancel"), // for debug
+  AfterCancel = () => window.close(),
+  // AfterCancel = () => console.log("cancel"), // for debug
   NextPage = null,
 }) {
   const sopId = (defaultValues && defaultValues.sopid) || null;
@@ -163,6 +127,13 @@ export default function BasicUserInputInterface({
     setIsSubmitted(true);
   }
 
+  function clearUserInput() {
+    setSelectedTaskTypes(null);
+    setSelectedTaskNames(null);
+    setSelectedTaskTags([]);
+    setAddedTaskContent(() => EditorState.createEmpty(strategyDecorator));
+  }
+
   useEffect(() => {
     fetch(
       "http://localhost:3000/getTaskInfos", // get task types from server
@@ -265,8 +236,8 @@ export default function BasicUserInputInterface({
             id="submit-btn"
             variant="outlined"
             sx={{ marginRight: 1 }}
-            onClick={() => {
-              saveTasksData(
+            onClick={async () => {
+              await saveTasksData(
                 dataSource,
                 selectedTaskTypes,
                 selectedTaskNames,
@@ -275,7 +246,10 @@ export default function BasicUserInputInterface({
                 sopId,
                 setIsMistake
               );
-              if (isMistake) return;
+              console.log("BasicUserInputInterface", "isMistake", isMistake);
+
+              if (isMistake) return; // if there is a mistake, don't go to the next page
+              clearUserInput();
               AfterSubmit(
                 selectedTaskTypes, // for DisplaySopArea.jsx
                 selectedTaskNames, // for DisplaySopArea.jsx

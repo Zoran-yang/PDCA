@@ -28,7 +28,6 @@ export default function fetchToServer(
         serverErrorHandle
       );
     case "reviseTaskInfos":
-      console.log("fetchToServer", "reviseTaskInfos", "start");
       method = "PATCH";
       return fetchData(
         url,

@@ -1,16 +1,16 @@
 import fetchToServer from "./fetchToServer.jsx";
 
-export default function delTaskData(
+export default async function delTaskData(
   delKey,
   // Mistake Warning
   setIsMistake = (info) => {
     info ? console.log("delTaskData", info) : null;
   }
 ) {
-  deleteSop(delKey, setIsMistake);
+  await deleteSop(delKey, setIsMistake);
 }
 
-function deleteSop(sopId, setIsMistake) {
+async function deleteSop(sopId, setIsMistake) {
   let serverResponseHandle = async (res) => {
     setIsMistake(false);
     return await res.json();

@@ -47,29 +47,56 @@ async function createTray(timerObj) {
     // set Start Time
     {
       label: "Choose Start Time",
-      submenu: ["From Now", "From o'clock", "From o'clock or half"].map(
-        (startTime) => {
-          // save setting
-          settings.set("setting", { startTime: startTime });
-          return {
-            label: startTime,
-            click: () => {
-              console.log(`Set to ${startTime}`);
-              startingTime = startTime;
-              timerObj.timeId = setTimer(
-                timerObj,
-                minuteSetting,
-                startingTime,
-                showNotification
-              );
-            },
-          };
-        }
-      ),
+      submenu: [
+        "Start From Now",
+        "Start From Next o'clock",
+        "Start From Next o'clock or half",
+      ].map((startTime) => {
+        // save setting
+        settings.set("setting", { startTime: startTime });
+        return {
+          label: startTime,
+          click: () => {
+            console.log(`Set to ${startTime}`);
+            startingTime = startTime;
+            timerObj.timeId = setTimer(
+              timerObj,
+              minuteSetting,
+              startingTime,
+              showNotification
+            );
+          },
+        };
+      }),
+    },
+    // Add user task info
+    {
+      label: "Add A New Task",
+      click: () => {
+        const newWindow = new BrowserWindow({
+          width: 700,
+          height: 600,
+          webPreferences: {
+            nodeIntegration: true,
+          },
+        });
+        newWindow.loadFile(
+          path.join(__dirname, "../APP/AddUserInfo/dist", "index.html")
+        );
+        newWindow.on("ready-to-show", () => {
+          newWindow.show();
+        });
+
+        // Add an event listener for the close event of the window
+        newWindow.on("close", (event) => {
+          event.preventDefault(); // Prevent the default behavior of the event
+          newWindow.hide(); // Hide the window instead of closing it
+        });
+      },
     },
     // build SOP
     {
-      label: "Build My SOP",
+      label: "Build My Own SOP",
       click: () => {
         const newWindow = new BrowserWindow({
           width: 700,
@@ -97,8 +124,8 @@ async function createTray(timerObj) {
       label: "Revise My SOP",
       click: () => {
         const newWindow = new BrowserWindow({
-          width: 700,
-          height: 600,
+          width: "100%",
+          height: "100%",
           webPreferences: {
             nodeIntegration: true,
           },
@@ -118,7 +145,7 @@ async function createTray(timerObj) {
     },
     // close app
     {
-      label: "quit",
+      label: "Quit",
       click: () => {
         // show confirm dialog for double check
         const choice = dialog.showMessageBoxSync({

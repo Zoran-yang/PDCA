@@ -162,7 +162,7 @@ export default function DisplaySopArea() {
           </Box>
         );
       })}
-
+      {/* render revise sop floating window */}
       <FloatingWindows isOpen={selectedSop}>
         <BasicUserInputInterface
           title="Saved SOP"

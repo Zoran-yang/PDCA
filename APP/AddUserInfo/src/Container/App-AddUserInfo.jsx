@@ -7,6 +7,9 @@ export default function App() {
     <BasicUserInputInterface
       title="Task"
       dataSource="AddUserInfo"
+      AfterSubmit={() => console.log("submit")}
+      defaultValues={null}
+      AfterCancel={() => window.close()}
       NextPage={CreateReminder}
     />
     // <BasicUserInputInterface  // for debug
