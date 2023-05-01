@@ -16,6 +16,13 @@ export default async function saveTasksData(
   setIsMistake // set the mistake message
 ) {
   // if any of the input is null, return
+  console.log("saveTasksData", "dataSource", dataSource);
+  console.log("saveTasksData", "selectedTaskTypes", selectedTaskTypes);
+  console.log("saveTasksData", "selectedTaskNames", selectedTaskNames);
+  console.log("saveTasksData", "selectedTaskTags", selectedTaskTags);
+  console.log("saveTasksData", "richEditorInput", richEditorInput);
+  console.log("saveTasksData", "sopId", sopId);
+
   if (!selectedTaskTypes || !selectedTaskNames) {
     setIsMistake("task type or task name is empty");
     return;
@@ -36,9 +43,13 @@ export default async function saveTasksData(
           richEditorInput
         ),
       ];
-      return Promise.all(addUserInfoPromises).then((results) => {
-        console.log("All promises completed:", results);
-      });
+      return Promise.all(addUserInfoPromises)
+        .then((results) => {
+          console.log("All promises completed:", results);
+        })
+        .catch((error) => {
+          console.error("Error in Promise.all:", error.message);
+        });
     case "BuildSOP":
       let buildSopPromises = [
         updateTaskTypes(selectedTaskTypes),

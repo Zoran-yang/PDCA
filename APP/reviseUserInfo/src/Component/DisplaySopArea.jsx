@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import FloatingWindows from "../../AddUserInfo/src/CommonTools/Component/floatingWindows";
 import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
 import delTaskData from "../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
-import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
+import ButtonGruopOfReviseUserInfo from "./Component/ButtonGruop - reviseUserInfo.jsx";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);

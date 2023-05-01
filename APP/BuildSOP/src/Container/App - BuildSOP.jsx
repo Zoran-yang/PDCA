@@ -4,7 +4,7 @@ import ButtonGruop from "../../../AddUserInfo/src/CommonTools/Component/ButtonGr
 export default function App() {
   return (
     <BasicUserInputInterface title="SOP" dataSource="BuildSOP">
-      {({
+      {(
         dataSource,
         AfterSubmit,
         AfterCancel,
@@ -16,8 +16,8 @@ export default function App() {
         addedTaskContent,
         sopId,
         setIsMistake,
-        isMistake,
-      }) => (
+        isMistake
+      ) => (
         <ButtonGruop
           dataSource={dataSource}
           AfterSubmit={AfterSubmit}

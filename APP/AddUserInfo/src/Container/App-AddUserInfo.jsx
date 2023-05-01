@@ -13,7 +13,7 @@ export default function App() {
       AfterCancel={() => window.close()}
       NextPage={CreateReminder}
     >
-      {({
+      {(
         dataSource,
         AfterSubmit,
         AfterCancel,
@@ -25,8 +25,8 @@ export default function App() {
         addedTaskContent,
         sopId,
         setIsMistake,
-        isMistake,
-      }) => (
+        isMistake
+      ) => (
         <ButtonGruop
           dataSource={dataSource}
           AfterSubmit={AfterSubmit}

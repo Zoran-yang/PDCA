@@ -3,12 +3,14 @@ export default function fetchToServer(
   data, // the data to be sent to server
   serverResponseHandle = async (res) => {
     // the function to handle the response from server
-    return await res.json();
+    const res = await res.json();
+    console.log(res);
+    return res;
   },
   serverErrorHandle = async (res) => {
     // the function to handle the error from server
     console.log(await res.json());
-    throw new Error("Request failed.");
+    throw new Error(`HTTP error: ${res.status}`);
   }
 ) {
   const url = "http://localhost:3000/" + situation;
@@ -57,21 +59,37 @@ async function fetchData(
   method,
   data,
   serverResponseHandle,
-  serverErrorHandle
+  serverErrorHandle,
+  timeout = 5000
 ) {
-  return fetch(url, {
-    method: method,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-    .then(async (res) => {
-      if (res.ok) {
-        serverResponseHandle(res);
-      } else {
-        serverErrorHandle(res);
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try {
+    const res = await fetchWithTimeout(url, method, data, timeout);
+    if (!res.ok) {
+      serverErrorHandle(res);
+    }
+    serverResponseHandle(res);
+  } catch (error) {
+    console.error(`Error fetching data: ${error.message}`);
+  }
+}
+
+function fetchWithTimeout(url, method, data, timeout) {
+  return new Promise(async (resolve, reject) => {
+    const timeoutId = setTimeout(() => {
+      reject(new Error("Request timed out"));
+    }, timeout);
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      clearTimeout(timeoutId);
+      resolve(response);
+    } catch (error) {
+      clearTimeout(timeoutId);
+      reject(error);
+    }
+  });
 }
