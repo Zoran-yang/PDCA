@@ -3,13 +3,13 @@ export default function fetchToServer(
   data, // the data to be sent to server
   serverResponseHandle = async (res) => {
     // the function to handle the response from server
-    const res = await res.json();
-    console.log(res);
+    res = await res.json();
+    console.log("serverResponseHandle", res);
     return res;
   },
   serverErrorHandle = async (res) => {
     // the function to handle the error from server
-    console.log(await res.json());
+    console.log("serverErrorHandle", await res.json());
     throw new Error(`HTTP error: ${res.status}`);
   }
 ) {
@@ -60,20 +60,20 @@ async function fetchData(
   data,
   serverResponseHandle,
   serverErrorHandle,
-  timeout = 5000
+  timeout = 1000
 ) {
   try {
     const res = await fetchWithTimeout(url, method, data, timeout);
     if (!res.ok) {
-      serverErrorHandle(res);
+      await serverErrorHandle(res);
     }
-    serverResponseHandle(res);
+    return await serverResponseHandle(res);
   } catch (error) {
     console.error(`Error fetching data: ${error.message}`);
   }
 }
 
-function fetchWithTimeout(url, method, data, timeout) {
+async function fetchWithTimeout(url, method, data, timeout) {
   return new Promise(async (resolve, reject) => {
     const timeoutId = setTimeout(() => {
       reject(new Error("Request timed out"));
