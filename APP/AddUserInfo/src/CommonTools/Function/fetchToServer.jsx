@@ -4,7 +4,7 @@ export default function fetchToServer(
   serverResponseHandle = async (res) => {
     // the function to handle the response from server
     res = await res.json();
-    console.log("serverResponseHandle", res);
+    // console.log("serverResponseHandle", res); // for debug
     return res;
   },
   serverErrorHandle = async (res) => {
@@ -16,10 +16,15 @@ export default function fetchToServer(
   const url = "http://localhost:3000/" + situation;
   let method;
   switch (situation) {
-    // case "getTaskInfos":
-    //     method = "POST"
-
-    //     break;
+    case "getTaskInfos":
+      method = "POST";
+      return fetchData(
+        url,
+        method,
+        data,
+        serverResponseHandle,
+        serverErrorHandle
+      );
     case "updateTaskInfos":
       method = "PATCH";
       return fetchData(
@@ -30,6 +35,7 @@ export default function fetchToServer(
         serverErrorHandle
       );
     case "reviseTaskInfos":
+      console.log("fetchToServer", "reviseTaskInfos", data);
       method = "PATCH";
       return fetchData(
         url,

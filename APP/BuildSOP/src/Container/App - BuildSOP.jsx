@@ -1,5 +1,5 @@
 import BasicUserInputInterface from "../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
-import ButtonGruop from "../../../AddUserInfo/src/CommonTools/Component/ButtonGruop.jsx";
+import ButtonGruopOfBuildSOP from "./ButtonGruop-BuildSOP.jsx";
 
 export default function App() {
   return (
@@ -18,7 +18,7 @@ export default function App() {
         setIsMistake,
         isMistake
       ) => (
-        <ButtonGruop
+        <ButtonGruopOfBuildSOP
           dataSource={dataSource}
           AfterSubmit={AfterSubmit}
           AfterCancel={AfterCancel}

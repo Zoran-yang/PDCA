@@ -7,13 +7,16 @@ import fetchToServer from "./fetchToServer.jsx";
 // it is used to save task data to database
 // add and updatetask data
 export default async function saveTasksData(
-  dataSource, // define the operation to server by "AddUserInfo", "BuildSOP", "ReviseTask"
+  dataSource,
+  // define the operation to server by
+  //"AddUserInfo", "BuildSOP", "ReviseTask", "ReviseTaskName"
   selectedTaskTypes, //updated task types
   selectedTaskNames, //updated task names
   selectedTaskTags, // updated task tags
   richEditorInput, // updated task content
   sopId, // sop id
-  setIsMistake // set the mistake message
+  setIsMistake, // set the mistake message
+  entryId
 ) {
   // if any of the input is null, return
 
@@ -28,14 +31,14 @@ export default async function saveTasksData(
     case "AddUserInfo":
       let addUserInfoPromises = [
         updateTaskTypes(selectedTaskTypes),
-        // updateTaskNames(selectedTaskTypes, selectedTaskNames),
-        // updateTaskTags(selectedTaskTags),
-        // updateTaskContent(
-        //   selectedTaskTypes,
-        //   selectedTaskNames,
-        //   selectedTaskTags,
-        //   richEditorInput
-        // ),
+        updateTaskNames(selectedTaskTypes, selectedTaskNames),
+        updateTaskTags(selectedTaskTags),
+        updateTaskContent(
+          selectedTaskTypes,
+          selectedTaskNames,
+          selectedTaskTags,
+          richEditorInput
+        ),
       ];
       return Promise.all(addUserInfoPromises)
         .then((results) => {
@@ -78,6 +81,9 @@ export default async function saveTasksData(
       return Promise.all(reviseTaskPromises).then((results) => {
         console.log("All promises completed:", results);
       });
+    case "ReviseTaskName":
+      // let reviseTaskNamePromises = [];
+      reviseTaskName(selectedTaskTypes, selectedTaskNames, entryId);
   }
 }
 
@@ -215,6 +221,45 @@ async function updateTaskSOP(
         taskTag: selectedTaskTags,
         sop: richEditorInput,
         sopId: uuidv4(),
+      },
+    },
+    serverResponseHandle,
+    serverErrorHandle
+  );
+}
+
+async function reviseTaskName(
+  revisedTaskTypes, //updated task types
+  revisedTaskNames, //updated task names
+  entryId
+) {
+  revisedTaskTypes = taskInfoFormat(revisedTaskTypes);
+  revisedTaskNames = taskInfoFormat(revisedTaskNames);
+  console.log("saveTasksData", "revisedTaskTypes", revisedTaskTypes);
+  console.log("saveTasksData", "revisedTaskNames", revisedTaskNames);
+  let serverResponseHandle = async (res) => {
+    let data = await res.json();
+    setIsMistake(false);
+    return data;
+  };
+  let serverErrorHandle = async (res) => {
+    res = await res.json();
+    console.log(res);
+    if ((res = "This SOP already exist, please revise SOP informaton")) {
+      //if SOP already exist, set error message
+      setIsMistake("This SOP already exist, please revise SOP informaton");
+    }
+    throw new Error("Request failed.");
+  };
+  return fetchToServer(
+    "reviseTaskInfos",
+    {
+      id: "zoran",
+      revisedInfo: {
+        requestType: "taskNames",
+        id: entryId,
+        taskType: revisedTaskTypes,
+        taskName: revisedTaskNames,
       },
     },
     serverResponseHandle,

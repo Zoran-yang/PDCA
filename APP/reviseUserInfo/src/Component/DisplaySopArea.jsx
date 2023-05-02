@@ -4,12 +4,12 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import TaskDisplayField from "../../AddUserInfo/src/CommonTools/Component/TaskDisplayField";
+import TaskDisplayField from "../../../AddUserInfo/src/CommonTools/Component/TaskDisplayField.jsx";
 import { useEffect, useState } from "react";
-import FloatingWindows from "../../AddUserInfo/src/CommonTools/Component/floatingWindows";
-import BasicUserInputInterface from "../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
-import delTaskData from "../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
-import ButtonGruopOfReviseUserInfo from "./Component/ButtonGruop - reviseUserInfo.jsx";
+import FloatingWindows from "../../../AddUserInfo/src/CommonTools/Component/floatingWindows";
+import BasicUserInputInterface from "../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
+import delTaskData from "../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
+import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);

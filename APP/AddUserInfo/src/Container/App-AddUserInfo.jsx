@@ -1,6 +1,6 @@
 import BasicUserInputInterface from "../CommonTools/Component/BasicUserInputInterface.jsx";
 import CreateReminder from "../Component/CreateReminder/CreateReminder.jsx";
-import ButtonGruop from "../CommonTools/Component/ButtonGruop.jsx";
+import ButtonGruopOfAddUserInfo from "../CommonTools/Component/ButtonGruop-AddUserInfo.jsx";
 import "./App.css";
 
 export default function App() {
@@ -27,7 +27,7 @@ export default function App() {
         setIsMistake,
         isMistake
       ) => (
-        <ButtonGruop
+        <ButtonGruopOfAddUserInfo
           dataSource={dataSource}
           AfterSubmit={AfterSubmit}
           AfterCancel={AfterCancel}

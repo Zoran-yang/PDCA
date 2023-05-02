@@ -1,12 +1,12 @@
 import Button from "@mui/material/Button";
-import ErrorWarning from "../../../AddUserInfo/src/CommonTools/Component/ErrorWarning.jsx";
-import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
+import ErrorWarning from "./ErrorWarning.jsx";
+import saveTasksData from "../Function/saveTasksData.jsx";
+import { convertToRaw } from "draft-js";
 
-export default function ButtonGruopOfReviseUserInfo({
+export default function ButtonGruopOfAddUserInfo({
   dataSource,
   AfterSubmit, // not close window,
   AfterCancel,
-  clearUserInput,
   handleIsSubmitted,
   selectedTaskTypes,
   selectedTaskNames,
@@ -52,7 +52,6 @@ export default function ButtonGruopOfReviseUserInfo({
             JSON.stringify(convertToRaw(addedTaskContent.getCurrentContent())), // for DisplaySopArea.jsx // If render addedTaskContent to DisplaySopArea will cause error in production mode.
             sopId // for DisplaySopArea.jsx
           );
-          clearUserInput();
           handleIsSubmitted();
         }}
       >
