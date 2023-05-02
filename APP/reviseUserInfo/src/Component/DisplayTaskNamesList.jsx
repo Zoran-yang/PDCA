@@ -10,6 +10,7 @@ import { TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
+import delTaskData from "../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 
 export default function DisplayTaskNamesList({ data }) {
   const [taskInfos, setTaskInfos] = useState(null);
@@ -18,14 +19,15 @@ export default function DisplayTaskNamesList({ data }) {
   const [newTaskName, setNewTaskName] = useState(null);
   const [isMistake, setIsMistake] = useState(false);
 
-  useEffect(() => {
+  function formatTaskInfos(data) {
     if (data) {
       // formats the data
       let formattedData = data.map((item) => {
         // console.log("DisplayTasNamesList", "useEffect item", item);
-        item["tasktype"] = JSON.parse(item["tasktype"]).title;
-        item["taskname"] = JSON.parse(item["taskname"]).title;
-        return item;
+        let newItem = Object.assign({}, item);
+        newItem["tasktype"] = JSON.parse(item["tasktype"]).title;
+        newItem["taskname"] = JSON.parse(item["taskname"]).title;
+        return newItem;
       });
 
       // classifies the task names by task type
@@ -39,12 +41,20 @@ export default function DisplayTaskNamesList({ data }) {
       });
       setTaskInfos(taskNamesByType);
       // console.log("DisplayTasNamesList", "useEffect", taskNamesByType); // for debug
+
       setIsLoading(false);
     }
-  }, [data]);
+  }
 
+  useEffect(() => {
+    console.log("DisplayTasNamesList", "useEffect data", data); // for debug
+    formatTaskInfos(data);
+  }, []);
+
+  // isLoading is true when taskInfos is null
+  console.log("DisplayTasNamesList", "isLoading", isLoading); // for debug
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Task Names Loading...</div>;
   }
 
   return (
@@ -81,7 +91,12 @@ export default function DisplayTaskNamesList({ data }) {
                       >
                         <CreateIcon />
                       </IconButton>
-                      <IconButton aria-label="Delete">
+                      <IconButton
+                        aria-label="Delete"
+                        // onClick={() => {
+                        //   delTaskData("taskNames", item.id, setIsMistake);
+                        // }}
+                      >
                         <DeleteForeverIcon />
                       </IconButton>
                     </>
@@ -112,6 +127,7 @@ export default function DisplayTaskNamesList({ data }) {
                             item.id
                           );
                           setNewTaskName(null);
+                          if (isMistake) return;
                           setIsRevising(null);
                         }}
                       >

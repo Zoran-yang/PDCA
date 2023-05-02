@@ -33,6 +33,11 @@ export default function DisplayTaskInfoArea() {
     if (res.ok) {
       res = await res.json();
       // console.log(res);
+      // console.log(
+      //   "DisplayTaskInfoArea",
+      //   "allTaskNamesServerResponseHandle",
+      //   res
+      // ); // for debug
       setTaskNames(res);
     } else {
       throw new Error("Request failed.");
@@ -51,43 +56,54 @@ export default function DisplayTaskInfoArea() {
 
   useEffect(() => {
     // fetch task sops from server
-    fetchToServer(
-      "getTaskInfos",
-      {
-        id: "zoran",
-        requestInfo: {
-          requestType: "AllTaskTypes",
+    let getAllInfoPromise = [
+      fetchToServer(
+        "getTaskInfos",
+        {
+          id: "zoran",
+          requestInfo: {
+            requestType: "AllTaskTypes",
+          },
         },
-      },
-      allTaskTypesServerResponseHandle
-    );
-
-    fetchToServer(
-      "getTaskInfos",
-      {
-        id: "zoran",
-        requestInfo: {
-          requestType: "AllTaskNames",
+        allTaskTypesServerResponseHandle
+      ),
+      fetchToServer(
+        "getTaskInfos",
+        {
+          id: "zoran",
+          requestInfo: {
+            requestType: "AllTaskNames",
+          },
         },
-      },
-      allTaskNamesServerResponseHandle
-    );
-
-    fetchToServer(
-      "getTaskInfos",
-      {
-        id: "zoran",
-        requestInfo: {
-          requestType: "AllTaskTags",
+        allTaskNamesServerResponseHandle
+      ),
+      fetchToServer(
+        "getTaskInfos",
+        {
+          id: "zoran",
+          requestInfo: {
+            requestType: "AllTaskTags",
+          },
         },
-      },
-      allTaskTagsServerResponseHandle
-    );
-
-    setIsLoading(false);
+        allTaskTagsServerResponseHandle
+      ),
+    ];
+    Promise.all(getAllInfoPromise)
+      .then(() => {
+        // console.log(
+        //   "DisplayTaskInfoArea",
+        //   "useEffect",
+        //   "All task infos loaded"
+        // );
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("DisplayTaskInfoArea", "useEffect", err);
+      });
   }, []);
 
   // render task infos
+  // console.log("DisplayTaskInfoArea", "isLoading", isLoading); // for debug
   if (isLoading) {
     return <div>Loading...</div>;
   }

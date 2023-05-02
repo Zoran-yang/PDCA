@@ -120,7 +120,7 @@ export default function DisplaySopArea() {
                     size="small"
                     sx={{ color: "red" }}
                     onClick={() => {
-                      delTaskData(item.sopid);
+                      delTaskData("TaskSOP", item.sopid);
                       handleDeletedSop(item.sopid);
                     }}
                   >

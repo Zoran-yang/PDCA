@@ -235,8 +235,6 @@ async function reviseTaskName(
 ) {
   revisedTaskTypes = taskInfoFormat(revisedTaskTypes);
   revisedTaskNames = taskInfoFormat(revisedTaskNames);
-  console.log("saveTasksData", "revisedTaskTypes", revisedTaskTypes);
-  console.log("saveTasksData", "revisedTaskNames", revisedTaskNames);
   let serverResponseHandle = async (res) => {
     let data = await res.json();
     setIsMistake(false);
