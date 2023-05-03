@@ -52,6 +52,8 @@ export default function DisplaySopArea() {
     setAllSopData((prevSopData) =>
       prevSopData.map((sop) => {
         if (sop.sopid === updatedSop.sopid) {
+          // add orginal sop id data to updated sop id, or the id will be undefined
+          // and cause error in the next rerender.
           updatedSop.id = sop.id;
           return updatedSop;
         } else {

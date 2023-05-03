@@ -91,18 +91,23 @@ export default async function saveTasksData(
         console.log("All promises completed:", results);
       });
     case "ReviseTaskType":
-      reviseTaskType(selectedTaskTypes, entryId);
+      reviseTaskType(selectedTaskTypes, entryId, setIsMistake);
     case "ReviseTaskName":
       // if any of the input is null, return
       if (!selectedTaskTypes || !selectedTaskNames) {
         setIsMistake("task type or task name is empty");
         return;
       }
-      reviseTaskName(selectedTaskTypes, selectedTaskNames, entryId);
+      reviseTaskName(
+        selectedTaskTypes,
+        selectedTaskNames,
+        entryId,
+        setIsMistake
+      );
   }
 }
 
-async function updateTaskTypes(selectedTaskTypes) {
+async function updateTaskTypes(selectedTaskTypes, setIsMistake) {
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
 
   // update info to db of "tasktypes"
@@ -115,7 +120,11 @@ async function updateTaskTypes(selectedTaskTypes) {
   });
 }
 
-async function updateTaskNames(selectedTaskTypes, selectedTaskNames) {
+async function updateTaskNames(
+  selectedTaskTypes,
+  selectedTaskNames,
+  setIsMistake
+) {
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
   selectedTaskNames = taskInfoFormat(selectedTaskNames);
 
@@ -129,7 +138,7 @@ async function updateTaskNames(selectedTaskTypes, selectedTaskNames) {
   });
 }
 
-async function updateTaskTags(selectedTaskTags) {
+async function updateTaskTags(selectedTaskTags, setIsMistake) {
   let promises = [];
   //multiple tags are selected and saved as an array
   for (let element of selectedTaskTags || []) {
@@ -156,7 +165,8 @@ async function updateTaskContent(
   selectedTaskTypes,
   selectedTaskNames,
   selectedTaskTags,
-  richEditorInput
+  richEditorInput,
+  setIsMistake
 ) {
   selectedTaskTypes = taskInfoFormat(selectedTaskTypes);
   selectedTaskNames = taskInfoFormat(selectedTaskNames);
@@ -243,8 +253,7 @@ async function updateTaskSOP(
   );
 }
 
-async function reviseTaskType(revisedTaskTypes, entryId) {
-  console.log("reviseTaskType", revisedTaskTypes, entryId);
+async function reviseTaskType(revisedTaskTypes, entryId, setIsMistake) {
   revisedTaskTypes = taskInfoFormat(revisedTaskTypes);
   let serverResponseHandle = async (res) => {
     let data = await res.json();
@@ -275,7 +284,8 @@ async function reviseTaskType(revisedTaskTypes, entryId) {
 async function reviseTaskName(
   revisedTaskTypes, //updated task types
   revisedTaskNames, //updated task names
-  entryId
+  entryId,
+  setIsMistake
 ) {
   revisedTaskTypes = taskInfoFormat(revisedTaskTypes);
   revisedTaskNames = taskInfoFormat(revisedTaskNames);

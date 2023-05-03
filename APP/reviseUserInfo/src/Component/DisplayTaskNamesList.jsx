@@ -44,28 +44,38 @@ export default function DisplayTaskNamesList({ data }) {
     }
   }
 
-  // re-render the updated sop data to DisplaySopArea
+  // re-render the updated TaskName data to DisplayTaskNamesList
   const handleUpdatedTaskName = (originalTaskNameInfos, newTaskName) => {
     // format updated data
-
     const updatedTaskName = {
       tasktype: originalTaskNameInfos.tasktype,
-      taskname: JSON.stringify(selectedTaskNames),
-      tasktag: JSON.stringify(selectedTaskTags),
-      sop: addedTaskContent,
-      sopid: sopId,
+      taskname: newTaskName,
+      id: originalTaskNameInfos.id,
     };
 
-    // upadte data to revised sop card
-    setAllSopData((prevSopData) =>
-      prevSopData.map((sop) => {
-        if (sop.sopid === updatedSop.sopid) {
-          updatedSop.id = sop.id;
-          return updatedSop;
+    // upadte data to revised TaskName
+    setTaskInfos((prevSopData) => {
+      const updatedTasks = prevSopData[updatedTaskName.tasktype].map((task) => {
+        if (task.id === updatedTaskName.id) {
+          return updatedTaskName;
         } else {
-          return sop;
+          return task;
         }
-      })
+      });
+      const updatedPrevSopData = {
+        ...prevSopData,
+        [updatedTaskName.tasktype]: updatedTasks,
+      };
+      return updatedPrevSopData;
+    });
+  };
+
+  // re-render the delete info to DisplayTaskNamesList
+  const handleDeletedSop = (id) => {
+    // delete TaskName list
+    setTaskInfos(
+      (prevSopData) =>
+        (prevSopData = prevSopData.filter((task) => task.id !== id))
     );
   };
 
@@ -95,6 +105,8 @@ export default function DisplayTaskNamesList({ data }) {
         <li key={`section-${key}`}>
           <ul>
             <ListSubheader>{key}</ListSubheader>
+            {/* {console.log("DisplayTaskNamesList", "taskInfos", taskInfos)}
+            {console.log("DisplayTaskNamesList", "key", key)} */}
             {taskInfos[key].map((item) => (
               <div key={`item-${key}-${item.taskname}`}>
                 <ListItem
@@ -116,6 +128,8 @@ export default function DisplayTaskNamesList({ data }) {
                         aria-label="Delete"
                         // onClick={() => {
                         //   delTaskData("taskNames", item.id, setIsMistake);
+                        //   if (isMistake) return;
+                        //   handleDeletedSop(item.id);
                         // }}
                       >
                         <DeleteForeverIcon />
@@ -147,8 +161,9 @@ export default function DisplayTaskNamesList({ data }) {
                             setIsMistake, // set the mistake message
                             item.id
                           );
-                          setNewTaskName(null);
                           if (isMistake) return;
+                          setNewTaskName(null);
+                          handleUpdatedTaskName(item, newTaskName);
                           setIsRevising(null);
                         }}
                       >

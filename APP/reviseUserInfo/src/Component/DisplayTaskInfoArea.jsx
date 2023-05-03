@@ -23,7 +23,7 @@ export default function DisplayTaskInfoArea() {
   const allTaskTypesServerResponseHandle = async (res) => {
     if (res.ok) {
       res = await res.json();
-      console.log(res);
+      // console.log(res);
       setTaskTypes(res);
     } else {
       throw new Error("Request failed.");
@@ -168,7 +168,7 @@ export default function DisplayTaskInfoArea() {
     //     </AccordionDetails>
     //   </Accordion>
     // </div>
-    // <DisplayTasNamesList data={AllTaskNames} />
-    <DisplayTaskTypesList data={AllTaskTypes} />
+    <DisplayTasNamesList data={AllTaskNames} />
+    // <DisplayTaskTypesList data={AllTaskTypes} />
   );
 }
