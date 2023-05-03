@@ -7,6 +7,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DisplayTasNamesList from "./DisplayTaskNamesList.jsx";
+import DisplayTaskTypesList from "./DisplayTaskTypesList.jsx";
 
 export default function DisplayTaskInfoArea() {
   const [AllTaskTypes, setTaskTypes] = useState(null);
@@ -22,7 +23,7 @@ export default function DisplayTaskInfoArea() {
   const allTaskTypesServerResponseHandle = async (res) => {
     if (res.ok) {
       res = await res.json();
-      // console.log(res);
+      console.log(res);
       setTaskTypes(res);
     } else {
       throw new Error("Request failed.");
@@ -32,12 +33,6 @@ export default function DisplayTaskInfoArea() {
   const allTaskNamesServerResponseHandle = async (res) => {
     if (res.ok) {
       res = await res.json();
-      // console.log(res);
-      // console.log(
-      //   "DisplayTaskInfoArea",
-      //   "allTaskNamesServerResponseHandle",
-      //   res
-      // ); // for debug
       setTaskNames(res);
     } else {
       throw new Error("Request failed.");
@@ -47,7 +42,7 @@ export default function DisplayTaskInfoArea() {
   const allTaskTagsServerResponseHandle = async (res) => {
     if (res.ok) {
       res = await res.json();
-      // console.log(res);
+      // console.log(res); // for debug
       setTaskTags(res);
     } else {
       throw new Error("Request failed.");
@@ -90,11 +85,6 @@ export default function DisplayTaskInfoArea() {
     ];
     Promise.all(getAllInfoPromise)
       .then(() => {
-        // console.log(
-        //   "DisplayTaskInfoArea",
-        //   "useEffect",
-        //   "All task infos loaded"
-        // );
         setIsLoading(false);
       })
       .catch((err) => {
@@ -103,7 +93,6 @@ export default function DisplayTaskInfoArea() {
   }, []);
 
   // render task infos
-  // console.log("DisplayTaskInfoArea", "isLoading", isLoading); // for debug
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -179,6 +168,7 @@ export default function DisplayTaskInfoArea() {
     //     </AccordionDetails>
     //   </Accordion>
     // </div>
-    <DisplayTasNamesList data={AllTaskNames} />
+    // <DisplayTasNamesList data={AllTaskNames} />
+    <DisplayTaskTypesList data={AllTaskTypes} />
   );
 }

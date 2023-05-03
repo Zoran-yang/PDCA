@@ -23,7 +23,6 @@ export default function DisplayTaskNamesList({ data }) {
     if (data) {
       // formats the data
       let formattedData = data.map((item) => {
-        // console.log("DisplayTasNamesList", "useEffect item", item);
         let newItem = Object.assign({}, item);
         newItem["tasktype"] = JSON.parse(item["tasktype"]).title;
         newItem["taskname"] = JSON.parse(item["taskname"]).title;
@@ -41,18 +40,15 @@ export default function DisplayTaskNamesList({ data }) {
       });
       setTaskInfos(taskNamesByType);
       // console.log("DisplayTasNamesList", "useEffect", taskNamesByType); // for debug
-
       setIsLoading(false);
     }
   }
 
   useEffect(() => {
-    console.log("DisplayTasNamesList", "useEffect data", data); // for debug
     formatTaskInfos(data);
   }, []);
 
   // isLoading is true when taskInfos is null
-  console.log("DisplayTasNamesList", "isLoading", isLoading); // for debug
   if (isLoading) {
     return <div>Task Names Loading...</div>;
   }
