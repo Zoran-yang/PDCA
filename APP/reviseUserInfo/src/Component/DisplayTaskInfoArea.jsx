@@ -168,7 +168,10 @@ export default function DisplayTaskInfoArea() {
     //     </AccordionDetails>
     //   </Accordion>
     // </div>
-    <DisplayTasNamesList data={AllTaskNames} />
-    // <DisplayTaskTypesList data={AllTaskTypes} />
+    <>
+      <DisplayTasNamesList data={AllTaskNames} />
+      <h1>YOO</h1>
+      <DisplayTaskTypesList data={AllTaskTypes} />
+    </>
   );
 }

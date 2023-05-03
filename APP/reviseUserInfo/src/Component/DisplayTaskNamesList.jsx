@@ -71,12 +71,18 @@ export default function DisplayTaskNamesList({ data }) {
   };
 
   // re-render the delete info to DisplayTaskNamesList
-  const handleDeletedSop = (id) => {
+  const handleDeletedTaskName = (originalTaskNameInfos, id) => {
     // delete TaskName list
-    setTaskInfos(
-      (prevSopData) =>
-        (prevSopData = prevSopData.filter((task) => task.id !== id))
-    );
+    setTaskInfos((prevSopData) => {
+      const updatedTasks = prevSopData[originalTaskNameInfos.tasktype].filter(
+        (task) => task.id !== id
+      );
+      const updatedPrevSopData = {
+        ...prevSopData,
+        [originalTaskNameInfos.tasktype]: updatedTasks,
+      };
+      return updatedPrevSopData;
+    });
   };
 
   useEffect(() => {
@@ -126,11 +132,11 @@ export default function DisplayTaskNamesList({ data }) {
                       </IconButton>
                       <IconButton
                         aria-label="Delete"
-                        // onClick={() => {
-                        //   delTaskData("taskNames", item.id, setIsMistake);
-                        //   if (isMistake) return;
-                        //   handleDeletedSop(item.id);
-                        // }}
+                        onClick={() => {
+                          //   delTaskData("taskNames", item.id, setIsMistake);
+                          if (isMistake) return;
+                          handleDeletedTaskName(item, item.id);
+                        }}
                       >
                         <DeleteForeverIcon />
                       </IconButton>

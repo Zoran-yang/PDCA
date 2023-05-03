@@ -91,6 +91,10 @@ export default async function saveTasksData(
         console.log("All promises completed:", results);
       });
     case "ReviseTaskType":
+      if (!selectedTaskTypes) {
+        setIsMistake("task type or task name is empty");
+        return;
+      }
       reviseTaskType(selectedTaskTypes, entryId, setIsMistake);
     case "ReviseTaskName":
       // if any of the input is null, return

@@ -36,6 +36,35 @@ export default function DisplayTaskTypesList({ data }) {
     }
   }
 
+  // re-render the updated TaskName data to DisplayTaskNamesList
+  const handleUpdatedTaskType = (originalTaskNameInfos, newTaskName) => {
+    // format updated data
+    const updatedTaskName = {
+      tasktype: newTaskType,
+      id: originalTaskNameInfos.id,
+    };
+    // upadte data to revised TaskName
+    setTaskInfos((prevSopData) => {
+      const updatedTasks = prevSopData.map((task) => {
+        if (task.id === updatedTaskName.id) {
+          return updatedTaskName;
+        } else {
+          return task;
+        }
+      });
+      return updatedTasks;
+    });
+  };
+
+  // re-render the delete info to DisplayTaskNamesList
+  const handleDeletedTaskTypes = (id) => {
+    // delete TaskName list
+    setTaskInfos(
+      (prevSopData) =>
+        (prevSopData = prevSopData.filter((task) => task.id !== id))
+    );
+  };
+
   useEffect(() => {
     formatTaskInfos(data);
   }, []);
@@ -77,9 +106,11 @@ export default function DisplayTaskTypesList({ data }) {
                 </IconButton>
                 <IconButton
                   aria-label="Delete"
-                  // onClick={() => {
-                  //   delTaskData("taskNames", item.id, setIsMistake);
-                  // }}
+                  onClick={() => {
+                    //   delTaskData("taskNames", item.id, setIsMistake);
+                    //   if (isMistake) return;
+                    handleDeletedTaskTypes(item.id);
+                  }}
                 >
                   <DeleteForeverIcon />
                 </IconButton>
@@ -100,18 +131,19 @@ export default function DisplayTaskTypesList({ data }) {
                 <IconButton
                   aria-label="Done"
                   onClick={() => {
-                    saveTasksData(
-                      "ReviseTaskType",
-                      newTaskType, //updated task types
-                      null, //if null, no change, saveTasksData will return the original task name
-                      null, // updated task tags
-                      null, // updated task content
-                      null, // sop id
-                      setIsMistake, // set the mistake message
-                      item.id
-                    );
-                    setNewTaskType(null);
+                    // saveTasksData(
+                    //   "ReviseTaskType",
+                    //   newTaskType, //updated task types
+                    //   null, //if null, no change, saveTasksData will return the original task name
+                    //   null, // updated task tags
+                    //   null, // updated task content
+                    //   null, // sop id
+                    //   setIsMistake, // set the mistake message
+                    //   item.id
+                    // );
                     if (isMistake) return;
+                    handleUpdatedTaskType(item, newTaskType);
+                    setNewTaskType(null);
                     setIsRevising(null);
                   }}
                 >
