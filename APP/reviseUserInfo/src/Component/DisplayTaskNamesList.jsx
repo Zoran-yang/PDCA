@@ -44,6 +44,31 @@ export default function DisplayTaskNamesList({ data }) {
     }
   }
 
+  // re-render the updated sop data to DisplaySopArea
+  const handleUpdatedTaskName = (originalTaskNameInfos, newTaskName) => {
+    // format updated data
+
+    const updatedTaskName = {
+      tasktype: originalTaskNameInfos.tasktype,
+      taskname: JSON.stringify(selectedTaskNames),
+      tasktag: JSON.stringify(selectedTaskTags),
+      sop: addedTaskContent,
+      sopid: sopId,
+    };
+
+    // upadte data to revised sop card
+    setAllSopData((prevSopData) =>
+      prevSopData.map((sop) => {
+        if (sop.sopid === updatedSop.sopid) {
+          updatedSop.id = sop.id;
+          return updatedSop;
+        } else {
+          return sop;
+        }
+      })
+    );
+  };
+
   useEffect(() => {
     formatTaskInfos(data);
   }, []);

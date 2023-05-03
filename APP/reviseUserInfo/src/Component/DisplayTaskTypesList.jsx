@@ -16,7 +16,7 @@ export default function DisplayTaskTypesList({ data }) {
   const [taskInfos, setTaskInfos] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRevising, setIsRevising] = useState(null);
-  const [newTaskName, setNewTaskName] = useState(null);
+  const [newTaskType, setNewTaskType] = useState(null);
   const [isMistake, setIsMistake] = useState(false);
 
   function formatTaskInfos(data) {
@@ -31,7 +31,7 @@ export default function DisplayTaskTypesList({ data }) {
       // classifies the task names by task type
 
       setTaskInfos(formattedData);
-      console.log("DisplayTasNamesList", "useEffect", formattedData); // for debug
+      // console.log("DisplayTasNamesList", "useEffect", formattedData); // for debug
       setIsLoading(false);
     }
   }
@@ -100,17 +100,17 @@ export default function DisplayTaskTypesList({ data }) {
                 <IconButton
                   aria-label="Done"
                   onClick={() => {
-                    // saveTasksData(
-                    //   "ReviseTaskName",
-                    //   item.tasktype, //updated task types
-                    //   newTaskName, //if null, no change, saveTasksData will return the original task name
-                    //   null, // updated task tags
-                    //   null, // updated task content
-                    //   null, // sop id
-                    //   setIsMistake, // set the mistake message
-                    //   item.id
-                    // );
-                    setNewTaskName(null);
+                    saveTasksData(
+                      "ReviseTaskType",
+                      newTaskType, //updated task types
+                      null, //if null, no change, saveTasksData will return the original task name
+                      null, // updated task tags
+                      null, // updated task content
+                      null, // sop id
+                      setIsMistake, // set the mistake message
+                      item.id
+                    );
+                    setNewTaskType(null);
                     if (isMistake) return;
                     setIsRevising(null);
                   }}
@@ -120,7 +120,7 @@ export default function DisplayTaskTypesList({ data }) {
                 <IconButton
                   aria-label="close"
                   onClick={() => {
-                    setNewTaskName(null);
+                    setNewTaskType(null);
                     setIsRevising(null);
                   }}
                 >
@@ -135,7 +135,7 @@ export default function DisplayTaskTypesList({ data }) {
               label="Required"
               defaultValue={item.tasktype}
               onChange={(event) => {
-                setNewTaskName(event.target.value);
+                setNewTaskType(event.target.value);
               }}
             />
           </ListItem>

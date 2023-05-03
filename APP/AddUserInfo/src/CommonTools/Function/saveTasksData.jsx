@@ -9,7 +9,7 @@ import fetchToServer from "./fetchToServer.jsx";
 export default async function saveTasksData(
   dataSource,
   // define the operation to server by
-  //"AddUserInfo", "BuildSOP", "ReviseTask", "ReviseTaskName"
+  //"AddUserInfo", "BuildSOP", "ReviseTask", "ReviseTaskName","ReviseTaskType"
   selectedTaskTypes, //updated task types
   selectedTaskNames, //updated task names
   selectedTaskTags, // updated task tags
@@ -18,17 +18,16 @@ export default async function saveTasksData(
   setIsMistake, // set the mistake message
   entryId
 ) {
-  // if any of the input is null, return
-
-  if (!selectedTaskTypes || !selectedTaskNames) {
-    setIsMistake("task type or task name is empty");
-    return;
-  }
   // reset the mistake message
   setIsMistake(false);
 
   switch (dataSource) {
     case "AddUserInfo":
+      // if any of the input is null, return
+      if (!selectedTaskTypes || !selectedTaskNames) {
+        setIsMistake("task type or task name is empty");
+        return;
+      }
       let addUserInfoPromises = [
         updateTaskTypes(selectedTaskTypes),
         updateTaskNames(selectedTaskTypes, selectedTaskNames),
@@ -48,6 +47,11 @@ export default async function saveTasksData(
           console.error("Error in Promise.all:", error.message);
         });
     case "BuildSOP":
+      // if any of the input is null, return
+      if (!selectedTaskTypes || !selectedTaskNames) {
+        setIsMistake("task type or task name is empty");
+        return;
+      }
       let buildSopPromises = [
         updateTaskTypes(selectedTaskTypes),
         updateTaskNames(selectedTaskTypes, selectedTaskNames),
@@ -64,6 +68,11 @@ export default async function saveTasksData(
         console.log("All promises completed:", results);
       });
     case "ReviseTask":
+      // if any of the input is null, return
+      if (!selectedTaskTypes || !selectedTaskNames) {
+        setIsMistake("task type or task name is empty");
+        return;
+      }
       // type, name, tag should also be updated, because user may add new type, name, tag.
       let reviseTaskPromises = [
         updateTaskTypes(selectedTaskTypes),
@@ -81,8 +90,14 @@ export default async function saveTasksData(
       return Promise.all(reviseTaskPromises).then((results) => {
         console.log("All promises completed:", results);
       });
+    case "ReviseTaskType":
+      reviseTaskType(selectedTaskTypes, entryId);
     case "ReviseTaskName":
-      // let reviseTaskNamePromises = [];
+      // if any of the input is null, return
+      if (!selectedTaskTypes || !selectedTaskNames) {
+        setIsMistake("task type or task name is empty");
+        return;
+      }
       reviseTaskName(selectedTaskTypes, selectedTaskNames, entryId);
   }
 }
@@ -228,6 +243,35 @@ async function updateTaskSOP(
   );
 }
 
+async function reviseTaskType(revisedTaskTypes, entryId) {
+  console.log("reviseTaskType", revisedTaskTypes, entryId);
+  revisedTaskTypes = taskInfoFormat(revisedTaskTypes);
+  let serverResponseHandle = async (res) => {
+    let data = await res.json();
+    setIsMistake(false);
+    return data;
+  };
+  let serverErrorHandle = async (res) => {
+    res = await res.json();
+    console.log(res);
+    if ((res = "Duplicate tasktype")) {
+      //if SOP already exist, set error message
+      setIsMistake("Duplicate tasktype");
+    }
+    throw new Error("Request failed.");
+  };
+  return fetchToServer("reviseTaskInfos", {
+    id: "zoran",
+    revisedInfo: {
+      requestType: "taskTypes",
+      taskType: revisedTaskTypes,
+      id: entryId,
+    },
+    serverResponseHandle,
+    serverErrorHandle,
+  });
+}
+
 async function reviseTaskName(
   revisedTaskTypes, //updated task types
   revisedTaskNames, //updated task names
@@ -243,9 +287,9 @@ async function reviseTaskName(
   let serverErrorHandle = async (res) => {
     res = await res.json();
     console.log(res);
-    if ((res = "This SOP already exist, please revise SOP informaton")) {
+    if ((res = "Duplicate taskname in tasktypes")) {
       //if SOP already exist, set error message
-      setIsMistake("This SOP already exist, please revise SOP informaton");
+      setIsMistake("Duplicate taskname in tasktypes");
     }
     throw new Error("Request failed.");
   };
