@@ -11,6 +11,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import saveTasksData from "../../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
 import delTaskData from "../../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
+import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
 
 export default function DisplayTaskNamesList({ data }) {
   const [taskInfos, setTaskInfos] = useState(null);
@@ -133,9 +134,16 @@ export default function DisplayTaskNamesList({ data }) {
                       <IconButton
                         aria-label="Delete"
                         onClick={() => {
-                          //   delTaskData("taskNames", item.id, setIsMistake);
-                          if (isMistake) return;
-                          handleDeletedTaskName(item, item.id);
+                          //   delTaskData(, item.id, setIsMistake);
+                          // if (isMistake) return;
+                          // handleDeletedTaskName(item, item.id);
+                          deleteConfirmation(
+                            "taskNames",
+                            item.id,
+                            setIsMistake,
+                            isMistake,
+                            handleDeletedTaskName
+                          );
                         }}
                       >
                         <DeleteForeverIcon />
