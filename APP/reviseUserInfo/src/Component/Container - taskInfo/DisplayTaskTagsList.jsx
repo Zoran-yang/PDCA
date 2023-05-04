@@ -65,6 +65,21 @@ export default function DisplayTaskTagsList({ data }) {
     );
   };
 
+  async function deleteConfirmation() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this permanently?"
+    );
+    if (confirmed) {
+      // User clicked "OK" in the confirmation dialog
+      await delTaskData("taskTags", item.id, setIsMistake);
+      if (isMistake) return;
+      handleDeletedTaskTypes(item.id);
+    } else {
+      // User clicked "Cancel" in the confirmation dialog
+      // Do nothing, or optionally display a message
+    }
+  }
+
   useEffect(() => {
     formatTaskInfos(data);
   }, []);
@@ -107,9 +122,7 @@ export default function DisplayTaskTagsList({ data }) {
                 <IconButton
                   aria-label="Delete"
                   onClick={() => {
-                    //   delTaskData("taskNames", item.id, setIsMistake);
-                    //   if (isMistake) return;
-                    handleDeletedTaskTypes(item.id);
+                    deleteConfirmation();
                   }}
                 >
                   <DeleteForeverIcon />
