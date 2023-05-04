@@ -1,5 +1,5 @@
-import DisplaySopArea from "../Component/DisplaySopArea.jsx";
-import DisplayTaskInfoArea from "../Component/DisplayTaskInfoArea.jsx";
+import DisplaySopArea from "../Component/Container - Sop/DisplaySopArea.jsx";
+import DisplayTaskInfoArea from "../Component/Container - taskInfo/DisplayTaskInfoArea.jsx";
 
 function App() {
   // return <DisplaySopArea />;

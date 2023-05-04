@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
-import ErrorWarning from "../../../AddUserInfo/src/CommonTools/Component/ErrorWarning.jsx";
-import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
+import ErrorWarning from "../../../../AddUserInfo/src/CommonTools/Component/ErrorWarning.jsx";
+import saveTasksData from "../../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
 
 export default function ButtonGruopOfReviseUserInfo({
   dataSource,

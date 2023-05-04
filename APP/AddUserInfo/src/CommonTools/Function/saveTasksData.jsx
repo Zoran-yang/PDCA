@@ -108,6 +108,13 @@ export default async function saveTasksData(
         entryId,
         setIsMistake
       );
+    case "ReviseTaskTag":
+      // if any of the input is null, return
+      if (!selectedTaskTags) {
+        setIsMistake("task tag is empty");
+        return;
+      }
+      reviseTaskTag(selectedTaskTags, entryId, setIsMistake);
   }
 }
 
@@ -316,6 +323,41 @@ async function reviseTaskName(
         id: entryId,
         taskType: revisedTaskTypes,
         taskName: revisedTaskNames,
+      },
+    },
+    serverResponseHandle,
+    serverErrorHandle
+  );
+}
+
+async function reviseTaskTag(
+  revisedTaskTags, //updated task tags
+  entryId,
+  setIsMistake
+) {
+  revisedTaskTags = taskInfoFormat(revisedTaskTags);
+  let serverResponseHandle = async (res) => {
+    let data = await res.json();
+    setIsMistake(false);
+    return data;
+  };
+  let serverErrorHandle = async (res) => {
+    res = await res.json();
+    console.log(res);
+    if ((res = "Duplicate tasktag")) {
+      //if SOP already exist, set error message
+      setIsMistake("Duplicate task tag");
+    }
+    throw new Error("Request failed.");
+  };
+  return fetchToServer(
+    "reviseTaskInfos",
+    {
+      id: "zoran",
+      revisedInfo: {
+        requestType: "taskTags",
+        id: entryId,
+        taskTag: revisedTaskTags,
       },
     },
     serverResponseHandle,

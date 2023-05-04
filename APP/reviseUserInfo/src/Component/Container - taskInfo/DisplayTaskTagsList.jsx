@@ -9,14 +9,14 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
-import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
-import delTaskData from "../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
+import saveTasksData from "../../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
+import delTaskData from "../../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 
-export default function DisplayTaskTypesList({ data }) {
+export default function DisplayTaskTagsList({ data }) {
   const [taskInfos, setTaskInfos] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRevising, setIsRevising] = useState(null);
-  const [newTaskType, setNewTaskType] = useState(null);
+  const [newTaskTag, setNewTaskTag] = useState(null);
   const [isMistake, setIsMistake] = useState(false);
 
   function formatTaskInfos(data) {
@@ -24,7 +24,7 @@ export default function DisplayTaskTypesList({ data }) {
       // formats the data
       let formattedData = data.map((item) => {
         let newItem = Object.assign({}, item);
-        newItem["tasktype"] = JSON.parse(item["tasktype"]).title;
+        newItem["tasktag"] = JSON.parse(item["tasktag"]).title;
         return newItem;
       });
 
@@ -40,7 +40,7 @@ export default function DisplayTaskTypesList({ data }) {
   const handleUpdatedTaskType = (originalTaskNameInfos, newTaskName) => {
     // format updated data
     const updatedTaskName = {
-      tasktype: newTaskType,
+      tasktag: newTaskTag,
       id: originalTaskNameInfos.id,
     };
     // upadte data to revised TaskName
@@ -71,7 +71,7 @@ export default function DisplayTaskTypesList({ data }) {
 
   // isLoading is true when taskInfos is null
   if (isLoading) {
-    return <div>Task Names Loading...</div>;
+    return <div>Task Tags Loading...</div>;
   }
 
   return (
@@ -88,11 +88,11 @@ export default function DisplayTaskTypesList({ data }) {
       subheader={<li />}
     >
       {taskInfos.map((item) => (
-        <div key={`item-${item.tasktype}`}>
+        <div key={`item-${item.tasktag}`}>
           <ListItem
-            key={`item-${item.tasktype}`}
+            key={`item-${item.tasktag}`}
             sx={
-              isRevising === item.tasktype
+              isRevising === item.tasktag
                 ? { display: "none" }
                 : { display: "block" }
             }
@@ -100,7 +100,7 @@ export default function DisplayTaskTypesList({ data }) {
               <>
                 <IconButton
                   aria-label="Revise"
-                  onClick={() => setIsRevising(item.tasktype)}
+                  onClick={() => setIsRevising(item.tasktag)}
                 >
                   <CreateIcon />
                 </IconButton>
@@ -117,12 +117,12 @@ export default function DisplayTaskTypesList({ data }) {
               </>
             }
           >
-            <ListItemText primary={item.tasktype} />
+            <ListItemText primary={item.tasktag} />
           </ListItem>
           <ListItem
-            key={`item-${item.tasktype}-revising`}
+            key={`item-${item.tasktag}-revising`}
             sx={
-              isRevising === item.tasktype
+              isRevising === item.tasktag
                 ? { display: "block" }
                 : { display: "none" }
             }
@@ -131,19 +131,19 @@ export default function DisplayTaskTypesList({ data }) {
                 <IconButton
                   aria-label="Done"
                   onClick={() => {
-                    // saveTasksData(
-                    //   "ReviseTaskType",
-                    //   newTaskType, //updated task types
-                    //   null, //if null, no change, saveTasksData will return the original task name
-                    //   null, // updated task tags
-                    //   null, // updated task content
-                    //   null, // sop id
-                    //   setIsMistake, // set the mistake message
-                    //   item.id
-                    // );
+                    saveTasksData(
+                      "ReviseTaskTag",
+                      null, //updated task types
+                      null, //if null, no change, saveTasksData will return the original task name
+                      newTaskTag, // updated task tags
+                      null, // updated task content
+                      null, // sop id
+                      setIsMistake, // set the mistake message
+                      item.id
+                    );
                     if (isMistake) return;
-                    handleUpdatedTaskType(item, newTaskType);
-                    setNewTaskType(null);
+                    handleUpdatedTaskType(item, newTaskTag);
+                    setNewTaskTag(null);
                     setIsRevising(null);
                   }}
                 >
@@ -152,7 +152,7 @@ export default function DisplayTaskTypesList({ data }) {
                 <IconButton
                   aria-label="close"
                   onClick={() => {
-                    setNewTaskType(null);
+                    setNewTaskTag(null);
                     setIsRevising(null);
                   }}
                 >
@@ -165,9 +165,9 @@ export default function DisplayTaskTypesList({ data }) {
               required
               id="outlined-required"
               label="Required"
-              defaultValue={item.tasktype}
+              defaultValue={item.tasktag}
               onChange={(event) => {
-                setNewTaskType(event.target.value);
+                setNewTaskTag(event.target.value);
               }}
             />
           </ListItem>

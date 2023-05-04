@@ -1,4 +1,4 @@
-import fetchToServer from "../../../AddUserInfo/src/CommonTools/Function/fetchToServer.jsx";
+import fetchToServer from "../../../../AddUserInfo/src/CommonTools/Function/fetchToServer.jsx";
 import { useState, useEffect } from "react";
 import * as React from "react";
 import Accordion from "@mui/material/Accordion";
@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DisplayTasNamesList from "./DisplayTaskNamesList.jsx";
 import DisplayTaskTypesList from "./DisplayTaskTypesList.jsx";
+import DisplayTaskTagsList from "./DisplayTaskTagsList.jsx";
 
 export default function DisplayTaskInfoArea() {
   const [AllTaskTypes, setTaskTypes] = useState(null);
@@ -170,6 +171,8 @@ export default function DisplayTaskInfoArea() {
     // </div>
     <>
       <DisplayTasNamesList data={AllTaskNames} />
+      <h1>YOO</h1>
+      <DisplayTaskTagsList data={AllTaskTags} />
       <h1>YOO</h1>
       <DisplayTaskTypesList data={AllTaskTypes} />
     </>

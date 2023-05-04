@@ -18,5 +18,11 @@ export default function ErrorWarning({ error }) {
           This SOP already exist, please add another SOP infomation
         </p>
       );
+    case "task tag is empty": // for "ReviseTaskTag"
+      return (
+        <p style={{ color: "red", lineHeight: 0, fontSize: 10 }}>
+          task tag is empty
+        </p>
+      );
   }
 }
