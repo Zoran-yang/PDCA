@@ -1,13 +1,10 @@
 import Button from "@mui/material/Button";
 import ErrorWarning from "./ErrorWarning.jsx";
 import saveTasksData from "../Function/saveTasksData.jsx";
-import { convertToRaw } from "draft-js";
 
 export default function ButtonGruopOfAddUserInfo({
   dataSource,
-  AfterSubmit, // not close window,
   AfterCancel,
-  handleIsSubmitted,
   selectedTaskTypes,
   selectedTaskNames,
   selectedTaskTags,
@@ -15,6 +12,7 @@ export default function ButtonGruopOfAddUserInfo({
   sopId,
   setIsMistake,
   isMistake,
+  setButtonClicked,
 }) {
   return (
     <div
@@ -42,17 +40,7 @@ export default function ButtonGruopOfAddUserInfo({
             sopId,
             setIsMistake
           );
-          console.log("BasicUserInputInterface", "isMistake", isMistake);
-
-          if (isMistake) return; // if there is a mistake, don't go to the next page
-          AfterSubmit(
-            selectedTaskTypes, // for DisplaySopArea.jsx
-            selectedTaskNames, // for DisplaySopArea.jsx
-            selectedTaskTags, // for DisplaySopArea.jsx
-            JSON.stringify(convertToRaw(addedTaskContent.getCurrentContent())), // for DisplaySopArea.jsx // If render addedTaskContent to DisplaySopArea will cause error in production mode.
-            sopId // for DisplaySopArea.jsx
-          );
-          handleIsSubmitted();
+          setButtonClicked("AddUserInfo-save");
         }}
       >
         Save

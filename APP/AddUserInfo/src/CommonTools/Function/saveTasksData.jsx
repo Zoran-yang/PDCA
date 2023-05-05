@@ -24,10 +24,20 @@ export default async function saveTasksData(
   switch (dataSource) {
     case "AddUserInfo":
       // if any of the input is null, return
+      // console.log("selectedTaskTypes", selectedTaskTypes);
+      // console.log("selectedTaskNames", selectedTaskNames);
+      // console.log("!selectedTaskTypes", !selectedTaskTypes);
+      // console.log("!selectedTaskNames", !selectedTaskNames);
+      // console.log(
+      //   "!selectedTaskTypes || !selectedTaskNames",
+      //   !selectedTaskTypes || !selectedTaskNames
+      // );
       if (!selectedTaskTypes || !selectedTaskNames) {
+        console.log("task type or task name is empty");
         setIsMistake("task type or task name is empty");
         return;
       }
+
       let addUserInfoPromises = [
         updateTaskTypes(selectedTaskTypes),
         updateTaskNames(selectedTaskTypes, selectedTaskNames),

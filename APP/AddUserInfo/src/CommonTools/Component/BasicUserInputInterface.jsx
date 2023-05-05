@@ -50,7 +50,13 @@ export default function BasicUserInputInterface({
       : () => EditorState.createEmpty(strategyDecorator)
   );
   const [isMistake, setIsMistake] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  function handleIsMistake(data) {
+    console.log("handleIsMistake", data);
+    setIsMistake(data);
+  }
 
   function handleTaskTypes(newValue) {
     if (newValue === null) return;
@@ -177,6 +183,38 @@ export default function BasicUserInputInterface({
       .catch(console.log);
   }, []);
 
+  //After submit, clear user input and go to the next page
+  useEffect(() => {
+    if (!buttonClicked) return; // if the user has clicked the button, go to the next page
+    if (isMistake) {
+      setButtonClicked(false);
+      return; // if there is a mistake, don't go to the next page
+    }
+
+    switch (buttonClicked) {
+      case "BuildSOP-cancel":
+        window.close();
+        break;
+      case "BuildSOP-save":
+        clearUserInput();
+        break;
+      case "ReviseUserInfo-save":
+        AfterSubmit(
+          selectedTaskTypes, // for DisplaySopArea.jsx
+          selectedTaskNames, // for DisplaySopArea.jsx
+          selectedTaskTags, // for DisplaySopArea.jsx
+          JSON.stringify(convertToRaw(addedTaskContent.getCurrentContent())), // for DisplaySopArea.jsx // If render addedTaskContent to DisplaySopArea will cause error in production mode.
+          sopId // for DisplaySopArea.jsx
+        );
+        clearUserInput();
+        handleIsSubmitted();
+        break;
+      default:
+        handleIsSubmitted();
+        break;
+    }
+  }, [isMistake, buttonClicked]);
+
   if (isSubmitted && NextPage) {
     // if the user has submitted the form, go to the next page
     return (
@@ -218,7 +256,9 @@ export default function BasicUserInputInterface({
             title={title}
           />
         </div>
+
         {children(
+          // children is a function that returns a button
           dataSource,
           AfterSubmit,
           AfterCancel,
@@ -229,8 +269,9 @@ export default function BasicUserInputInterface({
           selectedTaskTags,
           addedTaskContent,
           sopId,
-          setIsMistake,
-          isMistake
+          handleIsMistake,
+          isMistake,
+          setButtonClicked
         )}
       </div>
     );

@@ -1,4 +1,5 @@
 export default function ErrorWarning({ error }) {
+  console.log("ErrorWarning", "error", error);
   switch (error) {
     case "Task type or task name is empty":
       return (

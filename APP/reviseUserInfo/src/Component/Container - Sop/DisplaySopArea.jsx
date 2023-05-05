@@ -10,11 +10,13 @@ import FloatingWindows from "../../../../AddUserInfo/src/CommonTools/Component/f
 import BasicUserInputInterface from "../../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
 import delTaskData from "../../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
+import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSop, setSelectedSop] = useState(null);
+  const [isMistake, setIsMistake] = useState(null);
 
   function handleAllsopData(data) {
     setAllSopData(data);
@@ -122,8 +124,14 @@ export default function DisplaySopArea() {
                     size="small"
                     sx={{ color: "red" }}
                     onClick={() => {
-                      delTaskData("TaskSOP", item.sopid);
-                      handleDeletedSop(item.sopid);
+                      deleteConfirmation(
+                        "TaskSOP",
+                        item.sopid,
+                        setIsMistake,
+                        isMistake,
+                        handleDeletedSop,
+                        null
+                      );
                     }}
                   >
                     Delete
@@ -170,7 +178,8 @@ export default function DisplaySopArea() {
             addedTaskContent,
             sopId,
             setIsMistake,
-            isMistake
+            isMistake,
+            setButtonClicked
           ) => (
             <ButtonGruopOfReviseUserInfo
               dataSource={dataSource}
@@ -185,6 +194,7 @@ export default function DisplaySopArea() {
               sopId={sopId}
               setIsMistake={setIsMistake}
               isMistake={isMistake}
+              setButtonClicked={setButtonClicked}
             />
           )}
         </BasicUserInputInterface>

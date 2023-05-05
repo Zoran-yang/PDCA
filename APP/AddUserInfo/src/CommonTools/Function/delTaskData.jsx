@@ -10,7 +10,7 @@ export default async function delTaskData(
 ) {
   switch (target) {
     case "TaskSOP":
-      return await deleteSop(target, sopId, setIsMistake);
+      return await deleteSop(target, delKey, setIsMistake);
     case "taskTypes":
       return await deleteTaskType(target, delKey, setIsMistake);
     case "taskNames":

@@ -9,8 +9,6 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
-import saveTasksData from "../../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
-import delTaskData from "../../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
 
 export default function DisplayTaskTypesList({ data }) {

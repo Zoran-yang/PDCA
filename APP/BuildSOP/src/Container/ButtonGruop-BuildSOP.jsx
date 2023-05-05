@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import ErrorWarning from "../../../AddUserInfo/src/CommonTools/Component/ErrorWarning.jsx";
 import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
-import { convertToRaw } from "draft-js";
 
 export default function ButtonGruopOfBuildSOP({
   dataSource,
@@ -16,6 +15,7 @@ export default function ButtonGruopOfBuildSOP({
   sopId,
   setIsMistake,
   isMistake,
+  setButtonClicked,
 }) {
   return (
     <div
@@ -43,18 +43,7 @@ export default function ButtonGruopOfBuildSOP({
             sopId,
             setIsMistake
           );
-          console.log("BasicUserInputInterface", "isMistake", isMistake);
-
-          if (isMistake) return; // if there is a mistake, don't go to the next page
-          AfterSubmit(
-            selectedTaskTypes, // for DisplaySopArea.jsx
-            selectedTaskNames, // for DisplaySopArea.jsx
-            selectedTaskTags, // for DisplaySopArea.jsx
-            JSON.stringify(convertToRaw(addedTaskContent.getCurrentContent())), // for DisplaySopArea.jsx // If render addedTaskContent to DisplaySopArea will cause error in production mode.
-            sopId // for DisplaySopArea.jsx
-          );
-          handleIsSubmitted();
-          clearUserInput();
+          setButtonClicked("BuildSOP-save");
         }}
       >
         Save and Add More
@@ -73,10 +62,7 @@ export default function ButtonGruopOfBuildSOP({
             sopId,
             setIsMistake
           );
-          console.log("BasicUserInputInterface", "isMistake", isMistake);
-
-          if (isMistake) return; // if there is a mistake, don't go to the next page
-          window.close();
+          setButtonClicked("BuildSOP-cancel");
         }}
       >
         Save and Leave

@@ -25,7 +25,8 @@ export default function App() {
         addedTaskContent,
         sopId,
         setIsMistake,
-        isMistake
+        isMistake,
+        setButtonClicked
       ) => (
         <ButtonGruopOfAddUserInfo
           dataSource={dataSource}
@@ -40,6 +41,7 @@ export default function App() {
           sopId={sopId}
           setIsMistake={setIsMistake}
           isMistake={isMistake}
+          setButtonClicked={setButtonClicked}
         />
       )}
     </BasicUserInputInterface>
