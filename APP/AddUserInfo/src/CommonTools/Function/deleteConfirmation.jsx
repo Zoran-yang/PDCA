@@ -5,7 +5,8 @@ export default async function deleteConfirmation(
   delKey,
   setIsMistake,
   isMistake,
-  handleDeletedSituation
+  handleDeletedSituation,
+  originalTaskInfos
 ) {
   const confirmed = window.confirm(
     "Are you sure you want to delete this permanently?"
@@ -14,7 +15,7 @@ export default async function deleteConfirmation(
     // User clicked "OK" in the confirmation dialog
     await delTaskData(target, delKey, setIsMistake);
     if (isMistake) return;
-    handleDeletedSituation(delKey);
+    handleDeletedSituation(delKey, originalTaskInfos);
   } else {
     // User clicked "Cancel" in the confirmation dialog
     // Do nothing, or optionally display a message

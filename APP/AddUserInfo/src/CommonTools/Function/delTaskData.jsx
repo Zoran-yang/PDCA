@@ -11,8 +11,8 @@ export default async function delTaskData(
   switch (target) {
     case "TaskSOP":
       return await deleteSop(target, sopId, setIsMistake);
-    // case "taskTypes":
-    //   return await deleteTaskType(target, delKey, setIsMistake);
+    case "taskTypes":
+      return await deleteTaskType(target, delKey, setIsMistake);
     case "taskNames":
       return await deleteTaskName(target, delKey, setIsMistake);
     case "taskTags":
@@ -20,6 +20,32 @@ export default async function delTaskData(
     default:
       console.log("delTaskData: target not found");
   }
+}
+
+async function deleteTaskType(target, id, setIsMistake) {
+  let serverResponseHandle = async (res) => {
+    setIsMistake(false);
+    return await res.json();
+  };
+  let serverErrorHandle = async (res) => {
+    res = await res.json();
+    if ((res = "Task type is not deleted")) {
+      setIsMistake("Task type is not deleted");
+    }
+    throw new Error("Request failed.");
+  };
+  return fetchToServer(
+    "deleteTaskInfos",
+    {
+      id: "zoran",
+      deletedInfo: {
+        requestType: target,
+        id: id,
+      },
+    },
+    serverResponseHandle,
+    serverErrorHandle
+  );
 }
 
 async function deleteTaskName(target, id, setIsMistake) {

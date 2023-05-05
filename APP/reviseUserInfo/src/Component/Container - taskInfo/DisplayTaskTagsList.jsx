@@ -57,7 +57,7 @@ export default function DisplayTaskTagsList({ data }) {
   };
 
   // re-render the delete info to DisplayTaskNamesList
-  const handleDeletedTaskTypes = (id) => {
+  const handleDeletedTaskTags = (id) => {
     // delete TaskName list
     setTaskInfos(
       (prevSopData) =>
@@ -112,7 +112,8 @@ export default function DisplayTaskTagsList({ data }) {
                       item.id,
                       setIsMistake,
                       isMistake,
-                      handleDeletedTaskTypes
+                      handleDeletedTaskTags,
+                      null
                     );
                   }}
                 >

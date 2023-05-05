@@ -168,7 +168,7 @@ async function updateTaskTags(selectedTaskTags, setIsMistake) {
   return Promise.all(promises).catch((error) => console.log("Error" + error));
 }
 
-async function translateRichEditor(input) {
+function translateRichEditor(input) {
   return convertToRaw(input.getCurrentContent());
 }
 

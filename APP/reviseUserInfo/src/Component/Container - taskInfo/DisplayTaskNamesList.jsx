@@ -72,7 +72,7 @@ export default function DisplayTaskNamesList({ data }) {
   };
 
   // re-render the delete info to DisplayTaskNamesList
-  const handleDeletedTaskName = (originalTaskNameInfos, id) => {
+  const handleDeletedTaskName = (id, originalTaskNameInfos) => {
     // delete TaskName list
     setTaskInfos((prevSopData) => {
       const updatedTasks = prevSopData[originalTaskNameInfos.tasktype].filter(
@@ -112,8 +112,6 @@ export default function DisplayTaskNamesList({ data }) {
         <li key={`section-${key}`}>
           <ul>
             <ListSubheader>{key}</ListSubheader>
-            {/* {console.log("DisplayTaskNamesList", "taskInfos", taskInfos)}
-            {console.log("DisplayTaskNamesList", "key", key)} */}
             {taskInfos[key].map((item) => (
               <div key={`item-${key}-${item.taskname}`}>
                 <ListItem
@@ -134,15 +132,13 @@ export default function DisplayTaskNamesList({ data }) {
                       <IconButton
                         aria-label="Delete"
                         onClick={() => {
-                          //   delTaskData(, item.id, setIsMistake);
-                          // if (isMistake) return;
-                          // handleDeletedTaskName(item, item.id);
                           deleteConfirmation(
                             "taskNames",
                             item.id,
                             setIsMistake,
                             isMistake,
-                            handleDeletedTaskName
+                            handleDeletedTaskName,
+                            item
                           );
                         }}
                       >
