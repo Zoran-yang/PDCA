@@ -18,6 +18,7 @@ export default function DisplayTaskTagsList({ data }) {
   const [isRevising, setIsRevising] = useState(null);
   const [newTaskTag, setNewTaskTag] = useState(null);
   const [isMistake, setIsMistake] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   function formatTaskInfos(data) {
     if (data) {
@@ -37,7 +38,7 @@ export default function DisplayTaskTagsList({ data }) {
   }
 
   // re-render the updated TaskName data to DisplayTaskNamesList
-  const handleUpdatedTaskType = (originalTaskNameInfos, newTaskName) => {
+  const handleUpdatedTaskTag = (originalTaskNameInfos, newTaskName) => {
     // format updated data
     const updatedTaskName = {
       tasktag: newTaskTag,
@@ -69,6 +70,18 @@ export default function DisplayTaskTagsList({ data }) {
     formatTaskInfos(data);
   }, []);
 
+  useEffect(() => {
+    if (!buttonClicked) return; // if the user has clicked the button, go to the next page
+    if (isMistake) {
+      setButtonClicked(false);
+      return; // if there is a mistake, don't go to the next page
+    }
+    // if there is no mistake, go to the next step
+    setNewTaskTag(null);
+    handleUpdatedTaskTag(buttonClicked, newTaskTag);
+    setIsRevising(null);
+  }, [buttonClicked]);
+
   // isLoading is true when taskInfos is null
   if (isLoading) {
     return <div>Task Tags Loading...</div>;
@@ -78,7 +91,7 @@ export default function DisplayTaskTagsList({ data }) {
     <List
       sx={{
         width: "100%",
-        maxWidth: 360,
+        // maxWidth: 360,
         bgcolor: "background.paper",
         position: "relative",
         overflow: "auto",
@@ -89,6 +102,7 @@ export default function DisplayTaskTagsList({ data }) {
     >
       {taskInfos.map((item) => (
         <div key={`item-${item.tasktag}`}>
+          {/* Showing Mode */}
           <ListItem
             key={`item-${item.tasktag}`}
             sx={
@@ -100,7 +114,10 @@ export default function DisplayTaskTagsList({ data }) {
               <>
                 <IconButton
                   aria-label="Revise"
-                  onClick={() => setIsRevising(item.tasktag)}
+                  onClick={() => {
+                    setNewTaskTag(item.tasktag);
+                    setIsRevising(item.tasktag);
+                  }}
                 >
                   <CreateIcon />
                 </IconButton>
@@ -124,6 +141,7 @@ export default function DisplayTaskTagsList({ data }) {
           >
             <ListItemText primary={item.tasktag} />
           </ListItem>
+          {/* Revising Mode */}
           <ListItem
             key={`item-${item.tasktag}-revising`}
             sx={
@@ -146,10 +164,7 @@ export default function DisplayTaskTagsList({ data }) {
                       setIsMistake, // set the mistake message
                       item.id
                     );
-                    if (isMistake) return;
-                    handleUpdatedTaskType(item, newTaskTag);
-                    setNewTaskTag(null);
-                    setIsRevising(null);
+                    setButtonClicked(item);
                   }}
                 >
                   <DoneIcon />

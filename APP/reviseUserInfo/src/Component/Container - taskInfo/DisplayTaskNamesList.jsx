@@ -10,7 +10,6 @@ import { TextField } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import saveTasksData from "../../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
-import delTaskData from "../../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
 
 export default function DisplayTaskNamesList({ data }) {
@@ -19,6 +18,7 @@ export default function DisplayTaskNamesList({ data }) {
   const [isRevising, setIsRevising] = useState(null);
   const [newTaskName, setNewTaskName] = useState(null);
   const [isMistake, setIsMistake] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   function formatTaskInfos(data) {
     if (data) {
@@ -90,6 +90,18 @@ export default function DisplayTaskNamesList({ data }) {
     formatTaskInfos(data);
   }, []);
 
+  useEffect(() => {
+    if (!buttonClicked) return; // if the user has clicked the button, go to the next page
+    if (isMistake) {
+      setButtonClicked(false);
+      return; // if there is a mistake, don't go to the next page
+    }
+    // if there is no mistake, go to the next step
+    setNewTaskName(null);
+    handleUpdatedTaskName(buttonClicked, newTaskName);
+    setIsRevising(null);
+  }, [buttonClicked]);
+
   // isLoading is true when taskInfos is null
   if (isLoading) {
     return <div>Task Names Loading...</div>;
@@ -99,7 +111,7 @@ export default function DisplayTaskNamesList({ data }) {
     <List
       sx={{
         width: "100%",
-        maxWidth: 360,
+        // maxWidth: 360,
         bgcolor: "background.paper",
         position: "relative",
         overflow: "auto",
@@ -114,6 +126,7 @@ export default function DisplayTaskNamesList({ data }) {
             <ListSubheader>{key}</ListSubheader>
             {taskInfos[key].map((item) => (
               <div key={`item-${key}-${item.taskname}`}>
+                {/* Showing Mode */}
                 <ListItem
                   key={`item-${key}-${item.taskname}`}
                   sx={
@@ -125,7 +138,10 @@ export default function DisplayTaskNamesList({ data }) {
                     <>
                       <IconButton
                         aria-label="Revise"
-                        onClick={() => setIsRevising(item.taskname)}
+                        onClick={() => {
+                          setNewTaskName(item.taskname);
+                          setIsRevising(item.taskname);
+                        }}
                       >
                         <CreateIcon />
                       </IconButton>
@@ -149,6 +165,7 @@ export default function DisplayTaskNamesList({ data }) {
                 >
                   <ListItemText primary={item.taskname} />
                 </ListItem>
+                {/* Revising Mode */}
                 <ListItem
                   key={`item-${key}-${item.taskname}-revising`}
                   sx={
@@ -171,10 +188,7 @@ export default function DisplayTaskNamesList({ data }) {
                             setIsMistake, // set the mistake message
                             item.id
                           );
-                          if (isMistake) return;
-                          setNewTaskName(null);
-                          handleUpdatedTaskName(item, newTaskName);
-                          setIsRevising(null);
+                          setButtonClicked(item);
                         }}
                       >
                         <DoneIcon />

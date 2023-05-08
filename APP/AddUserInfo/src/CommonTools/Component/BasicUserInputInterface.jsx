@@ -54,7 +54,6 @@ export default function BasicUserInputInterface({
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   function handleIsMistake(data) {
-    console.log("handleIsMistake", data);
     setIsMistake(data);
   }
 

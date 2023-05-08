@@ -50,8 +50,7 @@ export default function CreateReminder({
   }
 
   if (!sopData || !sopData.length || !sopData[0].tasktype) {
-    console.log("BasicUserInputInterface", "isMistake", "WHY");
-    // window.close(); // for debug
+    window.close(); // for debug
   }
 
   return <Reminder sopData={sopData[0]} />;

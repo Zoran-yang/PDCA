@@ -17,6 +17,7 @@ export default function DisplayTaskTypesList({ data }) {
   const [isRevising, setIsRevising] = useState(null);
   const [newTaskType, setNewTaskType] = useState(null);
   const [isMistake, setIsMistake] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   function formatTaskInfos(data) {
     if (data) {
@@ -68,6 +69,18 @@ export default function DisplayTaskTypesList({ data }) {
     formatTaskInfos(data);
   }, []);
 
+  useEffect(() => {
+    if (!buttonClicked) return; // if the user has clicked the button, go to the next page
+    if (isMistake) {
+      setButtonClicked(false);
+      return; // if there is a mistake, don't go to the next page
+    }
+    // if there is no mistake, go to the next step
+    setNewTaskType(null);
+    handleUpdatedTaskType(buttonClicked, newTaskType);
+    setIsRevising(null);
+  }, [buttonClicked]);
+
   // isLoading is true when taskInfos is null
   if (isLoading) {
     return <div>Task Names Loading...</div>;
@@ -77,7 +90,7 @@ export default function DisplayTaskTypesList({ data }) {
     <List
       sx={{
         width: "100%",
-        maxWidth: 360,
+        // maxWidth: 360,
         bgcolor: "background.paper",
         position: "relative",
         overflow: "auto",
@@ -88,6 +101,7 @@ export default function DisplayTaskTypesList({ data }) {
     >
       {taskInfos.map((item) => (
         <div key={`item-${item.tasktype}`}>
+          {/* Showing Mode */}
           <ListItem
             key={`item-${item.tasktype}`}
             sx={
@@ -99,7 +113,10 @@ export default function DisplayTaskTypesList({ data }) {
               <>
                 <IconButton
                   aria-label="Revise"
-                  onClick={() => setIsRevising(item.tasktype)}
+                  onClick={() => {
+                    setNewTaskType(item.tasktype);
+                    setIsRevising(item.tasktype);
+                  }}
                 >
                   <CreateIcon />
                 </IconButton>
@@ -123,6 +140,7 @@ export default function DisplayTaskTypesList({ data }) {
           >
             <ListItemText primary={item.tasktype} />
           </ListItem>
+          {/* Revising Mode */}
           <ListItem
             key={`item-${item.tasktype}-revising`}
             sx={
@@ -135,20 +153,17 @@ export default function DisplayTaskTypesList({ data }) {
                 <IconButton
                   aria-label="Done"
                   onClick={() => {
-                    // saveTasksData(
-                    //   "ReviseTaskType",
-                    //   newTaskType, //updated task types
-                    //   null, //if null, no change, saveTasksData will return the original task name
-                    //   null, // updated task tags
-                    //   null, // updated task content
-                    //   null, // sop id
-                    //   setIsMistake, // set the mistake message
-                    //   item.id
-                    // );
-                    if (isMistake) return;
-                    handleUpdatedTaskType(item, newTaskType);
-                    setNewTaskType(null);
-                    setIsRevising(null);
+                    saveTasksData(
+                      "ReviseTaskType",
+                      newTaskType, //updated task types
+                      null, //if null, no change, saveTasksData will return the original task name
+                      null, // updated task tags
+                      null, // updated task content
+                      null, // sop id
+                      setIsMistake, // set the mistake message
+                      item.id
+                    );
+                    setButtonClicked(item);
                   }}
                 >
                   <DoneIcon />

@@ -6,25 +6,38 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-export default function ReviseTaskInfosTab(props) {
-  const [value, setValue] = React.useState(0);
+import { useEffect, useRef, useState } from "react";
+import { Paper } from "@mui/material";
+
+export default function ReviseTaskInfosTab({ value, setValue }) {
+  const ref = useRef(null);
+  // const [messages, setMessages] = useState(() => refreshMessages());
+
+  useEffect(() => {
+    ref.current.ownerDocument.body.scrollTop = 0;
+    // setMessages(refreshMessages());
+  }, [value]);
 
   return (
-    <Box sx={{ width: 500 }}>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
+    <Box sx={{ pb: 7 }} ref={ref}>
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
       >
-        <BottomNavigationAction
-          label="Task Basic Information"
-          icon={<RestoreIcon />}
-        />
-        {/* <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} /> */}
-        <BottomNavigationAction label="My SOP" icon={<LocationOnIcon />} />
-      </BottomNavigation>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction
+            label="Task Information"
+            icon={<RestoreIcon />}
+          />
+          <BottomNavigationAction label="Task SOP" icon={<FavoriteIcon />} />
+        </BottomNavigation>
+      </Paper>
     </Box>
   );
 }
