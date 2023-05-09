@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
-import ErrorWarning from "./ErrorWarning.jsx";
-import saveTasksData from "../Function/saveTasksData.jsx";
+import ErrorWarning from "../CommonTools/Component/ErrorWarning.jsx";
+import saveTasksData from "../CommonTools/Function/saveTasksData.jsx";
 
 export default function ButtonGruopOfAddUserInfo({
   dataSource,
@@ -29,6 +29,7 @@ export default function ButtonGruopOfAddUserInfo({
       <Button
         id="submit-btn"
         variant="outlined"
+        color="primary"
         sx={{ marginRight: 1 }}
         onClick={async () => {
           await saveTasksData(

@@ -6,6 +6,8 @@ import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import { useEffect, useState } from "react";
 import getTaskNames from "../Function/getTaskNames.jsx";
 import strategyDecorator from "../Function/linkFormatOfTexteditor.jsx";
+import { ThemeProvider } from "@mui/material/styles";
+import mainTheme from "../Component/mainTheme.jsx";
 
 export default function BasicUserInputInterface({
   title,
@@ -226,52 +228,60 @@ export default function BasicUserInputInterface({
   } else {
     // General Layout of the page
     return (
-      <div style={{ width: "100%" }}>
-        <h1 style={{ textAlign: "center" }}>Add My {title}</h1>
-        <div
-          style={{ display: "flex", flexWrap: "wrap", boxSizing: "border-box" }}
-        >
-          <FreeSoloCreateOption
-            labelName="Task Type"
-            taskInfo={taskTypes || JSON.parse(JSON.stringify([{ title: "" }]))}
-            selectedstatus={selectedTaskTypes}
-            handleSelectedstatus={handleSelectedTaskTypes}
-          />
-          <FreeSoloCreateOption
-            labelName="Task Name"
-            taskInfo={taskNames || [{ title: "" }]}
-            selectedstatus={selectedTaskNames}
-            handleSelectedstatus={handleSelectedTaskName}
-          />
-          {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}
-          <Tags
-            taskInfo={taskTags || JSON.parse(JSON.stringify([{ title: "" }]))}
-            handleSelectedTaskTags={handleSelectedTaskTags}
-            selectedTaskTags={selectedTaskTags}
-          />
-          <TaskContentField
-            handleStatus={handleAddedTaskContent}
-            editorState={addedTaskContent}
-            title={title}
-          />
-        </div>
+      <div style={{ width: "100%" }} className="mainBody">
+        <h1 style={{ textAlign: "center", margin: "10px" }}>Add My {title}</h1>
+        <ThemeProvider theme={mainTheme}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              boxSizing: "border-box",
+            }}
+          >
+            <FreeSoloCreateOption
+              labelName="Task Type"
+              taskInfo={
+                taskTypes || JSON.parse(JSON.stringify([{ title: "" }]))
+              }
+              selectedstatus={selectedTaskTypes}
+              handleSelectedstatus={handleSelectedTaskTypes}
+            />
+            <FreeSoloCreateOption
+              labelName="Task Name"
+              taskInfo={taskNames || [{ title: "" }]}
+              selectedstatus={selectedTaskNames}
+              handleSelectedstatus={handleSelectedTaskName}
+            />
+            {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}
+            <Tags
+              taskInfo={taskTags || JSON.parse(JSON.stringify([{ title: "" }]))}
+              handleSelectedTaskTags={handleSelectedTaskTags}
+              selectedTaskTags={selectedTaskTags}
+            />
+            <TaskContentField
+              handleStatus={handleAddedTaskContent}
+              editorState={addedTaskContent}
+              title={title}
+            />
+          </div>
 
-        {children(
-          // children is a function that returns a button
-          dataSource,
-          AfterSubmit,
-          AfterCancel,
-          clearUserInput,
-          handleIsSubmitted,
-          selectedTaskTypes,
-          selectedTaskNames,
-          selectedTaskTags,
-          addedTaskContent,
-          sopId,
-          handleIsMistake,
-          isMistake,
-          setButtonClicked
-        )}
+          {children(
+            // children is a function that returns a button
+            dataSource,
+            AfterSubmit,
+            AfterCancel,
+            clearUserInput,
+            handleIsSubmitted,
+            selectedTaskTypes,
+            selectedTaskNames,
+            selectedTaskTags,
+            addedTaskContent,
+            sopId,
+            handleIsMistake,
+            isMistake,
+            setButtonClicked
+          )}
+        </ThemeProvider>
       </div>
     );
   }

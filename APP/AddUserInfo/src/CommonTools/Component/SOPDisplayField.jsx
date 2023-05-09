@@ -27,31 +27,48 @@ const SOPDisplayField = ({ sopInfo }) => {
     <>
       <div
         style={{
-          width: "100%",
-          background: "#fff",
-          border: "1px solid #ddd",
-          fontFamily: "Georgia serif",
-          boxSizing: "border-box",
-          fontSize: 16,
+          // width: "100%",
+          // background: "#fff",
+          // border: "1px solid #ddd",
+          border: "none",
+          // fontFamily: "Georgia serif",
+          // boxSizing: "border-box",
+          // fontSize: 16,
+          paddingTop: "0px",
         }}
+        className="RichEditor-root"
       >
         <div
           style={{
             width: "100%",
+            boxSizing: "border-box",
             display: "flex",
             flexWrap: "wrap",
-            borderBottom: "1px solid #ddd",
+            borderRadius: 5,
             justifyContent: "center",
+            margin: "auto",
+            // borderTop: "3px solid #ffaa64",
+            // borderBottom: "3px solid #ffaa64",
+            // border: "3px solid #ffaa64",
+            padding: "5px 0",
           }}
         >
-          <div>
-            <span>My SOP</span>
-          </div>
+          <div style={{ fontSize: "20px" }}>Detail</div>
         </div>
-        <div className="RichEditor-hidePlaceholder" style={{ margin: 15 }}>
+        <div
+          className="RichEditor-editor"
+          // style={{ borderTop: "3px solid #ffaa64", margin: "0px" }}
+          // style={{ border: "1px solid #ddd" }}
+          style={{
+            borderTop: "none",
+            margin: "0px",
+            border: "3px solid #ffaa64",
+            borderRadius: 10,
+          }}
+        >
           <Editor
             blockStyleFn={getBlockStyle}
-            customStyleMap={styleMap}
+            // customStyleMap={styleMap}
             editorState={editorState}
             readOnly={true}
           />
@@ -63,14 +80,14 @@ const SOPDisplayField = ({ sopInfo }) => {
 
 export default SOPDisplayField;
 
-const styleMap = {
-  CODE: {
-    backgroundColor: "rgba(0, 0, 0, 0.05)",
-    fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-    fontSize: 16,
-    padding: 2,
-  },
-};
+// const styleMap = {
+//   CODE: {
+//     backgroundColor: "rgba(0, 0, 0, 0.05)",
+//     // fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+//     fontSize: 16,
+//     padding: 2,
+//   },
+// };
 
 function getBlockStyle(block) {
   switch (block.getType()) {

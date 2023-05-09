@@ -6,7 +6,7 @@ export default function InputWithWarning(input, notIntialRender) {
   }
 
   return (
-    <div style={{ marginLeft: 10, marginBottom: 0 }}>
+    <div style={{ marginLeft: "10px", marginBottom: 0 }}>
       {!input.input && (
         <p style={{ color: "red", lineHeight: 0, fontSize: "10px" }}>
           Please type a word!

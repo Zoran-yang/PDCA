@@ -1,6 +1,6 @@
 import BasicUserInputInterface from "../CommonTools/Component/BasicUserInputInterface.jsx";
 import CreateReminder from "../Component/CreateReminder/CreateReminder.jsx";
-import ButtonGruopOfAddUserInfo from "../CommonTools/Component/ButtonGruop-AddUserInfo.jsx";
+import ButtonGruopOfAddUserInfo from "../Component/ButtonGruop-AddUserInfo.jsx";
 import "./App.css";
 
 export default function App() {
@@ -45,12 +45,5 @@ export default function App() {
         />
       )}
     </BasicUserInputInterface>
-    // <BasicUserInputInterface  // for debug
-    //   title="Task"
-    //   dataSource="AddUserInfo"
-    //   NextPage={() => {
-    //     console.log("KO");
-    //   }}
-    // />
   );
 }

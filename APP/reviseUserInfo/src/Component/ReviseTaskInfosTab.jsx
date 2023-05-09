@@ -2,12 +2,13 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import RestoreIcon from "@mui/icons-material/Restore";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-
-import { useEffect, useRef, useState } from "react";
+import RuleIcon from "@mui/icons-material/Rule";
+import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
+import { useEffect, useRef } from "react";
 import { Paper } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import mainTheme from "../../../AddUserInfo/src/CommonTools/Component/mainTheme.jsx";
+import "./ReviseTaskInfosTab.css";
 
 export default function ReviseTaskInfosTab({ value, setValue }) {
   const ref = useRef(null);
@@ -19,25 +20,27 @@ export default function ReviseTaskInfosTab({ value, setValue }) {
   }, [value]);
 
   return (
-    <Box sx={{ pb: 7 }} ref={ref}>
-      <Paper
-        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-        elevation={3}
-      >
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+    <ThemeProvider theme={mainTheme}>
+      <Box sx={{ pb: 7 }} ref={ref}>
+        <Paper
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          elevation={3}
         >
-          <BottomNavigationAction
-            label="Task Information"
-            icon={<RestoreIcon />}
-          />
-          <BottomNavigationAction label="Task SOP" icon={<FavoriteIcon />} />
-        </BottomNavigation>
-      </Paper>
-    </Box>
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+          >
+            <BottomNavigationAction
+              label="Task Information"
+              icon={<PermContactCalendarIcon color="primary" />}
+            />
+            <BottomNavigationAction label="Task SOP" icon={<RuleIcon />} />
+          </BottomNavigation>
+        </Paper>
+      </Box>
+    </ThemeProvider>
   );
 }

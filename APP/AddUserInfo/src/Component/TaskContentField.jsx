@@ -30,27 +30,20 @@ const TaskContentField = ({ handleStatus, editorState, title }) => {
 
   return (
     <>
-      <div
-        className="RichEditor-root"
-        style={{
-          width: "98%",
-          margin: 5,
-          marginTop: 15,
-          boxSizing: "border-box",
-        }}
-      >
-        <div
+      <div className="RichEditor-root" style={{ margin: "5px" }}>
+        {/* <div
           style={{
             display: "flex",
             flexWrap: "wrap",
             borderBottom: "1px solid #ddd",
             paddingBottom: 10,
           }}
+          
         >
           <div>
             <span className="RichEditor-title">Add {title}</span>
           </div>
-        </div>
+        </div> */}
         <BlockStyleControls
           editorState={editorState}
           onToggle={toggleBlockType}
@@ -65,7 +58,7 @@ const TaskContentField = ({ handleStatus, editorState, title }) => {
             customStyleMap={styleMap}
             editorState={editorState}
             onChange={onChange}
-            // placeholder="Tell a story..."
+            placeholder="Tell a story..."
             ref={editorRef}
             blockRenderMap={extendedBlockRenderMap}
           />
