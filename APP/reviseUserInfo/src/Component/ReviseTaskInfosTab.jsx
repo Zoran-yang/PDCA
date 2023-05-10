@@ -1,14 +1,16 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+import { Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import RuleIcon from "@mui/icons-material/Rule";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import { useEffect, useRef } from "react";
-import { Paper } from "@mui/material";
+
 import { ThemeProvider } from "@mui/material/styles";
-import mainTheme from "../../../AddUserInfo/src/CommonTools/Component/mainTheme.jsx";
-import "./ReviseTaskInfosTab.css";
+// import mainTheme from "../../../AddUserInfo/src/CommonTools/Component/mainTheme.jsx";
+import mainTheme from "./mainTheme-reviseUserInfo.jsx";
+// import "./ReviseTaskInfosTab.css";
 
 export default function ReviseTaskInfosTab({ value, setValue }) {
   const ref = useRef(null);
@@ -35,7 +37,7 @@ export default function ReviseTaskInfosTab({ value, setValue }) {
           >
             <BottomNavigationAction
               label="Task Information"
-              icon={<PermContactCalendarIcon color="primary" />}
+              icon={<PermContactCalendarIcon />}
             />
             <BottomNavigationAction label="Task SOP" icon={<RuleIcon />} />
           </BottomNavigation>

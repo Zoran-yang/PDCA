@@ -1,5 +1,5 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+import { Box, Paper } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -8,7 +8,6 @@ import TaskDisplayField from "../../../../AddUserInfo/src/CommonTools/Component/
 import { useEffect, useState } from "react";
 import FloatingWindows from "../../../../AddUserInfo/src/CommonTools/Component/floatingWindows.jsx";
 import BasicUserInputInterface from "../../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
-import delTaskData from "../../../../AddUserInfo/src/CommonTools/Function/delTaskData.jsx";
 import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
 import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
 
@@ -110,7 +109,7 @@ export default function DisplaySopArea() {
     <div style={{ display: "flex", flexWrap: "wrap" }}>
       {AllsopData.map((item) => {
         return (
-          <Box sx={{ maxWidth: 275, margin: 1 }} key={item.id}>
+          <Paper sx={{ maxWidth: 275, margin: 1 }} key={item.id} elevation={6}>
             <Card variant="outlined">
               <React.Fragment>
                 <CardContent sx={{ paddingBottom: "8px" }}>
@@ -139,7 +138,7 @@ export default function DisplaySopArea() {
                 </CardActions>
               </React.Fragment>
             </Card>
-          </Box>
+          </Paper>
         );
       })}
       {/* render revise sop floating window */}

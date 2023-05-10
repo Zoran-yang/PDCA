@@ -1,26 +1,28 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from "@mui/material";
 
 const mainTheme = createTheme({
-  // typography: {
-  //   fontFamily: [
-  //     "source-code-pro",
-  //     "Menlo",
-  //     "Monaco",
-  //     "Consolas",
-  //     "Courier New",
-  //     "monospace",
-  //   ].join(","),
-  //   color: "red",
-  // },
+  typography: {
+    fontFamily: [
+      "source-code-pro",
+      "Menlo",
+      "Monaco",
+      "Consolas",
+      "Courier New",
+      "monospace",
+    ].join(","),
+    color: "red",
+  },
   palette: {
+    mode: "light",
     primary: {
-      // light: will be calculated from palette.primary.main,
       main: "#ff8264",
-      // dark: will be calculated from palette.primary.main,
-      // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       main: "#2196f3",
+    },
+    background: {
+      paper: "#fff5a5",
+      default: "#fff5a5",
     },
     text: {
       primary: "#ff6464",
@@ -36,16 +38,6 @@ const mainTheme = createTheme({
         },
       },
     },
-    // MuiBottomNavigationAction: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: "#ffaa64",
-    //       "&$selected": {
-    //         color: "#ff6464",
-    //       },
-    //     },
-    //   },
-    // },
   },
 });
 
