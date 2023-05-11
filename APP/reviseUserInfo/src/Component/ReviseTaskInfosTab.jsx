@@ -7,11 +7,6 @@ import RuleIcon from "@mui/icons-material/Rule";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import { useEffect, useRef } from "react";
 
-import { ThemeProvider } from "@mui/material/styles";
-// import mainTheme from "../../../AddUserInfo/src/CommonTools/Component/mainTheme.jsx";
-import mainTheme from "./mainTheme-reviseUserInfo.jsx";
-// import "./ReviseTaskInfosTab.css";
-
 export default function ReviseTaskInfosTab({ value, setValue }) {
   const ref = useRef(null);
   // const [messages, setMessages] = useState(() => refreshMessages());
@@ -22,27 +17,25 @@ export default function ReviseTaskInfosTab({ value, setValue }) {
   }, [value]);
 
   return (
-    <ThemeProvider theme={mainTheme}>
-      <Box sx={{ pb: 7 }} ref={ref}>
-        <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-          elevation={3}
+    <Box sx={{ pb: 7 }} ref={ref}>
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
+      >
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
         >
-          <BottomNavigation
-            showLabels
-            value={value}
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
-          >
-            <BottomNavigationAction
-              label="Task Information"
-              icon={<PermContactCalendarIcon />}
-            />
-            <BottomNavigationAction label="Task SOP" icon={<RuleIcon />} />
-          </BottomNavigation>
-        </Paper>
-      </Box>
-    </ThemeProvider>
+          <BottomNavigationAction
+            label="Task Information"
+            icon={<PermContactCalendarIcon />}
+          />
+          <BottomNavigationAction label="Task SOP" icon={<RuleIcon />} />
+        </BottomNavigation>
+      </Paper>
+    </Box>
   );
 }

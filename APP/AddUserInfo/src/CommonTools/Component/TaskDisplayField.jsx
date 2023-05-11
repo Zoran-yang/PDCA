@@ -16,8 +16,8 @@ export default function TaskDisplayField({ sopData, children }) {
   if (tasktag === "null") tasktag = '[{"title":"None"}]';
   return (
     <>
-      <ThemeProvider theme={mainTheme}>
-        <TableContainer component={Paper} sx={{ backgroundColor: "#fff5a5" }}>
+      {/* <ThemeProvider theme={mainTheme}> */}
+        <TableContainer component={Paper}>
           <Table sx={{ width: "100%" }} aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -86,7 +86,7 @@ export default function TaskDisplayField({ sopData, children }) {
           </Table>
           {children && children(childrenData)}
         </TableContainer>
-      </ThemeProvider>
+      {/* </ThemeProvider> */}
     </>
   );
 }

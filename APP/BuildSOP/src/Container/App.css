@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,30 @@
 
 .read-the-docs {
   color: #888;
+} */
+
+
+body {
+  margin: auto;
+  box-sizing: border-box;
+  /* width: 600px; */
+  padding: 10px;
+  border:#ff8264 3px solid;
+  font-family:       "Consolas",
+  "文泉驛正黑",
+  "WenQuanYi Zen Hei",
+  "儷黑 Pro",
+  "LiHei Pro",
+  "標楷體",
+  "微軟正黑體",
+  "Microsoft JhengHei",
+  "source-code-pro",
+  "Menlo",
+  "Monaco",
+  "Courier New",
+    monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* background-color: #fff5a5; */
+  /* color: #ff6464; */
 }

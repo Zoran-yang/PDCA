@@ -1,5 +1,4 @@
-import * as React from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, CssBaseline, Paper, ThemeProvider } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -10,6 +9,8 @@ import FloatingWindows from "../../../../AddUserInfo/src/CommonTools/Component/f
 import BasicUserInputInterface from "../../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
 import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
 import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
+// import "../../Container/App.css";
+import mainTheme from "../mainTheme-reviseUserInfo.jsx";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);
@@ -111,9 +112,12 @@ export default function DisplaySopArea() {
         return (
           <Paper sx={{ maxWidth: 275, margin: 1 }} key={item.id} elevation={6}>
             <Card variant="outlined">
-              <React.Fragment>
+              <>
                 <CardContent sx={{ paddingBottom: "8px" }}>
-                  <TaskDisplayField sopData={item}></TaskDisplayField>
+                  <ThemeProvider theme={mainTheme}>
+                    <CssBaseline />
+                    <TaskDisplayField sopData={item}></TaskDisplayField>
+                  </ThemeProvider>
                 </CardContent>
                 <CardActions sx={{ paddingTop: 0 }}>
                   <Button size="small" onClick={() => popFloatingWindow(item)}>
@@ -136,13 +140,15 @@ export default function DisplaySopArea() {
                     Delete
                   </Button>
                 </CardActions>
-              </React.Fragment>
+              </>
             </Card>
           </Paper>
         );
       })}
       {/* render revise sop floating window */}
       <FloatingWindows isOpen={selectedSop}>
+        {/* <ThemeProvider theme={mainTheme}> */}
+        {/* <CssBaseline /> */}
         <BasicUserInputInterface
           title="Saved SOP"
           dataSource="ReviseTask"
@@ -197,6 +203,7 @@ export default function DisplaySopArea() {
             />
           )}
         </BasicUserInputInterface>
+        {/* </ThemeProvider> */}
       </FloatingWindows>
     </div>
   );

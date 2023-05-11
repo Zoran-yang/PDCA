@@ -1,13 +1,10 @@
-import { FreeSoloCreateOption } from "../../Component/FreeSoloCreateOption.jsx";
-// import ComboBox from "../Component/Autocomplete.jsx";
-import Tags from "../../Component/TaskTags.jsx";
-import TaskContentField from "../../Component/TaskContentField.jsx";
+import { FreeSoloCreateOption } from "../../../../AddUserInfo/src/Component/FreeSoloCreateOption.jsx";
+import Tags from "../../../../AddUserInfo/src/Component/TaskTags.jsx";
+import TaskContentField from "../../../../AddUserInfo/src/Component/TaskContentField.jsx";
 import { EditorState, convertFromRaw, convertToRaw } from "draft-js";
 import { useEffect, useState } from "react";
-import getTaskNames from "../Function/getTaskNames.jsx";
-import strategyDecorator from "../Function/linkFormatOfTexteditor.jsx";
-import { ThemeProvider } from "@mui/material/styles";
-import mainTheme from "../Component/mainTheme.jsx";
+import getTaskNames from "../../../../AddUserInfo/src/CommonTools/Function/getTaskNames.jsx";
+import strategyDecorator from "../../../../AddUserInfo/src/CommonTools/Function/linkFormatOfTexteditor.jsx";
 
 export default function BasicUserInputInterface({
   title,
@@ -230,58 +227,54 @@ export default function BasicUserInputInterface({
     return (
       <div style={{ width: "100%" }} className="mainBody">
         <h1 style={{ textAlign: "center", margin: "10px" }}>Add My {title}</h1>
-        <ThemeProvider theme={mainTheme}>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              boxSizing: "border-box",
-            }}
-          >
-            <FreeSoloCreateOption
-              labelName="Task Type"
-              taskInfo={
-                taskTypes || JSON.parse(JSON.stringify([{ title: "" }]))
-              }
-              selectedstatus={selectedTaskTypes}
-              handleSelectedstatus={handleSelectedTaskTypes}
-            />
-            <FreeSoloCreateOption
-              labelName="Task Name"
-              taskInfo={taskNames || [{ title: "" }]}
-              selectedstatus={selectedTaskNames}
-              handleSelectedstatus={handleSelectedTaskName}
-            />
-            {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}
-            <Tags
-              taskInfo={taskTags || JSON.parse(JSON.stringify([{ title: "" }]))}
-              handleSelectedTaskTags={handleSelectedTaskTags}
-              selectedTaskTags={selectedTaskTags}
-            />
-            <TaskContentField
-              handleStatus={handleAddedTaskContent}
-              editorState={addedTaskContent}
-              title={title}
-            />
-          </div>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            boxSizing: "border-box",
+          }}
+        >
+          <FreeSoloCreateOption
+            labelName="Task Type"
+            taskInfo={taskTypes || JSON.parse(JSON.stringify([{ title: "" }]))}
+            selectedstatus={selectedTaskTypes}
+            handleSelectedstatus={handleSelectedTaskTypes}
+          />
+          <FreeSoloCreateOption
+            labelName="Task Name"
+            taskInfo={taskNames || [{ title: "" }]}
+            selectedstatus={selectedTaskNames}
+            handleSelectedstatus={handleSelectedTaskName}
+          />
+          {/* <ComboBox taskInfo={taskPhase}/> considering to add concept of phase(timeline) */}
+          <Tags
+            taskInfo={taskTags || JSON.parse(JSON.stringify([{ title: "" }]))}
+            handleSelectedTaskTags={handleSelectedTaskTags}
+            selectedTaskTags={selectedTaskTags}
+          />
+          <TaskContentField
+            handleStatus={handleAddedTaskContent}
+            editorState={addedTaskContent}
+            title={title}
+          />
+        </div>
 
-          {children(
-            // children is a function that returns a button
-            dataSource,
-            AfterSubmit,
-            AfterCancel,
-            clearUserInput,
-            handleIsSubmitted,
-            selectedTaskTypes,
-            selectedTaskNames,
-            selectedTaskTags,
-            addedTaskContent,
-            sopId,
-            handleIsMistake,
-            isMistake,
-            setButtonClicked
-          )}
-        </ThemeProvider>
+        {children(
+          // children is a function that returns a button
+          dataSource,
+          AfterSubmit,
+          AfterCancel,
+          clearUserInput,
+          handleIsSubmitted,
+          selectedTaskTypes,
+          selectedTaskNames,
+          selectedTaskTags,
+          addedTaskContent,
+          sopId,
+          handleIsMistake,
+          isMistake,
+          setButtonClicked
+        )}
       </div>
     );
   }

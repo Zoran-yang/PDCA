@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import BlankWarning from "./blankWarning.jsx";
-import "./FreeSoloCreateOption.css";
+// import "./FreeSoloCreateOption.css";
 
 const filter = createFilterOptions();
 

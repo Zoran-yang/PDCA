@@ -5,10 +5,17 @@ import { createTheme } from "@mui/material";
 const mainTheme = createTheme({
   typography: {
     fontFamily: [
+      "Consolas",
+      "文泉驛正黑",
+      "WenQuanYi Zen Hei",
+      "儷黑 Pro",
+      "LiHei Pro",
+      "標楷體",
+      "微軟正黑體",
+      "Microsoft JhengHei",
       "source-code-pro",
       "Menlo",
       "Monaco",
-      "Consolas",
       "Courier New",
       "monospace",
     ].join(","),
@@ -24,7 +31,7 @@ const mainTheme = createTheme({
     },
     background: {
       paper: "#fff5a5",
-      default: "#fff5a5",
+      // default: "#fff5a5",
     },
     text: {
       primary: "#ff6464",
@@ -37,37 +44,10 @@ const mainTheme = createTheme({
         root: {
           borderBottom: "none",
           padding: "10px 15px",
+          // fontSize: "200rem",
         },
       },
     },
-    // MuiBottomNavigation: {
-    //   styleOverrides: {
-    //     root: {
-    //       // fontSize: 32,
-    //       padding: "10px 15px",
-    //       // backgroundColor: "#ffaa64",
-    //       // color: "#ffaa64",
-    //     },
-    //     // "&selected": {
-    //     //   color: "#ff6464",
-    //     // },
-    //   },
-    // },
-    // MuiBottomNavigationAction: {
-    //   styleOverrides: {
-    //     root: {
-    //       // fontSize: 32,
-    //       padding: "10px 15px",
-    //       // background: {
-    //       //   default: "#ffaa64",
-    //       // },
-    //       // color: "#ffaa64",
-    //       // "&$selected": {
-    //       //   color: "#ff6464",
-    //       // },
-    //     },
-    //   },
-    // },
   },
 });
 
