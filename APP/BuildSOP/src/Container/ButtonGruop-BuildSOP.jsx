@@ -1,6 +1,8 @@
 import Button from "@mui/material/Button";
-import ErrorWarning from "../../../AddUserInfo/src/CommonTools/Component/ErrorWarning.jsx";
-import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
+// for instant testing
+// import ErrorWarning from "../../../AddUserInfo/src/CommonTools/Component/ErrorWarning.jsx";
+// import saveTasksData from "../../../AddUserInfo/src/CommonTools/Function/saveTasksData.jsx";
+import { ErrorWarning, saveTasksData } from "reactcommontool-zy";
 
 export default function ButtonGruopOfBuildSOP({
   dataSource,

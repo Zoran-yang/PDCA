@@ -45,18 +45,27 @@ const mainTheme = createTheme({
         },
       },
     },
-    MuiAutocomplete: {
+    MuiButton: {
       styleOverrides: {
         root: {
-          backgroundColor: "darkblue",
-          fontFamily: "標楷體",
+          color: "#2196f3",
+          borderColor: "#2196f3",
+          // backgroundColor: "blue",
+          "&:hover": {
+            borderColor: "#2196f3",
+            backgroundColor: "#2196f311",
+          },
+          // "&:disabled": {
+          //   color: "#fff",
+          //   backgroundColor: "#ff6464",
         },
-        primary: {
-          color: "darkblue",
-        },
-        secondary: {
-          color: "darkred",
-          backgroundColor: "pink",
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#2196f3",
+          borderColor: "#2196f3",
         },
       },
     },

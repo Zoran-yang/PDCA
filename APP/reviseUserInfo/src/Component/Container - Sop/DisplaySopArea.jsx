@@ -1,16 +1,24 @@
-import { Box, CssBaseline, Paper, ThemeProvider } from "@mui/material";
+import { CssBaseline, Paper } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import TaskDisplayField from "../../../../AddUserInfo/src/CommonTools/Component/TaskDisplayField.jsx";
 import { useEffect, useState } from "react";
-import FloatingWindows from "../../../../AddUserInfo/src/CommonTools/Component/floatingWindows.jsx";
-import BasicUserInputInterface from "../../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
 import ButtonGruopOfReviseUserInfo from "./ButtonGruop - reviseUserInfo.jsx";
-import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
-// import "../../Container/App.css";
 import mainTheme from "../mainTheme-reviseUserInfo.jsx";
+// for instant testing
+// import TaskDisplayField from "../../../../AddUserInfo/src/CommonTools/Component/TaskDisplayField.jsx";
+// import FloatingWindows from "../../../../AddUserInfo/src/CommonTools/Component/floatingWindows.jsx";
+// import deleteConfirmation from "../../../../AddUserInfo/src/CommonTools/Function/deleteConfirmation.jsx";
+// import "../../Container/App.css";
+// import BasicUserInputInterface from "../../../../AddUserInfo/src/CommonTools/Component/BasicUserInputInterface.jsx";
+import {
+  BasicUserInputInterface,
+  ThemeProvider as ThemeProviderZy,
+  FloatingWindows,
+  TaskDisplayField,
+  deleteConfirmation,
+} from "reactcommontool-zy";
 
 export default function DisplaySopArea() {
   const [AllsopData, setAllSopData] = useState([]);
@@ -107,104 +115,108 @@ export default function DisplaySopArea() {
   }
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {AllsopData.map((item) => {
-        return (
-          <Paper sx={{ maxWidth: 275, margin: 1 }} key={item.id} elevation={6}>
-            <Card variant="outlined">
-              <>
-                <CardContent sx={{ paddingBottom: "8px" }}>
-                  <ThemeProvider theme={mainTheme}>
-                    <CssBaseline />
+    <ThemeProviderZy theme={mainTheme}>
+      <CssBaseline />
+      <div style={{ display: "flex", flexWrap: "wrap" }}>
+        {AllsopData.map((item) => {
+          return (
+            <Paper
+              sx={{ minWidth: "270px", margin: 1 }}
+              key={item.id}
+              elevation={6}
+            >
+              <Card variant="outlined">
+                <>
+                  <CardContent sx={{ paddingBottom: "8px" }}>
                     <TaskDisplayField sopData={item}></TaskDisplayField>
-                  </ThemeProvider>
-                </CardContent>
-                <CardActions sx={{ paddingTop: 0 }}>
-                  <Button size="small" onClick={() => popFloatingWindow(item)}>
-                    Revise
-                  </Button>
-                  <Button
-                    size="small"
-                    sx={{ color: "red" }}
-                    onClick={() => {
-                      deleteConfirmation(
-                        "TaskSOP",
-                        item.sopid,
-                        setIsMistake,
-                        isMistake,
-                        handleDeletedSop,
-                        null
-                      );
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </CardActions>
-              </>
-            </Card>
-          </Paper>
-        );
-      })}
-      {/* render revise sop floating window */}
-      <FloatingWindows isOpen={selectedSop}>
-        {/* <ThemeProvider theme={mainTheme}> */}
-        {/* <CssBaseline /> */}
-        <BasicUserInputInterface
-          title="Saved SOP"
-          dataSource="ReviseTask"
-          defaultValues={selectedSop}
-          AfterSubmit={(
-            selectedTaskTypes,
-            selectedTaskNames,
-            selectedTaskTags,
-            addedTaskContent,
-            sopId // render props from BasicUserInputInterface
-          ) => {
-            handleUpdateSop(
+                  </CardContent>
+                  <CardActions sx={{ paddingTop: 0 }}>
+                    <Button
+                      size="small"
+                      onClick={() => popFloatingWindow(item)}
+                    >
+                      Revise
+                    </Button>
+                    <Button
+                      size="small"
+                      sx={{ color: "red" }}
+                      onClick={() => {
+                        deleteConfirmation(
+                          "TaskSOP",
+                          item.sopid,
+                          setIsMistake,
+                          isMistake,
+                          handleDeletedSop,
+                          null
+                        );
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </CardActions>
+                </>
+              </Card>
+            </Paper>
+          );
+        })}
+        {/* render revise sop floating window */}
+        <FloatingWindows isOpen={selectedSop} backgroundColor="#fff5a5">
+          <BasicUserInputInterface
+            title="Saved SOP"
+            dataSource="ReviseTask"
+            defaultValues={selectedSop}
+            AfterSubmit={(
               selectedTaskTypes,
               selectedTaskNames,
               selectedTaskTags,
               addedTaskContent,
-              sopId
-            );
-            closeFloatingWindow();
-          }}
-          AfterCancel={closeFloatingWindow}
-        >
-          {(
-            dataSource,
-            AfterSubmit,
-            AfterCancel,
-            clearUserInput,
-            handleIsSubmitted,
-            selectedTaskTypes,
-            selectedTaskNames,
-            selectedTaskTags,
-            addedTaskContent,
-            sopId,
-            setIsMistake,
-            isMistake,
-            setButtonClicked
-          ) => (
-            <ButtonGruopOfReviseUserInfo
-              dataSource={dataSource}
-              AfterSubmit={AfterSubmit}
-              AfterCancel={AfterCancel}
-              clearUserInput={clearUserInput}
-              handleIsSubmitted={handleIsSubmitted}
-              selectedTaskTypes={selectedTaskTypes}
-              selectedTaskNames={selectedTaskNames}
-              selectedTaskTags={selectedTaskTags}
-              addedTaskContent={addedTaskContent}
-              sopId={sopId}
-              setIsMistake={setIsMistake}
-              isMistake={isMistake}
-              setButtonClicked={setButtonClicked}
-            />
-          )}
-        </BasicUserInputInterface>
-        {/* </ThemeProvider> */}
-      </FloatingWindows>
-    </div>
+              sopId // render props from BasicUserInputInterface
+            ) => {
+              handleUpdateSop(
+                selectedTaskTypes,
+                selectedTaskNames,
+                selectedTaskTags,
+                addedTaskContent,
+                sopId
+              );
+              closeFloatingWindow();
+            }}
+            AfterCancel={closeFloatingWindow}
+          >
+            {(
+              dataSource,
+              AfterSubmit,
+              AfterCancel,
+              clearUserInput,
+              handleIsSubmitted,
+              selectedTaskTypes,
+              selectedTaskNames,
+              selectedTaskTags,
+              addedTaskContent,
+              sopId,
+              setIsMistake,
+              isMistake,
+              setButtonClicked
+            ) => (
+              <ButtonGruopOfReviseUserInfo
+                dataSource={dataSource}
+                AfterSubmit={AfterSubmit}
+                AfterCancel={AfterCancel}
+                clearUserInput={clearUserInput}
+                handleIsSubmitted={handleIsSubmitted}
+                selectedTaskTypes={selectedTaskTypes}
+                selectedTaskNames={selectedTaskNames}
+                selectedTaskTags={selectedTaskTags}
+                addedTaskContent={addedTaskContent}
+                sopId={sopId}
+                setIsMistake={setIsMistake}
+                isMistake={isMistake}
+                setButtonClicked={setButtonClicked}
+              />
+            )}
+          </BasicUserInputInterface>
+        </FloatingWindows>
+      </div>
+    </ThemeProviderZy>
   );
 }

@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Chip } from "@mui/material";
-import mainTheme from "../../Container/mainTheme.jsx";
+import mainTheme from "../../Container/mainTheme-AddUserInfo.jsx";
 import { ThemeProvider } from "@mui/material/styles";
 
 export default function TaskDisplayField({ sopData, children }) {

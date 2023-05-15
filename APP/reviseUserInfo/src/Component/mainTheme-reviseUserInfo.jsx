@@ -48,6 +48,26 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          color: "#2196f3",
+          borderColor: "#2196f3",
+          "&:hover": {
+            borderColor: "#2196f3",
+            backgroundColor: "#2196f311",
+          },
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#2196f3",
+          borderColor: "#2196f3",
+        },
+      },
+    },
   },
 });
 

@@ -6,7 +6,7 @@ import {
   ThemeProvider as ThemeProviderZy,
 } from "reactcommontool-zy";
 import "./App.css";
-import mainTheme from "./mainTheme.jsx";
+import mainTheme from "./mainTheme-AddUserInfo.jsx";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
 
