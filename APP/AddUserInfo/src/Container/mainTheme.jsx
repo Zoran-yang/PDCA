@@ -45,6 +45,21 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "darkblue",
+          fontFamily: "標楷體",
+        },
+        primary: {
+          color: "darkblue",
+        },
+        secondary: {
+          color: "darkred",
+          backgroundColor: "pink",
+        },
+      },
+    },
   },
 });
 
