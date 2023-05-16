@@ -10,7 +10,7 @@ async function main() {
   // let minuteSetting = (await settings.get("setting.minute")) || 15; // default 15 minutes
   // let minuteSetting = (await settings.get("setting.minute")) || 0.2 // for debug
   let settingObj = await settings.get("setting");
-  if (!settingObj.minute || !settingObj.startTime) {
+  if (!settingObj || !settingObj.minute || !settingObj.startTime) {
     settingObj = {
       minute: "Stop",
       startTime: "From Now",
